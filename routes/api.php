@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\DispatchController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Auth\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,6 +97,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         ->whereAlpha('corperation')
         ->whereAlpha('command')
         ->whereNumber('id');
+
+    Route::get('roles_all', [RoleController::class, 'index']);
+    Route::post('roles', [RoleController::class, 'store']);
+    Route::put('roles/{role}', [RoleController::class, 'update']);
+
+    Route::get('menu', [MenuController::class, 'index']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

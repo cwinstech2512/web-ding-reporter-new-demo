@@ -27,11 +27,11 @@ export default [
         name: '帳號管理',
         component: page('home/Account.vue')
       },
-      // {
-      //   path: 'manager',
-      //   name: '管理常見問題',
-      //   component: page('home/manager_qa.vue')
-      // },
+      {
+        path: '/authorization',
+        name: '權限管理',
+        component: page('home/Authorization.vue')
+      },
       // {
       //   path: 'ss',
       //   name: '相似問題選單連結',
@@ -120,6 +120,16 @@ export default [
         path: '/rtoil_fpg',
         name: '油料處檢測',
         component: page('report/fpg/RT_oil.vue')
+      },
+      {
+        path: '/rtolll_fpg',
+        name: '烯烴三廠檢測',
+        component: page('report/fpg/RT_olll.vue')
+      },
+      {
+        path: '/rthree_fpg',
+        name: '煉製三廠檢測',
+        component: page('report/fpg/RT_three.vue')
       },
     ]
   },

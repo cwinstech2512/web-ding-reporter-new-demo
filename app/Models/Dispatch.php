@@ -67,4 +67,20 @@ class Dispatch extends Model
     {
         return $this->hasOne(ReportRt::class, 'dispatch_id');
     }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function report_rtolll()
+    {
+        return $this->hasOne(ReportRt::class, 'dispatch_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function report_rthree()
+    {
+        return $this->hasOne(ReportRt::class, 'dispatch_id');
+    }
 }

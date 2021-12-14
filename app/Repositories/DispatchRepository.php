@@ -54,13 +54,6 @@ class DispatchRepository
         } else if(!empty($function_path) && $id > 0) {
             $reporExplope = explode('.', $function_path);
             if(sizeof($reporExplope)==2) {
-                // dd($this->model::where('function_path', $function_path)->where('id', $id)->with(
-                //     [
-                //         'report_'.$reporExplope[1] => function($query) {
-                    
-                //         }
-                //     ]
-                // )->first());
                 return $this->model::where('function_path', $function_path)->where('id', $id)->with(
                     [
                         'report_'.$reporExplope[1] => function($query) {

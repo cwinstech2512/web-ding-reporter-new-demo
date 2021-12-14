@@ -4,6 +4,7 @@ namespace App\Services;
 use Arr;
 use PDF;
 use Carbon\Carbon;
+use App\Services\ParseReport\ParseFpg;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\DispatchRepository;
 use App\Repositories\{SampleLogRepository};
@@ -39,10 +40,7 @@ class SampleService
 	{
 		return $this->spRepo->lately('chimei.it');
 	}
-    public function getFpgRT_Oil()
-	{
-		return $this->spRepo->lately('fpg.rtoil');
-	}
+
 
     public function logsChimeiPT()
 	{
@@ -104,212 +102,20 @@ class SampleService
 
     public function parseReportFpgRT_Oil($function_path, $id)
     {
-        $out = [];
-        $sample = $this->getFpgRT_Oil();
-        $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
-        
-        $realPath = $sample->full_path;
-        $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.xlsx';
-        if(is_null($reporter)){
-            $out['code'] = 50001;
-            $out['message'] = "資料更新錯誤";
-            return $out;
-        }
-        if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
-            // dd($reporter);
-            $dirname = dirname($realPath);
-            $samplePath = config('filesystems.disks.public_sample.root'). '/' .$dirname . '/' . basename($realPath);
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($samplePath);
-            // dd($spreadsheet->getSheet(1));
-            $spreadsheet_0 = $spreadsheet->getSheet(0);
-            /* dispatch */
-            // 客戶
-            $spreadsheet_0->setCellValue('B4', $reporter->customer);
-            // 檢測日期
-            $spreadsheet_0->setCellValue('F4', $reporter->exam_date);
-            // 工程名稱
-            $spreadsheet_0->setCellValue('B6', $reporter->job_name);
+        $fpg = new ParseFpg($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportFpgRT_Oil($function_path, $id);
+    }
 
-            /* report_rt */
-            if(isset($reporter->report_rtoil)) {
-                $tmpReport = $reporter->report_rtoil;
-                // 工程編號
-                $spreadsheet_0->setCellValue('B8', $tmpReport->job_no);
-                // 設備編號 
-                $spreadsheet_0->setCellValue('B10', $tmpReport->equlpment_no);
-                // 檢測地點
-                $spreadsheet_0->setCellValue('F6', $tmpReport->exam_place);
-                // 材質及厚度
-                $spreadsheet_0->setCellValue('F8', $tmpReport->thicknes);
-                // 檢測規範
-                // $spreadsheet_0->setCellValue('F10', $tmpReport->customer);
-                //  底片型號 
-                $spreadsheet_0->setCellValue('F13', $tmpReport->film_brand);
-                //  檢測儀器廠牌 
-                $spreadsheet_0->setCellValue('B13', $tmpReport->sn);
-                //  射源強度 
-                $spreadsheet_0->setCellValue('F15', $tmpReport->energy_strength . ' Ci');
-                //  射源類別 
-                $radiationEnergy = '';
-                if($tmpReport->radiation_energy == 0) {
-                    $radiationEnergy = '▓Ir-192      □CO-60                     □X-Ray       □se-75';
-                } else if($tmpReport->radiation_energy == 1) {
-                    $radiationEnergy = '□Ir-192      ▓CO-60                     □X-Ray       □se-75';
-                } else if($tmpReport->radiation_energy == 2) {
-                    $radiationEnergy = '□Ir-192      □CO-60                     ▓X-Ray       □se-75';
-                } else if($tmpReport->radiation_energy == 3) {
-                    $radiationEnergy = '□Ir-192      □CO-60                     □X-Ray       ▓se-75';
-                }
-                $spreadsheet_0->setCellValue('B15', $radiationEnergy);
+    public function parseReportFpgRT_Olll($function_path, $id)
+    {
+        $fpg = new ParseFpg($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportFpgRT_Olll($function_path, $id);
+    }
 
-                //底片大小 Film Size
-                $film_size1 = "";
-                $film_size2 = "";
-                $listFilmSize = ['10inX12in','8inX10in'];
-                $r_report_size = explode(',', $tmpReport->film_size);
-                if(is_array($r_report_size)) {
-                    for($i = 0; $i < sizeof($listFilmSize); $i++) {
-                        if(in_array($i, $r_report_size)) {
-                            if($i == 0)
-                            $film_size1 .= ('▓' . $listFilmSize[$i] . " ");
-                            else if($i == 1)
-                            $film_size2 .= ('▓' . $listFilmSize[$i] . " ");
-                        } else {
-                            if($i == 0)
-                            $film_size1 .= ('□' . $listFilmSize[$i] . " ");
-                            else if($i == 1)
-                            $film_size2 .= ('□' . $listFilmSize[$i] . " ");
-                        }
-                    }
-                }
-                $spreadsheet_0->setCellValue('F17', $film_size1);
-                $spreadsheet_0->setCellValue('F18', $film_size2);
-                // 焦點尺寸 FOCUS SIZE
-                $spreadsheet_0->setCellValue('B17', $tmpReport->focal_spot . 'mm');
-
-                //底片黑度範圍 sin_dou
-                $sin_dou1 = "";
-                $sin_dou2 = "";
-                $listSinDou= ['單片SINGLE1.8-4.0','雙片DOUBLE'];
-                $r_sin_dou = explode(',', $tmpReport->sin_dou);
-                if(is_array($r_sin_dou)) {
-                    for($i = 0; $i < sizeof($listSinDou); $i++) {
-                        if(in_array($i, $r_sin_dou)) {
-                            if($i == 0)
-                            $sin_dou1 .= ('▓' . $listSinDou[$i] . " ");
-                            else if($i == 1)
-                            $sin_dou2 .= ('▓' . $listSinDou[$i] . " ");
-                        } else {
-                            if($i == 0)
-                            $sin_dou1 .= ('□' . $listSinDou[$i] . " ");
-                            else if($i == 1)
-                            $sin_dou2 .= ('□' . $listSinDou[$i] . " ");
-                        }
-                    }
-                }
-                $spreadsheet_0->setCellValue('B19', $sin_dou1);
-                $spreadsheet_0->setCellValue('B20', $sin_dou2);
-
-                //增感屏厚度 screen_thick
-                $screen_thick1 = "";
-                $screen_thick2 = "";
-                $listScreenThick= ['前FRONT 鉛Pb-0.005','後BACK  鉛Pb-0.010'];
-                $r_screen_thick = explode(',', $tmpReport->screen_thick);
-                if(is_array($r_screen_thick)) {
-                    for($i = 0; $i < sizeof($listScreenThick); $i++) {
-                        if(in_array($i, $r_screen_thick)) {
-                            if($i == 0)
-                            $screen_thick1 .= ('▓' . $listScreenThick[$i] . " ");
-                            else if($i == 1)
-                            $screen_thick2 .= ('▓' . $listScreenThick[$i] . " ");
-                        } else {
-                            if($i == 0)
-                            $screen_thick1 .= ('□' . $listScreenThick[$i] . " ");
-                            else if($i == 1)
-                            $screen_thick2 .= ('□' . $listScreenThick[$i] . " ");
-                        }
-                    }
-                }
-                $spreadsheet_0->setCellValue('B21', $screen_thick1);
-                $spreadsheet_0->setCellValue('B22', $screen_thick2);
-
-                //判片方式 interpret
-                $interpret1 = "";
-                $interpret2 = "";
-                $listInterpret= ['單壁判讀SINGLE WALL','雙壁判讀DOUBLE WALL'];
-                $r_interpret = explode(',', $tmpReport->interpret);
-                if(is_array($r_interpret)) {
-                    for($i = 0; $i < sizeof($listInterpret); $i++) {
-                        if(in_array($i, $r_interpret)) {
-                            if($i == 0)
-                            $interpret1 .= ('▓' . $listInterpret[$i] . " ");
-                            else if($i == 1)
-                            $interpret2 .= ('▓' . $listInterpret[$i] . " ");
-                        } else {
-                            if($i == 0)
-                            $interpret1 .= ('□' . $listInterpret[$i] . " ");
-                            else if($i == 1)
-                            $interpret2 .= ('□' . $listInterpret[$i] . " ");
-                        }
-                    }
-                }
-                $spreadsheet_0->setCellValue('F21', $interpret2);
-                $spreadsheet_0->setCellValue('F22', $interpret1);
-
-                //檢測人員  obsert
-                $spreadsheet_0->setCellValue('B36', $tmpReport->obsert);
-
-                //審查  Approved By
-                $spreadsheet_0->setCellValue('F36', "");
-
-                $spreadsheet_1 = $spreadsheet->getSheet(1);
-                $items = json_decode($tmpReport->items);
-                
-                if(is_array($items)) {
-                    $i = 0; $index = 9;
-                    foreach($items as $item) {
-                        // 項次
-                        $spreadsheet_1->setCellValue('A' . ($index+$i), (string)($i + 1));
-                        // 底片編號
-                        $spreadsheet_1->setCellValue('B' . ($index+$i), $item->film_no);
-                        // 管徑
-                        $spreadsheet_1->setCellValue('C' . ($index+$i), $item->film_no);
-                        // 公稱厚度
-                        $spreadsheet_1->setCellValue('D' . ($index+$i), $item->n_thickness);
-                        // 剩餘厚度
-                        $spreadsheet_1->setCellValue('E' . ($index+$i), $item->le_thickness);
-                        // 減薄率
-                        $a = ($item->n_thickness - $item->le_thickness / $item->n_thickness) * 100;
-                        $spreadsheet_1->setCellValue('F' . ($index+$i), $a . '%');
-                        // 腐蝕內
-                        $_r = explode(',', $tmpReport->corrosion);
-                        $spreadsheet_1->setCellValue('G' . ($index+$i), in_array(0, $_r)? 'ü':'');
-                        // 腐蝕外
-                        $spreadsheet_1->setCellValue('H' . ($index+$i), in_array(1, $_r)? 'ü':'');
-                        // 缺陷描述
-                        $spreadsheet_1->setCellValue('I' . ($index+$i), $item->defect_descript);
-                        // 建議處理方式
-                        $spreadsheet_1->setCellValue('J' . ($index+$i), $item->suggested_handling);
-                        // 施照日期
-                        $spreadsheet_1->setCellValue('K' . ($index+$i), $item->exce_date);
-                        // 備註
-                        $spreadsheet_1->setCellValue('L' . ($index+$i), $item->remark);
-                        // 本單編號
-                        $spreadsheet_1->setCellValue('M' . ($index+$i), $item->exce_no);
-                        // 異常編號
-                        $spreadsheet_1->setCellValue('N' . ($index+$i), $item->unusual_no);
-                        // 是否管制追蹤
-                        $spreadsheet_1->setCellValue('O' . ($index+$i), $item->result == 0? '是':'');
-                        $i++;
-                    }
-                }
-                unset($tmpReport);
-            }
-
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save(Storage::disk('export')->path($copyPath));
-        }
+    public function parseReportFpgRT_Three($function_path, $id)
+    {
+        $fpg = new ParseFpg($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportFpgRT_Three($function_path, $id);
     }
 
     public function parseReportChimeiPT($function_path, $id)

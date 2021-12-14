@@ -69,6 +69,15 @@ class DispatchController extends Controller
             case 'chimei.it':
                 $this->smpService->parseReportChimeiIT($function_path, $id);
             break;
+            case 'fpg.rtoil':
+                $this->smpService->parseReportFpgRT_Oil($function_path, $id);
+            break;
+            case 'fpg.rtolll':
+                $this->smpService->parseReportFpgRT_Olll($function_path, $id);
+            break;
+            case 'fpg.rthree':
+                $this->smpService->parseReportFpgRT_Three($function_path, $id);
+            break;
         }
         return new ResponseResource($this->dispatchService->verifyDispatch($function_path, $id));
     }
@@ -94,6 +103,12 @@ class DispatchController extends Controller
             break;
             case 'fpg.rtoil':
                 return new ReportRTResource($this->smpService->parseReportFpgRT_Oil($function_path, $id));
+            break;
+            case 'fpg.rtolll':
+                return new ReportRTResource($this->smpService->parseReportFpgRT_Olll($function_path, $id));
+            break;
+            case 'fpg.rthree':
+                return new ReportRTResource($this->smpService->parseReportFpgRT_Three($function_path, $id));
             break;
         }
     }
@@ -145,6 +160,12 @@ class DispatchController extends Controller
                 return new ReportITResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
             case 'fpg.rtoil':
+                return new ReportRTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'fpg.rtolll':
+                return new ReportRTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'fpg.rthree':
                 return new ReportRTResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
         }

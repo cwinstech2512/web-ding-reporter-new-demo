@@ -7,7 +7,7 @@
     <material-card
       icon="mdi-clipboard-text"
       icon-small
-      title="射線檢測"
+      title="油料處檢測"
       color="accent"
     >
       <v-data-table
@@ -333,10 +333,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          照射方法
+                          工程編號
                         </div>
                         <div class="text-caption">
-                          Radiographic Tech.
+                           Project NO
                         </div>
                       </v-card>
                     </v-col>
@@ -350,14 +350,11 @@
                         <v-card-title>
                           <v-row>
                             <v-col cols="12">
-                              <v-select
-                                v-model="editedItem.radiographic_tech"
-                                :items="listRadiographicTech_Datas"
-                                label="請選擇"
-                                item-text="text"
-                                item-value="value"
-                                dense
-                              ></v-select>
+                              <v-text-field
+                                v-model="editedItem.job_no"
+                                label="Regular"
+                                :readonly="readonlyVisible"
+                              ></v-text-field>
                             </v-col>
                           </v-row>
                         </v-card-title>
@@ -449,21 +446,10 @@
                             ></v-select>
                           </v-col>
                           <v-col cols="12" md="4">
-                            <v-select
-                              v-model="editedItem.layers"
-                              :items="listLayer_Datas"
-                              label="層數"
-                              item-text="text"
-                              item-value="value"
-                              dense
-                              single-line
-                            ></v-select>
+                            <div v-text="mThincknessNomalSize + 'mm'"></div>
                           </v-col>
                         </v-row>
                       </v-card-title>
-                      <v-card-subtitle>
-                        <div v-text="mThincknessNomalSize"></div>
-                      </v-card-subtitle>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -481,10 +467,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          射源/廠牌型號<br>序號
+                          檢測儀器廠牌
                         </div>
                         <div class="text-caption">
-                          Radiation/Brand<br>SN
+                          Equipment  Brand
                         </div>
                       </v-card>
                     </v-col>
@@ -530,7 +516,7 @@
                               <v-text-field
                                 v-model="editedItem.film_type"
                                 label="Regular"
-                                :readonly="true"
+                                :readonly="readonlyVisible"
                               ></v-text-field>
                             </v-col>
                           </v-row>
@@ -603,10 +589,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          底片廠牌
+                          射源類別
                         </div>
                         <div class="text-caption">
-                          Film Brand
+                          RADIATION ENERGY
                         </div>
                       </v-card>
                     </v-col>
@@ -621,8 +607,8 @@
                           <v-row>
                             <v-col cols="12">
                               <v-select
-                                v-model="editedItem.film_brand"
-                                :items="listFilmBrand_Datas"
+                                v-model="editedItem.radiation_energy"
+                                :items="listRadiationEnergy_Datas"
                                 label="請選擇(Regular)"
                                 item-text="text"
                                 item-value="value"
@@ -679,10 +665,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          像質計編號
+                          底片黑度範圍
                         </div>
                         <div class="text-caption">
-                          IQI No.
+                          DENSITY
                         </div>
                       </v-card>
                     </v-col>
@@ -697,9 +683,8 @@
                           <v-row>
                             <v-col cols="12">
                               <v-select
-                                v-model="editedItem.iqi_no"
-                                :items="listIqiNo_Datas"
-                                label="ASTM"
+                                v-model="editedItem.sin_dou"
+                                :items="listDensity_Datas"
                                 item-text="text"
                                 item-value="value"
                                 dense
@@ -725,10 +710,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          射源試件距離
+                          增感屏厚度
                         </div>
                         <div class="text-caption">
-                          S. O. D
+                          SCREEN THICK
                         </div>
                       </v-card>
                     </v-col>
@@ -739,121 +724,23 @@
                         outlined
                         tile
                       >
-                        <v-text-field
-                          v-model="editedItem.sod"
-                          label="Regular"
-                          :readonly="true"
-                          suffix="mm"
-                        ></v-text-field>
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                v-model="editedItem.screen_thick"
+                                :items="listScreenThick_Datas"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                single-line
+                                :readonly="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
                       </v-card>
                     </v-col>
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          幾何模糊度
-                        </div>
-                        <div class="text-caption">
-                          Geometric Unsharpness
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-text-field
-                          v-model="editedItem.geometric_unsharpness"
-                          label="Regular"
-                          :readonly="true"
-                          suffix="mm"
-                        ></v-text-field>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                  <!-- row 7 -->
-                  <v-row
-                    class="mb-4 d-flex"
-                    justify="center"
-                    no-gutters
-                  >
-                    <v-col style="flex: 2; " class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          曝光時間
-                        </div>
-                        <div class="text-caption">
-                          Exposure Time
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-text-field
-                          label="Regular"
-                          :readonly="true"
-                          suffix="Min.Sec."
-                          v-text="formateExTime(editedItem.exposure_time)"
-                        ></v-text-field>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          像質計位置
-                        </div>
-                        <div class="text-caption">
-                          IQI/Location Mark
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-select
-                          v-model="editedItem.iqi_location_mark"
-                          :items="listiQiMark_Datas"
-                          label="像質計位置"
-                          item-text="text"
-                          item-value="value"
-                          dense
-                          single-line
-                        ></v-select>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                  <!-- row 9 -->
-                  <v-row
-                    class="mb-4 d-flex"
-                    justify="center"
-                    no-gutters
-                  >
                     <v-col style="flex: 2; " class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
@@ -888,66 +775,13 @@
                                 dense
                                 single-line
                               ></v-select>
-                              <v-select
-                                v-if="editedItem.interpret === 0 || editedItem.interpret === 1"
-                                v-model="editedItem.sin_dou"
-                                :items="listSinDou_Datas[editedItem.interpret]"
-                                label="請選擇"
-                                item-text="text"
-                                item-value="value"
-                                dense
-                                single-line
-                              ></v-select>
                             </v-col>
                           </v-row>
                       </v-card-title>
                       </v-card>
                     </v-col>
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          底片處理
-                        </div>
-                        <div class="text-caption">
-                          Film Processing
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-card-title>
-                          <v-row>
-                            <v-col cols="12" md="6">
-                              <v-text-field
-                                v-model="editedItem.film_processing_temp"
-                                label="溫度"
-                                :readonly="true"
-                                suffix="°C"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                              <v-text-field
-                                v-model="editedItem.film_processing_min"
-                                label="顯影時間"
-                                :readonly="true"
-                                suffix="min"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-title>
-                      </v-card>
-                    </v-col>
                   </v-row>
+                  <!-- row 9 -->
                   <!-- row 8 -->
                   <v-row
                     class="mb-4 d-flex"
@@ -990,7 +824,7 @@
                                 multiple
                               ></v-select>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <!-- <v-col cols="12" md="6">
                               <v-select
                                 v-model="editedItem.file_qty"
                                 :items="listQty_Datas"
@@ -1000,6 +834,40 @@
                                 dense
                                 single-line
                               ></v-select>
+                            </v-col> -->
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          檢測人員
+                        </div>
+                        <div class="text-caption">
+                          Inspected By
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12" md="6">
+                              <v-text-field
+                                v-model="editedItem.obsert"
+                                :readonly="readonlyVisible"
+                              ></v-text-field>
                             </v-col>
                           </v-row>
                         </v-card-title>
@@ -1024,6 +892,7 @@
                             <tr>
                               <th class="text-left">項次</th>
                               <th class="text-left">底片編號</th>
+                              <th class="text-left">管徑<br>(吋)</th>
                               <th class="text-left">公稱厚度<br>(mm)</th>
                               <th class="text-left">剩餘厚度<br>(mm)</th>
                               <th class="text-left">腐蝕<br>(內、外)</th>
@@ -1048,6 +917,11 @@
                               <td>
                                 <v-text-field
                                 v-model="item.film_no"
+                                :readonly="readonlyVisible"
+                              ></v-text-field></td>
+                              <td>
+                                <v-text-field
+                                v-model="item.pipeline_size"
                                 :readonly="readonlyVisible"
                               ></v-text-field></td>
                               <td>
@@ -1288,7 +1162,7 @@ import moment from 'moment'
 const SAMPLE_PDF_PATH = 'fpg_rtoil'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
-  name: 'RTOilchiView',
+  name: 'RTOilfpgView',
 
   middleware: 'auth',
 
@@ -1335,6 +1209,12 @@ export default {
       {text: '1層', value: 1},
       {text: '2層', value: 2},
     ],
+    listRadiationEnergy_Datas: [
+      {text: 'Ir-192', value: 0},
+      {text: 'CO-60', value: 1},
+      {text: 'X-Ray', value: 2},
+      {text: 'se-75', value: 3},
+    ],
     listFileSize_Datas: [
       {text: '10inX12in', value: '0'},
       {text: '8inX10in', value: '1'},
@@ -1343,9 +1223,13 @@ export default {
       {text: '單 Single', value: '0'},
       {text: '雙 Double', value: '1'},
     ],
-    listIqiNo_Datas:[
-      {text: '1A', value: 0},
-      {text: '1B', value: 1},
+    listDensity_Datas:[
+      {text: '單片SINGLE1.8-4.0', value: 0},
+      {text: '雙片DOUBLE', value: 1},
+    ],
+    listScreenThick_Datas:[
+      {text: '前FRONT 鉛Pb-0.005', value: 0},
+      {text: '後BACK  鉛Pb-0.010', value: 1},
     ],
     listInterpret_Datas:[
       {text: '單壁判讀Single View', value: 0},
@@ -1404,6 +1288,7 @@ export default {
       id: 0,
       dispatch_id: '',
       job_name: '',
+      job_no: '',
       exam_date: new Date,
       exam_place: '',
       material: '',
@@ -1412,6 +1297,7 @@ export default {
       nominal_size: '',
       radiographic_tech: '',
       identify: '',
+      radiation_energy: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '', film_processing_min: '',
       energy_strength: '', sin_dou: 0,
@@ -1420,6 +1306,7 @@ export default {
         {
           object_no: '',
           film_no: '', //底片編號
+          pipeline_size: '', //管徑(吋)
           n_thickness: '', //公稱厚度
           le_thickness: '', //剩餘厚度
           thinning_rate: '',//減薄率
@@ -1447,6 +1334,7 @@ export default {
       nominal_size: '',
       radiographic_tech: '',
       identify: '',
+      radiation_energy: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '25', film_processing_min: '5',
       energy_strength: '', sin_dou: 0,
@@ -1455,6 +1343,7 @@ export default {
         {
           object_no: '',
           film_no: '', //底片編號
+          pipeline_size: '', //管徑(吋)
           n_thickness: '', //公稱厚度
           le_thickness: '', //剩餘厚度
           thinning_rate: '',//減薄率
@@ -1525,13 +1414,13 @@ export default {
     },
     'editedItem.film_brand'(val, oldVal) {
       // console.log(val, oldVal)
-      if (val === oldVal) return
-      this.roleCalcSod()
-      this.roleCalcExTime()
-      if(val == '1' || val == '1.5')
-        this.editedItem.film_type = 'Class I'
-      else
-        this.editedItem.film_type = 'Class II'
+      // if (val === oldVal) return
+      // this.roleCalcSod()
+      // this.roleCalcExTime()
+      // if(val == '1' || val == '1.5')
+      //   this.editedItem.film_type = 'Class I'
+      // else
+      //   this.editedItem.film_type = 'Class II'
     }
   },
 
@@ -1576,16 +1465,26 @@ export default {
       this.$axios
         .fetchGet(url, params)
           .then(res => {
-            this.exportFinalPath = res.data.data.export_final_path
-            if(res.data.data.report_rtoil) {
-              this.editedItem = Object.assign({}, res.data.data.report_rtoil)
-              this.editedItem.film_size = this.editedItem.film_size.split(',')
+            if(res.data.data) {
+              this.exportFinalPath = res.data.data.export_final_path
+              if(res.data.data.report_rtoil) {
+                this.editedItem = Object.assign({}, res.data.data.report_rtoil)
+                this.editedItem.film_size = this.editedItem.film_size.split(',')
+              } else {
+                let tmp = Object.assign({}, this.editedItem)
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedItem.exam_date = tmp.exam_date
+                this.editedItem.exam_place = tmp.exam_place
+                this.editedItem.dispatch_id = tmp.id
+                this.editedItem.job_name = tmp.job_name
+              }
             } else {
               let tmp = Object.assign({}, this.editedItem)
               this.editedItem = Object.assign({}, this.defaultItem)
               this.editedItem.exam_date = tmp.exam_date
               this.editedItem.exam_place = tmp.exam_place
               this.editedItem.dispatch_id = tmp.id
+              this.editedItem.job_name = tmp.job_name
             }
               
             this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}

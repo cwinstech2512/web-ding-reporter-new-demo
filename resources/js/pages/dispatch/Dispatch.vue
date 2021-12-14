@@ -305,7 +305,10 @@ export default {
       {text: '奇美RT', value: 'chimei.rt'},
       {text: '奇美MT', value: 'chimei.mt'},
       {text: '奇美UT', value: 'chimei.ut'},
-      {text: '奇美IT', value: 'chimei.it'}
+      {text: '奇美IT', value: 'chimei.it'},
+      {text: '台塑油料廠', value: 'fpg.rtoil'},
+      {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
+      {text: '台塑煉製三廠', value: 'fpg.rthree'}
     ]
   }),
   methods: {

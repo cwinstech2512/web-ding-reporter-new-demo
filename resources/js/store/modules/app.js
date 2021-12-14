@@ -22,6 +22,11 @@ const state = {
           to: '/account/',
         },
         {
+          title: '權限管理',
+          icon: 'mdi-account',
+          to: '/authorization/',
+        },
+        {
           title: '設定',
           icon: 'mdi-cog',
           to: '/setting/',
@@ -90,9 +95,9 @@ const state = {
       icon: 'mdi-alpha-f-box-outline',
       items: [
         {
-          title: '液滲檢測(PT)',
-          icon: 'mdi-alpha-p',
-          to: '/pt_fpg/',
+          title: '烯烴三廠檢測(RT)',
+          icon: 'mdi-alpha-r',
+          to: '/rtolll_fpg/',
         },
         {
           title: '油料處檢測(RT)',
@@ -100,9 +105,9 @@ const state = {
           to: '/rtoil_fpg/',
         },
         {
-          title: '磁粒檢測(MT)',
-          icon: 'mdi-alpha-m',
-          to: '/mt_fpg/',
+          title: '煉製三廠(RT)',
+          icon: 'mdi-alpha-r',
+          to: '/rthree_fpg/',
         },
         {
           title: '超音波測厚檢測(UT)',

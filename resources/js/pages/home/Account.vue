@@ -57,53 +57,56 @@
                     <v-row>
                       <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
+                        md="12"
                       >
                         <v-text-field
                           v-model="editedItem.name"
-                          label="Dessert name"
+                          label="帳號＊"
+                          hint="登入時所需要輸入的帳號"
+                          outlined
                         ></v-text-field>
                       </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
+                        md="12"
                       >
                         <v-text-field
                           v-model="editedItem.email"
-                          label="Calories"
+                          outlined
+                          label="Email"
+                          hint="請輸入Email"
                         ></v-text-field>
                       </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
+                        md="12"
                       >
                         <v-text-field
-                          v-model="editedItem.fat"
-                          label="Fat (g)"
+                          v-model="editedItem.password"
+                          outlined
+                          label="密碼＊"
+                          hint="登入時所需要輸入的密碼"
                         ></v-text-field>
                       </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
+                        md="12"
                       >
-                        <v-text-field
-                          v-model="editedItem.carbs"
-                          label="Carbs (g)"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                      >
-                        <v-text-field
-                          v-model="editedItem.protein"
-                          label="Protein (g)"
-                        ></v-text-field>
+                        <v-select
+                          label="權限＊"
+                          outlined
+                          hint="請選擇使用者權限"
+                          :items="roleItems"
+                          item-text="text"
+                          item-value="id"
+                          v-model="editedItem.role"
+                        ></v-select>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -201,7 +204,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? '新增項目' : '編輯項目'
+        return this.editedIndex === -1 ? '新增帳號' : '編輯帳號'
       },
     },
 
@@ -227,17 +230,15 @@
       editedIndex: -1,
       editedItem: {
         name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        email: '',
+        password: '',
+        role: '',
       },
       defaultItem: {
         name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        email: '',
+        password: '',
+        role: '',
       },
     }),
     methods: {

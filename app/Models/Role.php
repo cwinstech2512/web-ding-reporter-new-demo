@@ -12,4 +12,13 @@ class Role extends Model
      * @var string
      */
     protected $table = 'roles';
+
+    public $fillable = ['name', 'slug'];
+
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class, 'role_menu')
+            ->withTimestamps()
+            ->withPivot('updated_at');
+    }
 }
