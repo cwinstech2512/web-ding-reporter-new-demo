@@ -78,6 +78,25 @@ class LoginController extends Controller
         $token = (string) $this->guard()->getToken();
         $expiration = $this->guard()->getPayload()->get('exp');
 
+        // type
+        // 1 = 正常登入
+        // 2 = 自行登出
+        // 3 = 重複登入被登出
+        // 4 = expire
+        $exists = OnlineLog::where('userid', $this->guard()->user()->id)->where('type', 1)->get();
+
+        foreach ($exists as $key => $value) {
+            $value->type = 3;
+            $value->save();
+        }
+
+        OnlineLog::create([
+            'online_time' => Carbon::now()->toDateTimeString(),
+            'type' => '1',
+            'name' => $this->guard()->user()->name,
+            'userid' => $this->guard()->user()->id,
+        ]);
+
         return response()->json([
             'token' => $token,
             'token_type' => 'bearer',

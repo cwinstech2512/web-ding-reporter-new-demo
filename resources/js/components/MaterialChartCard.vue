@@ -13,6 +13,7 @@
           :ratio="ratio"
           :responsive-options="responsiveOptions"
           :type="type"
+          ref="customRef"
           style="max-height: 150px;"
         />
       </div>
@@ -37,6 +38,10 @@
     inheritAttrs: false,
 
     props: {
+      customRef: {
+        type: String,
+        default: () => (''),
+      },
       data: {
         type: Object,
         default: () => ({}),
@@ -60,6 +65,12 @@
         validator: v => ['Bar', 'Line', 'Pie'].includes(v),
       },
     },
+    watch: {
+      data (val, oldVal) {
+        console.log('123')
+        this.$refs.customRef.update(val, this.options)
+      }
+    }
   }
 </script>
 

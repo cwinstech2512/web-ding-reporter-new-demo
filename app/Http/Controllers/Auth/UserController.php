@@ -131,24 +131,24 @@ class UserController extends Controller
         }
 
         try {
-            $time  = explode(" ", microtime());
-            $time  = $time[1] . ($time[0] * 1000);
-            $time2 = explode(".", $time);
-            $time  = $time2[0];
+            // $time  = explode(" ", microtime());
+            // $time  = $time[1] . ($time[0] * 1000);
+            // $time2 = explode(".", $time);
+            // $time  = $time2[0];
 
-            $token = str_replace('-', '', Uuid::uuid5(Uuid::NAMESPACE_DNS, $email.$time)->toString());
+            // $token = str_replace('-', '', Uuid::uuid5(Uuid::NAMESPACE_DNS, $email.$time)->toString());
 
-          DB::beginTransaction();
-          $uid = DB::table('users')->insertGetId(
-            array(
-              'name' => $name,
-              'email' => $email,
-              'token' => $token,
-              'created_at' => Carbon::now(),
-              'updated_at' => Carbon::now(),
-              'password' => $pwd));
-          DB::insert("INSERT INTO role_users (role_id, user_id) values (?, ?)",[$role, $uid]);
-          DB::commit();
+            DB::beginTransaction();
+            $uid = DB::table('users')->insertGetId(
+              array(
+                'name' => $name,
+                'email' => $email,
+                // 'token' => $token,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'password' => $pwd));
+            DB::insert("INSERT INTO role_users (role_id, user_id) values (?, ?)",[$role, $uid]);
+            DB::commit();
         } catch (\PDOException $e) {
             DB::rollBack();
             return '{"code": 103, "msg": "' . $e->getMessage() . '"}';

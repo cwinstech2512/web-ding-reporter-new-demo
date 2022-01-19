@@ -133,8 +133,8 @@ export default {
     return {
       headers: [
         { text: "角色", value: "name", width: "200" },
-        { text: "權限", value: " ", width: "350", sortable: false },
-        { text: " ", value: "id", sortable: false }
+        { text: "權限", value: "slug", width: "350", sortable: false },
+        // { text: " ", value: "id", sortable: false }
       ],
       roles: [],
       loading: false,

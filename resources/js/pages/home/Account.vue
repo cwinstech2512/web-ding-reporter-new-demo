@@ -20,6 +20,7 @@
         :items-per-page="itemsPerPage"
         @page-count="pageCount = $event"
         :loading="loading"
+        :search="search"
       >
         <template v-slot:top>
           <v-toolbar
@@ -31,6 +32,14 @@
               inset
               vertical
             ></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="搜尋..."
+              single-line
+              hide-details
+            ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog
               v-model="dialog"
@@ -64,6 +73,7 @@
                           label="帳號＊"
                           hint="登入時所需要輸入的帳號"
                           outlined
+                          :readonly="editedIndex !== -1"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -88,6 +98,7 @@
                         <v-text-field
                           v-model="editedItem.password"
                           outlined
+                          password
                           label="密碼＊"
                           hint="登入時所需要輸入的密碼"
                         ></v-text-field>
@@ -104,7 +115,7 @@
                           hint="請選擇使用者權限"
                           :items="roleItems"
                           item-text="text"
-                          item-value="id"
+                          item-value="value"
                           v-model="editedItem.role"
                         ></v-select>
                       </v-col>
@@ -154,7 +165,7 @@
               >
               <v-icon small>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn
+            <!-- <v-btn
                 color="error"
                 small
                 dark
@@ -162,7 +173,7 @@
                 @click="deleteItem(item)"
               >
               <v-icon small>mdi-delete</v-icon>
-            </v-btn>
+            </v-btn> -->
         </template>
         <template v-slot:no-data>
           <v-btn
@@ -209,6 +220,7 @@
     },
 
     data: () => ({
+      search: '',
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -258,6 +270,7 @@
                   name: res.data.users[idx].name,
                   roleId: res.data.users[idx].role,
                   email: res.data.users[idx].email,
+                  id: res.data.users[idx].id,
                   role: this.roleItems.find(function (role) {
                           return role.value === res.data.users[idx].role
                         }).text,
@@ -282,7 +295,7 @@
               console.log(res.data)
               this.roleItems = res.data.roles.map((_, idx) => ({
                   value: res.data.roles[idx].id,
-                  text: res.data.roles[idx].name
+                  text: res.data.roles[idx].slug
                 }))
               that.getUsers()
             })
@@ -294,10 +307,13 @@
       editItem (item) {
         this.editedIndex = this.userItems.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        console.log(this.editedItem)
+        this.editedItem.role = this.editedItem.roleId
         this.dialog = true
       },
 
       deleteItem (item) {
+        console.log(item)
         this.$swal.fire({
           title: '確定要刪除數據?',
           showCancelButton: true,
@@ -305,16 +321,16 @@
           showLoaderOnConfirm: true,
           cancelButtonText: '取消',
           preConfirm: () => {
-            // let url = 'api/managerqa/' + sc_id
-            // return this.$axios
-            //   .fetchDelete(url, data)
-            //   .then(res => {
-            //     return res.data.data
-            //   })
-            //   .catch(err => {
-            //     // this.tLoading = false
-            //     console.log(err)
-            //   })
+            let url = `api/account/${item.id}`;
+            return this.$axios
+              .fetchDelete(url, {})
+              .then(res => {
+                return res.data.data
+              })
+              .catch(err => {
+                // this.tLoading = false
+                console.log(err)
+              })
           },
           allowOutsideClick: () => this.$swal.isLoading()
         }).then((result) => {
@@ -366,9 +382,74 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          let url = `api/account/${this.editedIndex}`;
+
+          let data = {};
+          console.log(this.editedItem.password)
+          if (!this.editedItem.password) {
+            data = {
+              name: this.editedItem.name,
+              email: this.editedItem.email,
+              role: this.editedItem.role
+            };
+          } else {
+            data = { ...this.editedItem };
+          }
+
+          this.$axios
+            .fetchPut(url, data)
+            .then(({ data }) => {
+              // const newUsers = this.userItems.filter(
+              //   user => user.id !== data.user.id
+              // );
+              // newUsers.unshift(data.user);
+              // this.userItems = newUsers;
+
+              this.$swal.fire({
+                  title: "成功!",
+                  text: "更新帳號成功",
+                  type: "success",
+                  confirmButtonClass: "btn btn-success",
+                  buttonsStyling: false
+                });
+              this.getRoles()
+            })
+            .catch(({ response }) => {
+              if (response.status === 422) {
+                this.notify(response.data.errors, "error");
+              } else {
+                Swal.fire({
+                  text: JSON.stringify(response)
+                });
+              }
+            });
         } else {
-          this.desserts.push(this.editedItem)
+          let url = "api/account";
+
+          this.$axios
+            .fetchPost(url, this.editedItem)
+            .then(({ data }) => {
+              this.userItems.push(data.user);
+              
+              this.$swal.fire({
+                  title: "成功!",
+                  text: "新增帳號成功",
+                  type: "success",
+                  confirmButtonClass: "btn btn-success",
+                  buttonsStyling: false
+                });
+
+              this.getRoles()
+            })
+            .catch(({ response }) => {
+              if (response.status === 422) {
+                this.notify(response.data.errors, "error");
+              } else {
+                Swal.fire({
+                  text: JSON.stringify(response)
+                });
+              }
+            });
         }
         this.close()
       },

@@ -34,9 +34,8 @@
         <app-bar-item
           v-else
           :key="`item-${i}`"
-          to="/"
         >
-          <v-list-item-title v-text="p.title" />
+          <v-list-item-title v-text="p.title"  @click="dropdownClick(p.link)" />
         </app-bar-item>
       </template>
     </v-list>
@@ -49,11 +48,32 @@
 
     data: () => ({
       profile: [
-        { title: 'Profile' },
-        { title: 'Settings' },
+        { title: '個人中心' },
+        { title: '修改密碼' },
         { divider: true },
-        { title: 'Log out' },
+        { title: '登出', link: 'logout' },
       ],
     }),
+
+    methods: {
+      dropdownClick(link) {
+        console.log(link)
+        switch (link) {
+          case 'logout':
+            this.logout()
+            break;
+        
+          default:
+            break;
+        }
+      },
+      async logout () {
+        // Log out the user.
+        await this.$store.dispatch('auth/logout')
+
+        // Redirect to login.
+        this.$router.push({ name: 'login' })
+      },
+    }
   }
 </script>

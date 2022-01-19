@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('user', [UserController::class, 'current']);
     Route::get('analytics', [AnalyticsController::class, 'index']);
+    Route::get('analytics/dispatch', [AnalyticsController::class, 'gDispatch']);
     // Sample block
     Route::get('sample/group', [SampleFixController::class, 'functionPathGroup']);
     Route::get('sample/{corperation}/{command}', [SampleFixController::class, 'active'])->whereAlpha('corperation')->whereAlpha('command');

@@ -29,4 +29,15 @@ class AnalyticsController extends Controller
     {
         return new ResponseResource($this->analyticsService->dashboard());
     }
+
+    /**
+     * 
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function gDispatch(Request $request)
+    {
+        return new ResponseResource($this->analyticsService->dispatch());
+    }
 }

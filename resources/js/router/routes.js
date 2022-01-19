@@ -20,7 +20,7 @@ export default [
       {
         path: '/dashboard',
         name: '統計分析',
-        component: page('home/Test.vue')
+        component: page('home/Dashboard.vue')
       },
       {
         path: '/account',

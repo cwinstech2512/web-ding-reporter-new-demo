@@ -20,6 +20,7 @@
         :items-per-page="itemsPerPage"
         @page-count="pageCount = $event"
         :loading="loading"
+        :search="search"
       >
         <template v-slot:top>
           <v-toolbar
@@ -32,9 +33,18 @@
               vertical
             ></v-divider>
             <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="搜尋..."
+              single-line
+              hide-details
+            ></v-text-field>
+            <v-spacer></v-spacer>
             <v-dialog
               v-model="dialogSample"
               max-width="500px"
+              v-if="authRoleVaild('upload')"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -116,10 +126,12 @@
               class="mx-4"
               inset
               vertical
+              v-if="authRoleVaild('upload')"
             ></v-divider>
             <v-dialog
               v-model="dialogNew"
               max-width="800px"
+              v-if="authRoleVaild('upload')"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -1125,9 +1137,9 @@
                     </v-btn>
                     <v-btn
                       tile
-                      :dark="!(editedDispatchStatus != 3)"
+                      :dark="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
                       color="green darken-1"
-                      :disabled="editedDispatchStatus != 3"
+                      :disabled="(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
                       @click="saveDoubleVerify"
                     >
                       <v-icon left>
@@ -1258,6 +1270,7 @@ export default {
   data: () => ({
     active: [],
     open: [],
+    search: '',
     sampleItems: [],
     page: 1,
     pageCount: 0,
@@ -1604,6 +1617,14 @@ export default {
           .catch(err => {
             console.log(err)
           })
+    },
+
+    authRoleVaild (key) {
+      let co = SAMPLE_PDF_PATH.split('_');
+      return this.user.menu.menus.find(e => Object.values(e.menu_info).find((obj) => {
+        console.log((co[0] + '_'+ key))
+        return obj == ('/' + co[0] + '_'+ key + '/')
+        }))
     },
 
     activeSample() {
