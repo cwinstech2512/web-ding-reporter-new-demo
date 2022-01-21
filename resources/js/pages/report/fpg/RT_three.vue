@@ -1876,7 +1876,7 @@ export default {
           } else {
               that.$swal.fire({
                 title: "錯誤!",
-                text: result.value.message,
+                text: result.value.data.message,
                 type: "error",
                 confirmButtonClass: "btn btn-danger"
               });
