@@ -128,7 +128,6 @@
                           label="檢測分類"
                           item-text="text"
                           item-value="value"
-                          single-line
                           outlined
                           prepend-icon="mdi-map-marker"
                           :readonly="readonlyVisible"
