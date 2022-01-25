@@ -380,7 +380,7 @@ export default {
       this.dialogView = true
       this.$nextTick(() => {
         // this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -2
+        this.editedIndex = -3
       })
     },
 
