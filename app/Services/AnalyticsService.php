@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use App\Repositories\{DispatchRepository};
 
 use Arr;
+use Illuminate\Support\Facades\Log;
 
 class AnalyticsService
 {
@@ -94,6 +95,7 @@ class AnalyticsService
 				)
 			)
 		);
+		Log::info(json_encode($out));
 		return $out;
 	}
 }
