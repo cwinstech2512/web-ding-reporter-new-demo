@@ -4,6 +4,7 @@ namespace App\Services;
 use Arr;
 use PDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use App\Services\ParseReport\ParseFpg;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\DispatchRepository;
@@ -174,6 +175,7 @@ class SampleService
             if($this->dispstchRepo->saveDispatchByArray($array)) {
                 $out['code'] = 1000;
                 $out['message'] = "資料更新成功";
+                Log::info(json_encode($array));
             } else {
                 $out['code'] = 50001;
                 $out['message'] = "資料更新錯誤";
@@ -340,6 +342,7 @@ class SampleService
             if($this->dispstchRepo->saveDispatchByArray($array)) {
                 $out['code'] = 1000;
                 $out['message'] = "資料更新成功";
+                Log::info(json_encode($array));
             } else {
                 $out['code'] = 50001;
                 $out['message'] = "資料更新錯誤";
@@ -507,6 +510,7 @@ class SampleService
         if($this->dispstchRepo->saveDispatchByArray($array)) {
             $out['code'] = 1000;
             $out['message'] = "資料更新成功";
+            Log::info(json_encode($array));
         } else {
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
@@ -584,6 +588,7 @@ class SampleService
         if($this->dispstchRepo->saveDispatchByArray($array)) {
             $out['code'] = 1000;
             $out['message'] = "資料更新成功";
+            Log::info(json_encode($array));
         } else {
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
@@ -662,6 +667,7 @@ class SampleService
         if($this->dispstchRepo->saveDispatchByArray($array)) {
             $out['code'] = 1000;
             $out['message'] = "資料更新成功";
+            Log::info(json_encode($array));
         } else {
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
@@ -704,6 +710,7 @@ class SampleService
         } else {
             $out['code'] = 5004;
             $out['message'] = "尚未通過審核";
+            Log::info(json_encode($array));
         }
         return $out;
     }
