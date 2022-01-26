@@ -46,7 +46,7 @@ class DispatchController extends Controller
     public function doubleVerify(Request $request, $corperation, $command, $id)
     {
         $function_path = $corperation . '.' . $command;
-        return new ResponseResource($this->dispatchService->verifyDispatch($function_path, $id));
+        return new ResponseResource($this->dispatchService->doubleVerifyDispatch($function_path, $id));
     }
 
     public function verify(Request $request, $corperation, $command, $id)
