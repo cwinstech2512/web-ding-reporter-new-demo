@@ -8,7 +8,7 @@ class ReportPTResource extends JsonResource
 {
     public function toArray($request)
     {
-        if(isset($this->report_mt->items)) {
+        if(isset($this->report_pt->items)) {
             $this->report_pt->items = json_decode($this->report_pt->items);
         }
         

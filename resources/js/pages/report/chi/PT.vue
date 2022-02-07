@@ -316,6 +316,89 @@
                         tile
                       >
                         <div class="text-subtitle-2">
+                          工程名稱
+                        </div>
+                        <div class="text-caption">
+                          Project Name 
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                ref="job_name"
+                                v-model="editedItem.job_name"
+                                label="Regular"
+                                :readonly="true"
+                                :rules="[
+                                  (v) => !!v || '請填寫此欄位',
+                                ]"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 2; " class="d-flex align-stretch ">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          設備編號
+                        </div>
+                        <div class="text-caption">
+                          Equlpment No
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                      <v-card-title>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-text-field
+                              ref="equlpment_no"
+                              v-model="editedItem.equlpment_no"
+                              label="(空白)"
+                              :readonly="true"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- row 2 -->
+                  <v-row
+                    class="mb-4 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
                           材質
                         </div>
                         <div class="text-caption">
@@ -1012,6 +1095,7 @@ export default {
       this.editedIndex = this.dataItems.indexOf(item)
       this.editedDispatchStatus = item.status
       this.editedItem = Object.assign({}, item)
+      console.log(this.editedItem)
       this.itemData()
     },
 
@@ -1185,7 +1269,7 @@ export default {
     },
 
     saveVerify() {
-      console.log(this.editedItem)
+      // console.log(this.editedItem)
       if(!this.editedItem.dispatch_id) return 
       let params = this.editedItem
       let co = SAMPLE_PDF_PATH.split('_');

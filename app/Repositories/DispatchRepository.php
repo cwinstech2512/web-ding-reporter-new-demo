@@ -29,7 +29,19 @@ class DispatchRepository
         $first = null;
         if(isset($array['id'])) {
             if($first = Dispatch::find($array['id'])) {
-                if(!$first) $first = new Dispatch;
+                if(!$first) {
+                    $first = new Dispatch;
+                } else {
+                    if(isset($array['function_path']) && !empty($array['function_path'])) {
+                        $function_path = $array['function_path'];
+                        $reporExplope = explode('.', $function_path);
+                        if(sizeof($reporExplope)==2) {
+                            $array['dispatch_id'] = $array['id'];
+                            unset($array['id']);
+                            $this->saveFunPathByArray($array, $reporExplope[1]);
+                        }
+                    }
+                }
             }
         } else {
             $first = new Dispatch;
@@ -89,7 +101,13 @@ class DispatchRepository
                 $first = new $model;
             }
         } else {
-            $first = new $model;
+            if(isset($array['dispatch_id']) && $array['dispatch_id'] > 0) {
+                if(!($first = $model::where('dispatch_id', $array['dispatch_id'])->first())) {
+                    $first = new $model;
+                }
+            } else {
+                $first = new $model;
+            }
         }
         $first->fill($array);
         return $first->save();
