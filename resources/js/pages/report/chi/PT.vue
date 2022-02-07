@@ -246,6 +246,9 @@
                           v-model="editedItem.exam_place"
                           label="Regular"
                           :readonly="readonlyVisible"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -286,12 +289,17 @@
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
+                              ref="exam_date"
                               v-model="editedItem.exam_date"
                               label="Regular"
                               prepend-icon="mdi-calendar"
                               readonly
                               v-bind="attrs"
                               v-on="on"
+                              :rules="[
+                                (v) => !!v || '請填寫此欄位',
+                              ]"
+                              required
                             ></v-text-field>
                           </template>
                           <v-date-picker
@@ -414,9 +422,13 @@
                         tile
                       >
                         <v-text-field
+                          ref="material"
                           v-model="editedItem.material"
                           label="Regular"
                           :readonly="readonlyVisible"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -505,9 +517,13 @@
                         tile
                       >
                         <v-text-field
+                          ref="light_intensity"
                           v-model="editedItem.light_intensity"
                           label="Regular"
                           :readonly="readonlyVisible"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -534,9 +550,13 @@
                         tile
                       >
                         <v-text-field
+                          ref="surface_temp"
                           v-model="editedItem.surface_temp"
                           label="Regular"
                           :readonly="readonlyVisible"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -973,6 +993,9 @@ export default {
             this.exportFinalPath = res.data.data.export_final_path
             if(res.data.data.report_pt) {
               this.editedItem = Object.assign({}, res.data.data.report_pt)
+              if(!res.data.data.report_pt.items) {
+                this.editedItem.items = Object.assign({}, this.defaultItem.items)
+              }
             } else {
               let tmp = Object.assign({}, this.editedItem)
               this.editedItem = Object.assign({}, this.defaultItem)
@@ -1320,6 +1343,17 @@ export default {
     },
 
     save () {
+      var formError = false
+      Object.keys(this.editedItem).forEach(f => {
+        if(this.$refs[f] && !this.$refs[f].validate(true)) {
+          formError = true
+          return
+        }
+      })
+
+      if(formError) {
+        return
+      }
       let params = this.editedItem
       let co = SAMPLE_PDF_PATH.split('_');
       let that = this

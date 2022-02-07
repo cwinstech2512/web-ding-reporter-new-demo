@@ -1228,11 +1228,14 @@ export default {
             this.exportFinalPath = res.data.data.export_final_path
             if(res.data.data.report_mt) {
               this.editedItem = Object.assign({}, res.data.data.report_mt)
-              this.editedItem.surface_status = this.editedItem.surface_status.split(',')
-              this.editedItem.exam_time = this.editedItem.exam_time.split(',')
-              this.editedItem.type_of_particle_olor = this.editedItem.type_of_particle_olor.split(',')
-              this.editedItem.magnetizing_methon = this.editedItem.magnetizing_methon.split(',')
+              this.editedItem.surface_status = this.editedItem.surface_status?.split(',')
+              this.editedItem.exam_time = this.editedItem.exam_time?.split(',')
+              this.editedItem.type_of_particle_olor = this.editedItem.type_of_particle_olor?.split(',')
+              this.editedItem.magnetizing_methon = this.editedItem.magnetizing_methon?.split(',')
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
+              if(!res.data.data.report_mt.items) {
+                this.editedItem.items = Object.assign({}, this.defaultItem.items)
+              }
               console.log(this.editedItem)
             } else {
               let tmp = Object.assign({}, this.editedItem)

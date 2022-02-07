@@ -1163,6 +1163,9 @@ export default {
               // this.editedItem.surface_status = this.editedItem.surface_status.split(',')
               // this.editedItem.exam_time = this.editedItem.exam_time.split(',')
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
+              if(!res.data.data.report_ut.items) {
+                this.editedItem.items = Object.assign({}, this.defaultItem.items)
+              }
               console.log(this.editedItem)
             } else {
               let tmp = Object.assign({}, this.editedItem)

@@ -1115,6 +1115,9 @@ export default {
             if(res.data.data.report_it) {
               this.editedItem = Object.assign({}, res.data.data.report_it)
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
+              if(!res.data.data.report_it.items) {
+                this.editedItem.items = Object.assign({}, this.defaultItem.items)
+              }
             } else {
               let tmp = Object.assign({}, this.editedItem)
               this.editedItem = Object.assign({}, this.defaultItem)

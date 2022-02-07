@@ -1483,6 +1483,9 @@ export default {
               if(res.data.data.report_rtoil) {
                 this.editedItem = Object.assign({}, res.data.data.report_rtoil)
                 this.editedItem.film_size = this.editedItem.film_size.split(',')
+                if(!res.data.data.report_rtoil.items) {
+                  this.editedItem.items = Object.assign({}, this.defaultItem.items)
+                }
               } else {
                 let tmp = Object.assign({}, this.editedItem)
                 this.editedItem = Object.assign({}, this.defaultItem)
