@@ -172,12 +172,7 @@
           </v-toolbar>
         </template>
         <template v-slot:[`item.status`]="{ item }">
-          <v-chip
-            :color="getStatusColor(item.status)"
-            dark
-          >
-            {{ getStatusText(item.status) }}
-          </v-chip>
+          <DataTableStatus :item="item"></DataTableStatus>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
@@ -229,11 +224,16 @@
 </template>
 
 <script>
+import DataTableStatus from '../../components/DataTableStatus.vue'
 
 export default {
   name: 'DispatchView',
 
   middleware: 'auth',
+
+  components: {
+    DataTableStatus
+  },
 
   metaInfo () {
     return { title: this.$t('dispath_title') }
@@ -421,6 +421,9 @@ export default {
         case 3:
           return "orange darken-4"
           break;
+        case 3:
+          return "orange darken-4"
+          break;
         default:
           return "blue-grey lighten-1"
       }
@@ -439,6 +442,9 @@ export default {
           break;
         case 3:
           return "審核"
+          break;
+        case 4:
+          return "通過"
           break;
         default:
           return "未定義"

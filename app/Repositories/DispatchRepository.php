@@ -109,8 +109,20 @@ class DispatchRepository
                 $first = new $model;
             }
         }
+        $array['items'] = $this->initItemReportData($array, $command);
         $first->fill($array);
         return $first->save();
+    }
+
+    private function initItemReportData($object, $command)
+    {
+        if($command == "Ut") {
+            if(!isset($object['items']) || empty($object['items'])) {
+                return ('[{"thickness_result":"E1-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null}]');
+            }
+        }
+
+        return isset($object['items'])? $object['items'] : ('[]');
     }
 
     public function countStatus(int $status)
