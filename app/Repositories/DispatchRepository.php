@@ -109,7 +109,10 @@ class DispatchRepository
                 $first = new $model;
             }
         }
-        $array['items'] = $this->initItemReportData($array, $command);
+        if(empty($first->items) || is_null($first->items)) {
+            $array['items'] = $this->initItemReportData($array, $command);
+        }
+        
         $first->fill($array);
         return $first->save();
     }
