@@ -96,7 +96,7 @@ class DispatchRepository
         $command = substr(ucfirst($command), 0, 2);
         $model = app("App\Models\Report{$command}");
         
-        if(isset($array['id'])) {
+        if(isset($array['id']) && $array['id'] > 0) {
             if(!($first = $model::find($array['id']))) {
                 $first = new $model;
             }
