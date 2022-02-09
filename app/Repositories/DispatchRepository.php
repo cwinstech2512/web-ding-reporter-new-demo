@@ -125,7 +125,7 @@ class DispatchRepository
             }
         }
 
-        return isset($object['items'])? $object['items'] : ('[]');
+        return isset($object['items'])? $object['items'] : ('');
     }
 
     public function countStatus(int $status)
