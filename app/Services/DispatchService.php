@@ -52,6 +52,18 @@ class DispatchService
         return $out;
     }
 
+    public function verifyBackDispatch($function_path, $id = -1)
+    {
+        if($this->dispstchRepo->verifyBackFunPathDispatch($function_path, $id)) {
+            $out['code'] = 1000;
+            $out['message'] = "資料更新成功";
+        } else {
+            $out['code'] = 50001;
+            $out['message'] = "資料更新錯誤";
+        }
+        return $out;
+    }
+
     public function syncFunPath($array, $id = null, $corperation = '', $command = '')
     {
         if(!is_null($id) && $id > 0) {

@@ -89,6 +89,16 @@ class DispatchRepository
         }
     }
 
+    public function verifyBackFunPathDispatch($function_path, $id = -1)
+    {
+        if(!empty($function_path) && $id == -1) {
+        } else if(!empty($function_path) && $id > 0) {
+            $tmp = $this->model::where('function_path', $function_path)->where('id', $id)->first();
+            $tmp->status = 2;
+            return $tmp->save();
+        }
+    }
+
     public function saveFunPathByArray($array, $command)
     {
         $first = null;

@@ -85,6 +85,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         ->whereAlpha('corperation')
         ->whereAlpha('command')
         ->whereNumber('id');
+    Route::put('dispatch_verify_back/{corperation}/{command}/{id}', [DispatchController::class, 'verifyBack'])
+        ->whereAlpha('corperation')
+        ->whereAlpha('command')
+        ->whereNumber('id');
     Route::post('dispatch_download/{corperation}/{command}/{id}', [DispatchController::class, 'download'])
         ->whereAlpha('corperation')
         ->whereAlpha('command')

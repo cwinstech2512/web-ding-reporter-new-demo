@@ -814,6 +814,19 @@
                     <v-btn
                       tile
                       :dark="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
+                      color="red darken-1"
+                      :disabled="!authRoleVaild('vaild') || editedDispatchStatus != 3"
+                      v-if="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
+                      @click="saveVerifyBack"
+                    >
+                      <v-icon left>
+                        mdi-account-remove-outline
+                      </v-icon>
+                      退回審核
+                    </v-btn>
+                    <v-btn
+                      tile
+                      :dark="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
                       color="green darken-1"
                       :disabled="!authRoleVaild('vaild') || editedDispatchStatus != 3"
                       @click="saveDoubleVerify"
@@ -1457,6 +1470,56 @@ export default {
               this.closeView()
           }
           
+      })
+    },
+
+    saveVerifyBack () {
+      if(!this.editedItem.dispatch_id) return 
+      let params = this.editedItem
+      let co = SAMPLE_PDF_PATH.split('_');
+      let that = this
+      let url = `api/dispatch_verify_back/${co[0]}/${co[1]}/` + this.editedItem.dispatch_id
+      this.$swal.fire({
+        title: '確定要退回審核?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          params.nominal_size = that.selectNominalSize.nominal_size
+          params.thicknes = that.selectThickness.thickness
+          return this.$axios
+            .fetchPut(url, params)
+            .then(res => {
+              return res.data.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
+        try {
+          if(result.value.code == 1000) {
+              that.$swal.fire({
+                title: "成功!",
+                text: "儲存數據成功",
+                type: "success",
+                confirmButtonClass: "btn btn-success"
+              });
+              this.closeView()
+          } else {
+              that.$swal.fire({
+                title: "錯誤!",
+                text: "儲存數據錯誤",
+                type: "error",
+                confirmButtonClass: "btn btn-danger"
+              });
+              this.closeView()
+          }
+        } catch {
+
+        }
       })
     },
 

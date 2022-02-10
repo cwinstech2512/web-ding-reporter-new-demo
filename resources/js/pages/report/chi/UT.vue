@@ -826,7 +826,7 @@
                       :dark="exportFinalPath != null"
                       :disabled="exportFinalPath == null"
                       color="blue darken-1"
-                      @click="saveExport"
+                      @click="saveExport(editedItem.dispatch_id)"
                     >
                       <v-icon left>
                         mdi-file-word-outline
@@ -844,6 +844,19 @@
                         mdi-send-lock
                       </v-icon>
                       提交審核
+                    </v-btn>
+                    <v-btn
+                      tile
+                      :dark="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
+                      color="red darken-1"
+                      :disabled="!authRoleVaild('vaild') || editedDispatchStatus != 3"
+                      v-if="!(!authRoleVaild('vaild') || editedDispatchStatus != 3)"
+                      @click="saveVerifyBack"
+                    >
+                      <v-icon left>
+                        mdi-account-remove-outline
+                      </v-icon>
+                      退回審核
                     </v-btn>
                     <v-btn
                       tile
@@ -1163,7 +1176,7 @@ export default {
               // this.editedItem.surface_status = this.editedItem.surface_status.split(',')
               // this.editedItem.exam_time = this.editedItem.exam_time.split(',')
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
-              if(!res.data.data.report_ut.items) {
+              if(!res.data.data.report_ut.items || res.data.data.report_ut.items.length < 1) {
                 this.editedItem.items = Object.assign({}, this.defaultItem.items)
               }
               console.log(this.editedItem)
@@ -1380,12 +1393,12 @@ export default {
       })
     },
 
-    saveExport() {
+    saveExport(dispatch_id = -1) {
       if(!this.editedItem.dispatch_id) return 
       let params = this.editedItem
       let co = SAMPLE_PDF_PATH.split('_');
       let that = this
-      let url = `api/dispatch_download/${co[0]}/${co[1]}/` + this.editedItem.dispatch_id
+      let url = `api/dispatch_download/${co[0]}/${co[1]}/` + dispatch_id
       this.$swal.fire({
         title: '確定要匯出報告?',
         showCancelButton: true,
@@ -1516,6 +1529,56 @@ export default {
               });
               this.closeView()
           }
+        }
+      })
+    },
+
+    saveVerifyBack () {
+      if(!this.editedItem.dispatch_id) return 
+      let params = this.editedItem
+      let co = SAMPLE_PDF_PATH.split('_');
+      let that = this
+      let url = `api/dispatch_verify_back/${co[0]}/${co[1]}/` + this.editedItem.dispatch_id
+      this.$swal.fire({
+        title: '確定要退回審核?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          params.nominal_size = that.selectNominalSize.nominal_size
+          params.thicknes = that.selectThickness.thickness
+          return this.$axios
+            .fetchPut(url, params)
+            .then(res => {
+              return res.data.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
+        try {
+          if(result.value.code == 1000) {
+              that.$swal.fire({
+                title: "成功!",
+                text: "儲存數據成功",
+                type: "success",
+                confirmButtonClass: "btn btn-success"
+              });
+              this.closeView()
+          } else {
+              that.$swal.fire({
+                title: "錯誤!",
+                text: "儲存數據錯誤",
+                type: "error",
+                confirmButtonClass: "btn btn-danger"
+              });
+              this.closeView()
+          }
+        } catch {
+
         }
       })
     },
