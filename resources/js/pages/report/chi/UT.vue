@@ -1378,6 +1378,7 @@ export default {
     },
 
     closeView () {
+      this.listDatas()
       this.dialogView = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
