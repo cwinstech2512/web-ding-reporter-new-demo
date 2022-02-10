@@ -42,6 +42,8 @@ class DispatchRepository
                         }
                     }
                 }
+            } else {
+                $first = new Dispatch;
             }
         } else {
             $first = new Dispatch;
