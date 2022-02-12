@@ -297,7 +297,7 @@ export default {
       exam_date: '',
       function_path: '',
       exam_place: '',
-      status: '',
+      status: 0,
       id: -1,
     },
     editedItem: {
@@ -306,7 +306,7 @@ export default {
       exam_date: '',
       function_path: '',
       exam_place: '',
-      status: '',
+      status: 0,
       id: -1,
     },
     examDatePickShow: false,

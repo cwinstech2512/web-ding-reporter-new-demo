@@ -5,14 +5,23 @@ namespace App\Models;
 use App\Models\ReportPt;
 use App\Models\ReportMt;
 use App\Traits\DateTimeFormatTrait;
+use App\Traits\UserStampsTrait;
 use Illuminate\Database\Eloquent\Model;
 
 
 class Dispatch extends Model
 {
     use DateTimeFormatTrait;
+    use UserStampsTrait;
     
-    protected $fillable = ['customer', 'exam_date', 'job_name', 'exam_place', 'status', 'function_path', 'export_final_path'];
+    protected $fillable = ['customer', 'exam_date', 'job_name', 'exam_place', 'status', 'function_path', 'export_final_path',
+    'updated_user',
+    'created_user'];
+
+    protected $defaults = [
+        'status' => 0,
+    ];
+
 	/**
      * The table associated with the model.
      *
