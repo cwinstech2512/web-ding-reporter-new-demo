@@ -164,7 +164,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" text @click="closeDelete">取消</v-btn>
-                  <v-btn color="error" text @click="deleteItemConfirm">確定</v-btn>
+                  <v-btn color="error" text @click="deleteItemConfirm" :loading="loadingDelete">確定</v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
@@ -262,6 +262,7 @@ export default {
     dialogDelete: false,
     loading: false,
     loadingSave: false,
+    loadingDelete: false,
     dataItems: [],
     selectItem: [],
     excelFile: null,
@@ -370,9 +371,58 @@ export default {
       this.itemData()
     },
 
+    deleteItem(item) {
+      this.dialogDelete = true
+
+      this.editedItem = Object.assign({}, item)
+      this.editedIndex = this.editedItem.id
+    },
+
     deleteItemConfirm () {
-      this.userItems.splice(this.editedIndex, 1)
-      this.closeDelete()
+      this.dialogDelete = true
+
+      let that = this
+      if (this.editedIndex > -1) {
+        if(this.editedItem != this.defaultItem) {
+          that.loadingDelete = true
+          // let formData = new FormData();
+          let url = 'api/dispatch/' + this.editedItem.id
+          // formData.append("ex_file", this.editedItem);
+          this.$axios
+            .fetchDelete(url, {})
+              .then(res => {
+                that.loadingDelete = false
+                that.closeDelete()
+                that.listDatas()
+                let result = res.data.data
+                if(result.code == 1000) {
+                    that.$swal.fire({
+                      title: "成功!",
+                      text: result.message,
+                      type: "success",
+                      confirmButtonClass: "btn btn-success"
+                    });
+                } else {
+                    that.$swal.fire({
+                      title: "錯誤!",
+                      text: result.message,
+                      type: "error",
+                      confirmButtonClass: "btn btn-danger"
+                    });
+                }
+              })
+              .catch(err => {
+                that.loadingDelete = false
+                that.close()
+                that.$swal.fire({
+                  title: "錯誤!",
+                  text: "系統錯誤，請稍後重新嘗試",
+                  type: "error",
+                  confirmButtonClass: "btn btn-danger"
+                });
+              })
+        }
+      }
     },
 
     createView() {

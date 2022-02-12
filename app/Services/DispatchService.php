@@ -125,8 +125,8 @@ class DispatchService
     {
         $out = [];
         if(!is_null($id)) {
-            $array['params']['id'] = $id;
-            $array['params']['status'] = -1;
+            $array['id'] = $id;
+            $array['status'] = 5;
         }
         if($this->dispstchRepo->saveDispatchByArray($array)) {
             $out['code'] = 1000;
@@ -135,5 +135,6 @@ class DispatchService
             $out['code'] = 50001;
             $out['message'] = "資料刪除錯誤";
         }
+        return $out;
     }
 }
