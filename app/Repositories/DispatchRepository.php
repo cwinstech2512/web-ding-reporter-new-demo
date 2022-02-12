@@ -65,7 +65,7 @@ class DispatchRepository
     public function funPathDispatch($function_path, $id = -1)
     {
         if(!empty($function_path) && $id == -1) {
-            return $this->model::where('function_path', $function_path)->get();
+            return $this->model::where('function_path', $function_path)->where('status', '<', 5)->get();
         } else if(!empty($function_path) && $id > 0) {
             $reporExplope = explode('.', $function_path);
             if(sizeof($reporExplope)==2) {
