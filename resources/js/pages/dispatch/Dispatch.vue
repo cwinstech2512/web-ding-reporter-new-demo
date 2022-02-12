@@ -20,6 +20,7 @@
         :items-per-page="itemsPerPage"
         @page-count="pageCount = $event"
         :loading="loading"
+        :search="search"
       >
         <template v-slot:top>
           <v-toolbar
@@ -31,6 +32,14 @@
               inset
               vertical
             ></v-divider>
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="搜尋..."
+              single-line
+              hide-details
+            ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog
               v-model="dialogView"
@@ -263,6 +272,7 @@ export default {
     loading: false,
     loadingSave: false,
     loadingDelete: false,
+    search: '',
     dataItems: [],
     selectItem: [],
     excelFile: null,
