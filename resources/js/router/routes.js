@@ -32,6 +32,11 @@ export default [
         name: '權限管理',
         component: page('home/Authorization.vue')
       },
+      {
+        path: '/change_password',
+        name: '修改密碼',
+        component: page('auth/password/Change.vue')
+      },
       // {
       //   path: 'ss',
       //   name: '相似問題選單連結',

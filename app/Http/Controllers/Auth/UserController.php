@@ -105,7 +105,9 @@ class UserController extends Controller
             DB::rollBack();
             return '{"code": 103, "msg": "' . $e->getMessage() . '"}';
         }
-        return '{"code": 200, "msg": ""}';
+        $out['code'] = 1000;
+        $out['message'] = "資料更新成功";
+        return json_encode($out);
       }
 
       if ($method == "post") { // create user
