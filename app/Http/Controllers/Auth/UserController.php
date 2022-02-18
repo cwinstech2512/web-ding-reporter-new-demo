@@ -125,7 +125,7 @@ class UserController extends Controller
         }
         $name = $data['name'];
         $pwd = Hash::make($data['password']);
-        $email = $name."@ehsnchat.com.tw";
+        $email = $name."@example.com";
         $user = DB::select("SELECT * FROM users WHERE email = '$email'");
         $cnt = Count((array)$user);
         if ($cnt != 0) {
