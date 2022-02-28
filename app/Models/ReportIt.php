@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UserStampsTrait;
 
 class ReportIt extends Model
 {
+    use UserStampsTrait;
 	/**
      * The table associated with the model.
      *
@@ -18,5 +20,7 @@ class ReportIt extends Model
      * @var array
      */
     protected $fillable = ['dispatch_id', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
-    'pipeline_no', 'equipement', 'testing_method', 'thickness', 'voltage', 'obsert', 'type', 'items'];
+    'pipeline_no', 'equipement', 'testing_method', 'thickness', 'voltage', 'obsert', 'type', 'items', 'thickness_objs',
+    'updated_user',
+    'created_user'];
 }

@@ -7,7 +7,7 @@
     <material-card
       icon="mdi-clipboard-text"
       icon-small
-      title="射線檢測"
+      title="射線檢測(RT)"
       color="accent"
     >
       <v-data-table
@@ -26,7 +26,7 @@
           <v-toolbar
             flat
           >
-            <v-toolbar-title>列表</v-toolbar-title>
+            <v-toolbar-title>射線檢測(RT)</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -180,6 +180,16 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+            <ThicknessChoice
+              @saveMThinckness="saveMThinckness"
+              @toggleDialog="toggleDialog"
+              :channalType="'chimei_rt'"
+              :thicknesGroup_Data="thicknesGroup_Data"
+              :thicknesGroupModel="thicknesGroupModel"
+              :dialog="dialogThicknessChoice" 
+              :listRTPT_Datas="listRTPT_Datas"
+              :listThickness_Datas="listThickness_Datas">
+            </ThicknessChoice>
             <v-dialog
               v-model="dialogView"
               width="600px"
@@ -311,6 +321,88 @@
                         tile
                       >
                         <div class="text-subtitle-2">
+                          檢測人員
+                        </div>
+                        <div class="text-caption">
+                          Inspected By
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12" md="6">
+                              <v-text-field
+                                v-model="editedItem.obsert"
+                                :readonly="readonlyVisible"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 2; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          工單編號
+                        </div>
+                        <div class="text-caption">
+                          Job No.
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                ref="job_no"
+                                v-model="editedItem.job_no"
+                                label="Regular"
+                                :readonly="readonlyVisible"
+                                :rules="[
+                                  (v) => !!v || '請填寫此欄位',
+                                ]"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+
+                  <!-- row 1 -->
+                  <v-row
+                    class="mb-4 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
                           工程名稱
                         </div>
                         <div class="text-caption">
@@ -369,6 +461,7 @@
                                 item-text="text"
                                 item-value="value"
                                 dense
+                                multiple
                                 :disabled="readonlyVisible"
                               ></v-select>
                             </v-col>
@@ -421,7 +514,7 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          厚度
+                          層數
                         </div>
                         <div class="text-caption">
                           Thicknes
@@ -437,33 +530,7 @@
                       >
                       <v-card-title>
                         <v-row>
-                          <v-col cols="12" md="4">
-                            <v-select
-                              v-model="selectNominalSize"
-                              :items="listRTPT_Datas"
-                              label="尺寸"
-                              item-text="nominal_size"
-                              item-value="id"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-select
-                              v-model="selectThickness"
-                              :items="listThickness_Datas"
-                              label="厚度"
-                              item-text="thickness"
-                              item-value="value"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col>
-                          <v-col cols="12" md="4">
+                          <v-col cols="12" md="12">
                             <v-select
                               v-model="editedItem.layers"
                               :items="listLayer_Datas"
@@ -477,9 +544,6 @@
                           </v-col>
                         </v-row>
                       </v-card-title>
-                      <v-card-subtitle>
-                        <div v-text="mThincknessNomalSize"></div>
-                      </v-card-subtitle>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -828,7 +892,7 @@
                           label="Regular"
                           :readonly="true"
                           suffix="Min.Sec."
-                          v-text="formateExTime(editedItem.exposure_time)"
+                          v-model="editedItem.exposure_time"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -1040,7 +1104,86 @@
                         outlined
                         tile
                       >
-                      <v-simple-table id="tab">
+                      <v-card-text>
+                        <v-slide-group
+                          v-model="thicknesGroupModel"
+                          class="pa-4"
+                          mandatory
+                          show-arrows
+                        >
+                          <v-slide-item
+                            v-for="n in thicknesGroup_Data.length + 1"
+                            :key="n"
+                            v-slot="{ active, toggle }"
+                          >
+                            <v-card
+                              v-if="n != thicknesGroup_Data.length + 1"
+                              :color="active ? 'blue darken-3' : 'grey lighten-1'"
+                              class="ma-4"
+                              height="100"
+                              @click="toggle"
+                            >
+                              <v-app-bar
+                                flat
+                                color="rgba(0, 0, 0, 0)"
+                                height="12"
+                              >
+                                <v-spacer></v-spacer>
+
+                                <v-btn
+                                  color="white"
+                                  icon
+                                  height="10"
+                                  width="10"
+                                  @click="deleteThickness(thicknesGroup_Data[n-1])"
+                                >
+                                  <v-icon size="8" color="white">mdi-close-thick</v-icon>
+                                </v-btn>
+                              </v-app-bar>
+                              <v-card-text
+                                :class="active ? 'white--text' : ''"
+                              >
+                                {{thicknesGroup_Data[n-1].selectThickness.thickness.toUpperCase()}}
+                              <v-divider class="mx-2"></v-divider>
+                                {{thicknesGroup_Data[n-1].selectNominalSize.nominal_size}}
+                              </v-card-text>
+                            </v-card>
+                            <v-card
+                              v-else
+                              :color="active ? 'deep-purple accent-4' : 'grey lighten-1'"
+                              class="ma-4"
+                              height="100"
+                              width="60"
+                              @click="addDialogThickness"
+                            >
+                              <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                              >
+                                <v-icon
+                                  :class="active ? 'white--text' : ''"
+                                  size="24"
+                                  v-text="'mdi-plus-circle-multiple-outline'"
+                                ></v-icon>
+                              </v-row>
+                            </v-card>
+                          </v-slide-item>
+                        </v-slide-group>
+                        <!-- <v-chip-group
+                          v-model="selection"
+                          mandatory
+                          active-class="deep-purple accent-4 white--text"
+                          column
+                        >
+                          <v-chip>2"<v-divider class="mx-2"></v-divider>std</v-chip>
+
+                          <v-chip>2 1/2"</v-chip>
+
+                          <v-chip>3"</v-chip>
+                        </v-chip-group> -->
+                      </v-card-text>
+                      <v-simple-table>
                         <template v-slot:default>
                           <thead>
                             <!--  表头 -->
@@ -1055,40 +1198,46 @@
                               <th class="text-left">備註<br>Remark</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <draggable v-if="editedItem.items" v-model="editedItem.items[thicknesGroupModelChoice]" tag="tbody" :sort="!readonlyVisible">
                             <!-- 表格内容 -->
-                            <tr v-for="(item, index) in editedItem.items" :key="index">
+                            <tr v-for="(item, index) in editedItem.items[thicknesGroupModelChoice]" :key="index">
                               <td><v-text-field
                                 :disabled="true"
-                                autofocus
+                                outlined
+                                dense
                                 :value="(index+1)"
                               ></v-text-field></td>
                               <td>
                                 <v-text-field
                                 v-model="item.film_or_weld_no"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td>
                                 <v-text-field
                                 v-model="item.thickness"
                                 :readonly="true"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.welder_no"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.sensitivity"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.defect_code"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td>
                                 <v-select
@@ -1097,6 +1246,7 @@
                                   item-text="text"
                                   item-value="value"
                                   dense
+                                  outlined
                                   single-line
                                   :readonly="readonlyVisible"
                                 ></v-select>
@@ -1104,19 +1254,22 @@
                               <td><v-text-field
                                 v-model="item.remark"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <template>
                                 <!-- 按钮区域 -->
                               <td>
-                                <!-- 修改界面显示取消 -->
-                                <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items.length - 1" @click="insertEditItems()">插入下一行</v-btn>
-                                <!-- 修改界面显示取消 -->
-                                <v-btn rounded color="error" dark small v-else @click="deleteEditItems(item)">刪除</v-btn>
+                                <template v-if="!readonlyVisible">
+                                  <!-- 修改界面显示取消 -->
+                                  <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items[thicknesGroupModelChoice].length - 1" @click="insertEditItems(thicknesGroupModelChoice)">插入下一行</v-btn>
+                                  <!-- 修改界面显示取消 -->
+                                  <v-btn rounded color="error" dark small v-else @click="deleteEditItems(item)">刪除</v-btn>
+                                </template>
                               </td>
                             </template>
                             </tr>
-                          </tbody>
+                          </draggable>
                         </template>
                       </v-simple-table>
                     </v-card>
@@ -1274,6 +1427,8 @@
 import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
+import ThicknessChoice from '../../../components/ThicknessChoice.vue'
+import draggable from "vuedraggable"
 import moment from 'moment'
 const SAMPLE_PDF_PATH = 'chimei_rt'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -1284,7 +1439,9 @@ export default {
 
   components: {
     PdfViewer,
-    DataTableStatus
+    DataTableStatus,
+    draggable,
+    ThicknessChoice
   },
 
   metaInfo () {
@@ -1307,13 +1464,18 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogThicknessChoice: false,
     loading: false,
     loadingSave: false,
+    thicknesGroup_Data: [],
+    thicknesGroupModel: -1,
+    thicknesGroupModelChoice: 0,
     dataItems: [],
     selectItem: [],
     objDL_Data: {
       data_value: null
     },
+    mThincknessNomalSize: null,
     listDL_Datas: [],
     listRTPT_Datas: [],
     listThickness_Datas: [],
@@ -1391,6 +1553,7 @@ export default {
       id: 0,
       dispatch_id: '',
       job_name: '',
+      job_no: '',
       exam_date: new Date,
       exam_place: '',
       material: '',
@@ -1401,25 +1564,28 @@ export default {
       identify: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '', film_processing_min: '',
-      energy_strength: '', sin_dou: 0,
+      energy_strength: '', sin_dou: 0, thickness_objs: [],
       obsert: '',
       items:[
-        {
-          object_no: '',
-          film_or_weld_no: '',
-          thickness: '',
-          welder_no: '',
-          sensitivity: '',
-          defect_code: '',
-          result: '',
-          remark: '',
-        }
+        [
+          {
+            object_no: '',
+            film_or_weld_no: '',
+            thickness: '',
+            welder_no: '',
+            sensitivity: '',
+            defect_code: '',
+            result: '',
+            remark: '',
+          }
+        ]
       ],
     },
     defaultItem: {
       id: 0,
       dispatch_id: '',
       job_name: '',
+      job_no: '',
       exam_date: new Date,
       exam_place: '',
       material: '',
@@ -1430,19 +1596,21 @@ export default {
       identify: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '25', film_processing_min: '5',
-      energy_strength: '', sin_dou: 0,
+      energy_strength: '', sin_dou: 0, thickness_objs: [],
       obsert: '',
       items:[
-        {
-          object_no: '',
-          film_or_weld_no: '',
-          thickness: '',
-          welder_no: '',
-          sensitivity: '',
-          defect_code: '',
-          result: '',
-          remark: '',
-        }
+        [
+          {
+            object_no: '',
+            film_or_weld_no: '',
+            thickness: '',
+            welder_no: '',
+            sensitivity: '',
+            defect_code: '',
+            result: '',
+            remark: '',
+          }
+        ]
       ],
     },
   }),
@@ -1466,43 +1634,52 @@ export default {
       return this.editedIndex == -2
     },
 
-    mThincknessNomalSize() {
-      if(Object.keys(this.selectThickness).length !== 0 && Object.keys(this.selectNominalSize).length !== 0) {
-        console.log(this.selectNominalSize)
-        return /*this.selectNominalSize.nominal_size + ', ' + this.selectThickness.thickness + ', ' + */this.selectNominalSize[this.selectThickness.thickness]
-      }
-    },
+    // mThincknessNomalSize() {
+    //   if(Object.keys(this.selectThickness).length !== 0 && Object.keys(this.selectNominalSize).length !== 0) {
+    //     console.log(this.selectNominalSize)
+    //     return /*this.selectNominalSize.nominal_size + ', ' + this.selectThickness.thickness + ', ' + */this.selectNominalSize[this.selectThickness.thickness]
+    //   }
+    // },
   },
 
   watch: {
+    thicknesGroupModel (val, oldVal) {
+      // if(val == this.thicknesGroup_Data.length) {
+      //   this.dialogThicknessChoice = true
+      if(val === oldVal) {
+        return
+      }
+      if(val >= this.thicknesGroup_Data.length) return
+      this.thicknesGroupModelChoice = val
+    },
     selectDL (val, oldVal) {
       if (val === oldVal) return
       this.getDL_Data()
     },
     mThincknessNomalSize(val, oldVal) {
       if (val === oldVal) return
-      this.roleCalcFOG()
-      this.editedItem.items.forEach(element => {
-        element.thickness = val
-      })
-      this.roleCalcSod()
-      this.roleCalcExTime()
+      // this.roleCalcFOG()
+      // this.editedItem.items.forEach(element => {
+      //   element.thickness = val
+      // })
+      // this.roleCalcSod()
+      // this.roleCalcExTime()
     },
     'editedItem.radiographic_tech'(val, oldVal) {
       if (val === oldVal) return
-      this.roleCalcSod()
-      this.roleCalcExTime()
+      // this.roleCalcSod()
+      // this.roleCalcExTime()
     },
     'editedItem.sin_dou'(val, oldVal) {
       if (val === oldVal) return
-      this.roleCalcSod()
-      this.roleCalcExTime()
+      // this.roleCalcSod()
+      // this.roleCalcExTime()
     },
     'editedItem.film_brand'(val, oldVal) {
       // console.log(val, oldVal)
       if (val === oldVal) return
-      this.roleCalcSod()
-      this.roleCalcExTime()
+      // this.roleCalcSod()
+      // this.roleCalcExTime()
       if(val == '1' || val == '1.5')
         this.editedItem.film_type = 'Class I'
       else
@@ -1547,7 +1724,7 @@ export default {
     authRoleVaild (key) {
       let co = SAMPLE_PDF_PATH.split('_');
       return this.user.menu.menus.find(e => Object.values(e.menu_info).find((obj) => {
-        console.log((co[0] + '_'+ key))
+        // console.log((co[0] + '_'+ key))
         return obj == ('/' + co[0] + '_'+ key + '/')
         }))
     },
@@ -1563,21 +1740,27 @@ export default {
             if(res.data.data.report_rt) {
               this.editedItem = Object.assign({}, res.data.data.report_rt)
               this.editedItem.film_size = this.editedItem.film_size?.split(',')
-              if(!res.data.data.report_rt.items || res.data.data.report_rt.items.length < 1) {
-                this.editedItem.items = Object.assign({}, this.defaultItem.items)
-              }
+              this.editedItem.radiographic_tech = this.editedItem.radiographic_tech?.split(',')
+              // if(!res.data.data.report_rt.items || res.data.data.report_rt.items.length < 1) {
+              //   this.editedItem.items = Object.assign([], this.defaultItem.items)
+              // }
             } else {
               let tmp = Object.assign({}, this.editedItem)
-              this.editedItem = Object.assign({}, this.defaultItem)
+              this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+              this.editedItem.items = null
               this.editedItem.exam_date = tmp.exam_date
               this.editedItem.exam_place = tmp.exam_place
               this.editedItem.dispatch_id = tmp.id
             }
+
+            if(!this.editedItem.film_processing_temp || this.editedItem.film_processing_temp.length == 0) this.editedItem.film_processing_temp = this.defaultItem.film_processing_temp
+            if(!this.editedItem.film_processing_min || this.editedItem.film_processing_min.length == 0) this.editedItem.film_processing_min = this.defaultItem.film_processing_min
               
             this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
             this.getRTPT_Data()
             this.getDL_Data()
             this.selectDL = this.editedItem.identify
+            this.thicknesGroup_Data = this.editedItem.thickness_objs? this.editedItem.thickness_objs : []
             console.log(this.editedItem)
           })
           .catch(err => {
@@ -1638,12 +1821,14 @@ export default {
     },
 
     insertEditItems() {
-      if(this.editedItem.items && this.editedItem.items.length > 0) {
-        let tmpDefault = Object.assign({}, this.defaultItem.items[0])
-        tmpDefault.object_no = this.editedItem.items.length + 1
+      var choiceIndex = this.thicknesGroupModelChoice
+      if(choiceIndex < 0) return
+      if(this.editedItem.items && this.editedItem.items[choiceIndex] && this.editedItem.items[choiceIndex].length > 0) {
+        let tmpDefault = Object.assign({}, this.editedItem.items[choiceIndex][0])
+        tmpDefault.object_no = this.editedItem.items[choiceIndex].length + 1
         console.log(tmpDefault)
-        this.editedItem.items.push(tmpDefault)
-        this.editedItem.items.forEach((element, index) => {
+        this.editedItem.items[choiceIndex].push(tmpDefault)
+        this.editedItem.items[choiceIndex].forEach((element, index) => {
           this.editedItem.items[index].object_no = (index+1)
         })
       }
@@ -1684,7 +1869,7 @@ export default {
       this.$axios
         .fetchGet(url, params)
           .then(res => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             that.listRT_Datas = res.data.data.slave
           })
           .catch(err => {
@@ -1988,6 +2173,8 @@ export default {
           params.nominal_size = that.selectNominalSize.nominal_size
           params.thicknes = that.selectThickness.thickness
           params.film_size = that.editedItem.film_size.join(',')
+          params.radiographic_tech = that.editedItem.radiographic_tech.join(',')
+          params.thickness_objs = that.thicknesGroup_Data
           return this.$axios
             .fetchPut(url, params)
             .then(res => {
@@ -2031,77 +2218,151 @@ export default {
         if(time > 1) {
           min = parseInt(time)
         }
-        console.log(time)
+        // console.log(time)
         sec = Math.round((time-min) * 60)
       }
       
       return min + " 分 " + sec + " 秒"
     },
 
-    roleCalcFOG() {
-      if(this.editedItem.radiographic_tech !== '') {
-        //單壁照相
-        if(this.editedItem.radiographic_tech == 0) {
-          if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0) {
-            this.editedItem.geometric_unsharpness = Math.round((2.9 * this.mThincknessNomalSize / 330) * 100) / 100
+    roleCalcFOG(obj = null) {
+      if(obj == null) {
+        if(this.editedItem.radiographic_tech !== '') {
+          //單壁照相
+          if(this.editedItem.radiographic_tech == 0) {
+            if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0) {
+              this.editedItem.geometric_unsharpness = Math.round((2.9 * this.mThincknessNomalSize / 330) * 100) / 100
+            }
+          }
+          //雙壁照相
+          else if(this.editedItem.radiographic_tech == 1) {
+            if(this.editedItem.sod && this.selectNominalSize) {
+              if(this.editedItem.sin_dou == 0) {
+                this.editedItem.geometric_unsharpness = Math.round((3 * this.selectNominalSize.od_out / this.mThincknessNomalSize) * 100) / 100
+              } else if(this.editedItem.sin_dou == 1) {
+                this.editedItem.geometric_unsharpness = Math.round((3 * this.selectNominalSize.od_out / this.mThincknessNomalSize) * 100) / 100
+              }
+            }
           }
         }
-        //雙壁照相
-        else if(this.editedItem.radiographic_tech == 1) {
-          if(this.editedItem.sod && this.selectNominalSize) {
-            if(this.editedItem.sin_dou == 0) {
-              this.editedItem.geometric_unsharpness = Math.round((3 * this.selectNominalSize.od_out / this.mThincknessNomalSize) * 100) / 100
-            } else if(this.editedItem.sin_dou == 1) {
-              this.editedItem.geometric_unsharpness = Math.round((3 * this.selectNominalSize.od_out / this.mThincknessNomalSize) * 100) / 100
+      } else {
+        if(obj.radiographic_tech !== '') {
+          //單壁照相
+          if(obj.radiographic_tech == 0) {
+            if(obj.mThincknessNomalSize && obj.mThincknessNomalSize != 0.0) {
+              this.editedItem.geometric_unsharpness += (";" + Math.round((2.9 * this.mThincknessNomalSize / 330) * 100) / 100)
+            }
+          }
+          //雙壁照相
+          else if(obj.radiographic_tech == 1) {
+            if(obj.selectNominalSize) {
+              if(obj.selectNominalSize.id < 11) {
+                this.editedItem.geometric_unsharpness += (";" +Math.round((3 * obj.selectNominalSize.od_out / obj.mThincknessNomalSize) * 100) / 100)
+              } else if(obj.selectNominalSize.id >= 11) {
+                this.editedItem.geometric_unsharpness += (";" +Math.round((3 * obj.selectNominalSize.od_out / obj.mThincknessNomalSize) * 100) / 100)
+              }
             }
           }
         }
       }
     },
 
-    roleCalcSod() {
-      if(this.selectNominalSize) {
-        if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0) {
+    roleCalcSod(obj = null) {
+      if(obj === null) {
+        if(this.selectNominalSize) {
+          if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0) {
+            if(this.editedItem.radiographic_tech == 0) {
+              this.editedItem.sod = 330
+            } else if(this.editedItem.radiographic_tech == 1) {
+              if(this.editedItem.sin_dou == 0) {
+                this.editedItem.sod = Math.round((this.mThincknessNomalSize * 8) * 100) / 100
+              } else if(this.editedItem.sin_dou == 1) {
+                this.editedItem.sod = Math.round((this.selectNominalSize.od_out - this.mThincknessNomalSize ) * 100) / 100
+              }
+            }
+          }
+        }
+      } else {
+        if(obj.selectNominalSize) {
+          if(obj.mThincknessNomalSize && obj.mThincknessNomalSize != 0.0) {
+            var sod = 330
+            if(obj.radiographic_tech == 0) {
+              this.editedItem.sod += (";" + 330)
+            } else if(obj.radiographic_tech == 1) {
+              if(obj.selectNominalSize.id < 11) {
+                sod = Math.round((obj.mThincknessNomalSize * 8) * 100) / 100
+                this.editedItem.sod += (";" + sod)
+              } else if(obj.selectNominalSize.id >= 11) {
+                sod = Math.round((obj.selectNominalSize.od_out - obj.mThincknessNomalSize ) * 100) / 100
+                this.editedItem.sod += (";" + sod)
+              }
+            }
+            return sod
+          }
+        }
+      }
+      return 0.0
+    },
+
+    roleCalcExTime(obj = null, sod = 0.0) {
+      // console.log(this.editedItem.layers)
+      if(obj == null) {
+        if(!this.mThincknessNomalSize || this.editedItem.layers == '') {
+          return
+        }
+        // console.log(this.listRT_Datas)
+        const rt = this.listRT_Datas.find(element => element.thickness == Math.round(this.mThincknessNomalSize * this.editedItem.layers))
+        // console.log(rt)
+        if(this.editedItem.radiographic_tech !== '' && rt) {
+          //單壁照相
           if(this.editedItem.radiographic_tech == 0) {
-            this.editedItem.sod = 330
+            if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0 && rt) {
+              var a = ((this.editedItem.sod + this.mThincknessNomalSize) * (this.editedItem.sod + this.mThincknessNomalSize) / this.editedItem.energy_strength)
+              var b = (a * rt.numness * this.editedItem.film_brand) / (25.4*25.4)
+              // console.log(b)
+              this.editedItem.exposure_time = b
+            }
           } else if(this.editedItem.radiographic_tech == 1) {
             if(this.editedItem.sin_dou == 0) {
-              this.editedItem.sod = Math.round((this.mThincknessNomalSize * 8) * 100) / 100
+              var a = this.editedItem.sod * 9 / 8 * this.editedItem.sod * 9 / 8 / this.editedItem.energy_strength * this.mThincknessNomalSize * this.editedItem.film_brand
+              var b = a / 25.4 / 25.4
+              this.editedItem.exposure_time = b
             } else if(this.editedItem.sin_dou == 1) {
-              this.editedItem.sod = Math.round((this.selectNominalSize.od_out - this.mThincknessNomalSize ) * 100) / 100
+              if(this.selectNominalSize) {
+                var a = this.selectNominalSize.od_out * this.selectNominalSize.od_out / this.editedItem.energy_strength * this.mThincknessNomalSize * this.editedItem.film_brand
+                var b = a / 25.4 / 25.4
+                this.editedItem.exposure_time = b
+              }
             }
           }
         }
-      }
-    },
-
-    roleCalcExTime() {
-      console.log(this.editedItem.layers)
-      if(!this.mThincknessNomalSize || this.editedItem.layers == '') {
-        return
-      }
-      // console.log(this.listRT_Datas)
-      const rt = this.listRT_Datas.find(element => element.thickness == Math.round(this.mThincknessNomalSize * this.editedItem.layers))
-      console.log(rt)
-      if(this.editedItem.radiographic_tech !== '' && rt) {
-        //單壁照相
-        if(this.editedItem.radiographic_tech == 0) {
-          if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0 && rt) {
-            var a = ((this.editedItem.sod + this.mThincknessNomalSize) * (this.editedItem.sod + this.mThincknessNomalSize) / this.editedItem.energy_strength)
-            var b = (a * rt.numness * this.editedItem.film_brand) / (25.4*25.4)
-            console.log(b)
-            this.editedItem.exposure_time = b
-          }
-        } else if(this.editedItem.radiographic_tech == 1) {
-          if(this.editedItem.sin_dou == 0) {
-            var a = this.editedItem.sod * 9 / 8 * this.editedItem.sod * 9 / 8 / this.editedItem.energy_strength * this.mThincknessNomalSize * this.editedItem.film_brand
-            var b = a / 25.4 / 25.4
-            this.editedItem.exposure_time = b
-          } else if(this.editedItem.sin_dou == 1) {
-            if(this.selectNominalSize) {
-              var a = this.selectNominalSize.od_out * this.selectNominalSize.od_out / this.editedItem.energy_strength * this.mThincknessNomalSize * this.editedItem.film_brand
+      } else {
+        if(!obj.mThincknessNomalSize || this.editedItem.layers == '') {
+          return
+        }
+        // console.log(this.listRT_Datas)
+        const rt = this.listRT_Datas.find(element => element.thickness == Math.round(obj.mThincknessNomalSize * this.editedItem.layers))
+        // console.log(rt)
+        if(obj.radiographic_tech !== '' && rt) {
+          //單壁照相
+          if(obj.radiographic_tech == 0) {
+            if(obj.mThincknessNomalSize && obj.mThincknessNomalSize != 0.0 && rt) {
+              var a = ((sod + obj.mThincknessNomalSize) * (sod + obj.mThincknessNomalSize) / this.editedItem.energy_strength)
+              var b = (a * rt.numness * this.editedItem.film_brand) / (25.4*25.4)
+              // console.log(b)
+              this.editedItem.exposure_time += (";" + this.formateExTime(b))
+            }
+          } else if(obj.radiographic_tech == 1) {
+            if(this.editedItem.sin_dou == 0) {
+              var a = sod * 9 / 8 * sod * 9 / 8 / this.editedItem.energy_strength * obj.mThincknessNomalSize * this.editedItem.film_brand
               var b = a / 25.4 / 25.4
-              this.editedItem.exposure_time = b
+              this.editedItem.exposure_time += (";" + this.formateExTime(b))
+            } else if(this.editedItem.sin_dou == 1) {
+              if(obj.selectNominalSize) {
+                var a = obj.selectNominalSize.od_out * obj.selectNominalSize.od_out / this.editedItem.energy_strength * obj.mThincknessNomalSize * this.editedItem.film_brand
+                var b = a / 25.4 / 25.4
+                this.editedItem.exposure_time += (";" + this.formateExTime(b))
+              }
             }
           }
         }
@@ -2158,7 +2419,64 @@ export default {
       })
     },
 
-    
+    addDialogThickness () {
+      this.dialogThicknessChoice = true
+      this.thicknesGroupModel = this.thicknesGroup_Data.length
+      this.thicknesGroupModelChoice = this.thicknesGroup_Data.length
+    },
+
+    deleteThickness (item) {
+      let x = this.thicknesGroup_Data.indexOf(item)
+      this.thicknesGroup_Data.splice(x, 1);
+      this.editedItem.items.splice(x, 1)
+    },
+
+    saveMThinckness (data) {
+      // this.mThincknessNomalSize = data[0].mThincknessNomalSize
+      this.thicknesGroup_Data = data
+
+      // console.log("saveMThinckness result", data)
+
+      if(this.thicknesGroup_Data.length > 0) {
+        this.editedItem.geometric_unsharpness = ''
+        this.editedItem.sod = ''
+        this.editedItem.exposure_time = ''
+        // 多選項尺寸使用
+        this.thicknesGroup_Data.forEach((element, index) => {
+          // console.log("element", element)
+          // console.log("item default start", this.defaultItem.items[0][0])
+          this.roleCalcFOG(element)
+          this.roleCalcExTime(element, this.roleCalcSod(element))
+          if(!this.editedItem.items) {
+            this.editedItem.items = []
+          }
+          if(!this.editedItem.items[index] || this.editedItem.items[index].length == 0) {
+            this.editedItem.items[index] = []
+            this.editedItem.items[index].push(Object.assign({}, this.defaultItem.items[0][0]))
+            // console.log("item empty end", this.editedItem.items[index])
+          }
+          // console.log("item not empty end", this.editedItem.items[index])
+          var thickness = element.mThincknessNomalSize
+          // console.log("thickness", thickness)
+          this.editedItem.items[index].forEach((element1, i) => {
+            // console.log("start", this.editedItem.items[index][i])
+            // console.log("items", element1)
+            this.editedItem.items[index][i].thickness = thickness
+            // console.log("end", this.editedItem.items[index][i])
+          })
+        })
+        this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
+        this.editedItem.sod = this.editedItem.sod.slice(1);
+        this.editedItem.exposure_time = this.editedItem.exposure_time.slice(1);
+        this.thicknesGroupModelChoice = 0
+        this.thicknesGroupModel = 0
+        console.log(this.thicknesGroupModelChoice, this.editedItem.items)
+      }
+    },
+
+    toggleDialog () {
+      this.dialogThicknessChoice = !this.dialogThicknessChoice
+    }
   }
 }
 </script>
@@ -2166,5 +2484,8 @@ export default {
 <style lang="scss" scope>
 .v-file-input__text {
   cursor: pointer;
+}
+tr .v-text-field__details {
+  display: none !important;
 }
 </style>

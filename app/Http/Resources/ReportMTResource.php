@@ -11,6 +11,9 @@ class ReportMTResource extends JsonResource
         if(isset($this->report_mt->items)) {
             $this->report_mt->items = json_decode($this->report_mt->items);
         }
+        if(isset($this->report_mt->thickness_objs)) {
+            $this->report_mt->thickness_objs = isset($this->report_mt->thickness_objs)? json_decode($this->report_mt->thickness_objs) : null;
+        }
         
         return parent::toArray($request);
     }

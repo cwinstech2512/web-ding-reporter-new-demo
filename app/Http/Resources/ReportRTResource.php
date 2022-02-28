@@ -21,6 +21,9 @@ class ReportRTResource extends JsonResource
                 if(isset($this->report_rt->items)) {
                     $this->report_rt->items = isset($this->report_rt->items)? json_decode($this->report_rt->items) : null;
                 }
+                if(isset($this->report_rt->thickness_objs)) {
+                    $this->report_rt->thickness_objs = isset($this->report_rt->thickness_objs)? json_decode($this->report_rt->thickness_objs) : null;
+                }
                 unset($this->report_rtoil);
                 unset($this->report_rtolll);
                 unset($this->report_rthree);

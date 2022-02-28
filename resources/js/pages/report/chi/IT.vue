@@ -180,6 +180,16 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+            <ThicknessChoice
+              @saveMThinckness="saveMThinckness"
+              @toggleDialog="toggleDialog"
+              :channalType="'chimei_it'"
+              :thicknesGroup_Data="thicknesGroup_Data"
+              :thicknesGroupModel="thicknesGroupModel"
+              :dialog="dialogThicknessChoice" 
+              :listRTPT_Datas="listRTPT_Datas"
+              :listThickness_Datas="listThickness_Datas">
+            </ThicknessChoice>
             <v-dialog
               v-model="dialogView"
               width="600px"
@@ -709,7 +719,86 @@
                         outlined
                         tile
                       >
-                      <v-simple-table id="tab">
+                      <v-card-text>
+                        <v-slide-group
+                          v-model="thicknesGroupModel"
+                          class="pa-4"
+                          mandatory
+                          show-arrows
+                        >
+                          <v-slide-item
+                            v-for="n in thicknesGroup_Data.length + 1"
+                            :key="n"
+                            v-slot="{ active, toggle }"
+                          >
+                            <v-card
+                              v-if="n != thicknesGroup_Data.length + 1"
+                              :color="active ? 'blue darken-3' : 'grey lighten-1'"
+                              class="ma-4"
+                              height="100"
+                              @click="toggle"
+                            >
+                              <v-app-bar
+                                flat
+                                color="rgba(0, 0, 0, 0)"
+                                height="12"
+                              >
+                                <v-spacer></v-spacer>
+
+                                <v-btn
+                                  color="white"
+                                  icon
+                                  height="10"
+                                  width="10"
+                                  @click="deleteThickness(thicknesGroup_Data[n-1])"
+                                >
+                                  <v-icon size="8" color="white">mdi-close-thick</v-icon>
+                                </v-btn>
+                              </v-app-bar>
+                              <v-card-text
+                                :class="active ? 'white--text' : ''"
+                              >
+                                {{thicknesGroup_Data[n-1].selectThickness.thickness.toUpperCase()}}
+                              <v-divider class="mx-2"></v-divider>
+                                {{thicknesGroup_Data[n-1].selectNominalSize.nominal_size}}
+                              </v-card-text>
+                            </v-card>
+                            <v-card
+                              v-else
+                              :color="active ? 'deep-purple accent-4' : 'grey lighten-1'"
+                              class="ma-4"
+                              height="100"
+                              width="60"
+                              @click="addDialogThickness"
+                            >
+                              <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                              >
+                                <v-icon
+                                  :class="active ? 'white--text' : ''"
+                                  size="24"
+                                  v-text="'mdi-plus-circle-multiple-outline'"
+                                ></v-icon>
+                              </v-row>
+                            </v-card>
+                          </v-slide-item>
+                        </v-slide-group>
+                        <!-- <v-chip-group
+                          v-model="selection"
+                          mandatory
+                          active-class="deep-purple accent-4 white--text"
+                          column
+                        >
+                          <v-chip>2"<v-divider class="mx-2"></v-divider>std</v-chip>
+
+                          <v-chip>2 1/2"</v-chip>
+
+                          <v-chip>3"</v-chip>
+                        </v-chip-group> -->
+                      </v-card-text>
+                      <v-simple-table>
                         <template v-slot:default>
                           <thead>
                             <!--  表头 -->
@@ -723,33 +812,38 @@
                               <th class="text-left">備註<br>Remark</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <draggable v-if="editedItem.items" v-model="editedItem.items[thicknesGroupModelChoice]" tag="tbody" :sort="!readonlyVisible">
                             <!-- 表格内容 -->
-                            <tr v-for="(item, index) in editedItem.items" :key="index">
+                            <tr v-for="(item, index) in editedItem.items[thicknesGroupModelChoice]" :key="index">
                               <td><v-text-field
                                 :disabled="true"
-                                autofocus
+                                outlined
+                                dense
                                 :value="(index+1)"
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.exam_length"
                                 :disabled="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.defect_location"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.type_of_defect"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-text-field
                                 v-model="item.defect_length"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <td><v-select
                                   v-model="item.result"
@@ -757,27 +851,29 @@
                                   item-text="text"
                                   item-value="value"
                                   dense
+                                  outlined
                                   single-line
                                   :readonly="readonlyVisible"
                                 ></v-select></td>
                               <td><v-text-field
                                 v-model="item.remark"
                                 :readonly="readonlyVisible"
-                                autofocus
+                                outlined
+                                dense
                               ></v-text-field></td>
                               <template>
                                 <!-- 按钮区域 -->
                               <td>
                                 <template v-if="!readonlyVisible">
                                   <!-- 修改界面显示取消 -->
-                                  <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items.length - 1" @click="insertEditItems()">插入下一行</v-btn>
+                                  <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items[thicknesGroupModelChoice].length - 1" @click="insertEditItems(thicknesGroupModelChoice)">插入下一行</v-btn>
                                   <!-- 修改界面显示取消 -->
                                   <v-btn rounded color="error" dark small v-else @click="deleteEditItems(item)">刪除</v-btn>
                                 </template>
                               </td>
                             </template>
                             </tr>
-                          </tbody>
+                          </draggable>
                         </template>
                       </v-simple-table>
                     </v-card>
@@ -935,6 +1031,8 @@
 import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
+import ThicknessChoice from '../../../components/ThicknessChoice.vue'
+import draggable from "vuedraggable"
 const SAMPLE_PDF_PATH = 'chimei_it'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -944,7 +1042,9 @@ export default {
 
   components: {
     PdfViewer,
-    DataTableStatus
+    DataTableStatus,
+    draggable,
+    ThicknessChoice
   },
 
   metaInfo () {
@@ -967,8 +1067,13 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogThicknessChoice: false,
     loading: false,
     loadingSave: false,
+    thicknesGroup_Data: [],
+    thicknesGroupModel: -1,
+    thicknesGroupModelChoice: 0,
+    mThincknessNomalSize: null,
     dataItems: [],
     selectItem: [],
     listRTPT_Datas: [],
@@ -1076,11 +1181,28 @@ export default {
       return this.editedIndex == -2
     },
 
-    mThincknessNomalSize() {
-      if(Object.keys(this.selectThickness).length !== 0 && Object.keys(this.selectNominalSize).length !== 0) {
-        console.log(this.selectNominalSize)
-        return /*this.selectNominalSize.nominal_size + ', ' + this.selectThickness.thickness + ', ' + */this.selectNominalSize[this.selectThickness.thickness]
+    // mThincknessNomalSize() {
+    //   if(Object.keys(this.selectThickness).length !== 0 && Object.keys(this.selectNominalSize).length !== 0) {
+    //     console.log(this.selectNominalSize)
+    //     return /*this.selectNominalSize.nominal_size + ', ' + this.selectThickness.thickness + ', ' + */this.selectNominalSize[this.selectThickness.thickness]
+    //   }
+    // },
+  },
+  watch: {
+    thicknesGroupModel (val, oldVal) {
+      // if(val == this.thicknesGroup_Data.length) {
+      //   this.dialogThicknessChoice = true
+      if(val === oldVal) {
+        return
       }
+      if(val >= this.thicknesGroup_Data.length) return
+      this.thicknesGroupModelChoice = val
+    },
+    mThincknessNomalSize(val, oldVal) {
+      if (val === oldVal) return
+      // this.editedItem.items.forEach(element => {
+      //   element.weld_length = val
+      // })
     },
   },
 
@@ -1128,18 +1250,20 @@ export default {
             if(res.data.data.report_it) {
               this.editedItem = Object.assign({}, res.data.data.report_it)
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
-              if(!res.data.data.report_it.items) {
-                this.editedItem.items = Object.assign({}, this.defaultItem.items)
-              }
+              // if(!res.data.data.report_it.items) {
+              //   this.editedItem.items = Object.assign([], this.defaultItem.items)
+              // }
             } else {
               let tmp = Object.assign({}, this.editedItem)
-              this.editedItem = Object.assign({}, this.defaultItem)
+              this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+              this.editedItem.items = null
               this.editedItem.exam_date = tmp.exam_date
               this.editedItem.exam_place = tmp.exam_place
               this.editedItem.job_name = tmp.job_name
               this.editedItem.dispatch_id = tmp.id
             }
             this.getRTPT_Data()
+            this.thicknesGroup_Data = this.editedItem.thickness_objs? this.editedItem.thickness_objs : []
             console.log(this.editedItem)
           })
           .catch(err => {
@@ -1200,12 +1324,14 @@ export default {
     },
 
     insertEditItems() {
-      if(this.editedItem.items && this.editedItem.items.length > 0) {
-        let tmpDefault = Object.assign({}, this.defaultItem.items[0])
-        tmpDefault.object_no = this.editedItem.items.length + 1
+      var choiceIndex = this.thicknesGroupModelChoice
+      if(choiceIndex < 0) return
+      if(this.editedItem.items && this.editedItem.items[choiceIndex] && this.editedItem.items[choiceIndex].length > 0) {
+        let tmpDefault = Object.assign({}, this.editedItem.items[choiceIndex][0])
+        tmpDefault.object_no = this.editedItem.items[choiceIndex].length + 1
         console.log(tmpDefault)
-        this.editedItem.items.push(tmpDefault)
-        this.editedItem.items.forEach((element, index) => {
+        this.editedItem.items[choiceIndex].push(tmpDefault)
+        this.editedItem.items[choiceIndex].forEach((element, index) => {
           this.editedItem.items[index].object_no = (index+1)
         })
       }
@@ -1281,7 +1407,7 @@ export default {
     authRoleVaild (key) {
       let co = SAMPLE_PDF_PATH.split('_');
       return this.user.menu.menus.find(e => Object.values(e.menu_info).find((obj) => {
-        console.log((co[0] + '_'+ key))
+        // console.log((co[0] + '_'+ key))
         return obj == ('/' + co[0] + '_'+ key + '/')
         }))
     },
@@ -1539,6 +1665,7 @@ export default {
         preConfirm: () => {
           params.nominal_size = that.selectNominalSize.nominal_size
           params.thicknes = that.selectThickness.thickness
+          params.thickness_objs = that.thicknesGroup_Data
           return this.$axios
             .fetchPut(url, params)
             .then(res => {
@@ -1575,7 +1702,63 @@ export default {
       this.closeSample()
     },
 
-    
+    addDialogThickness () {
+      this.dialogThicknessChoice = true
+      this.thicknesGroupModel = this.thicknesGroup_Data.length
+      this.thicknesGroupModelChoice = this.thicknesGroup_Data.length
+    },
+
+    deleteThickness (item) {
+      let x = this.thicknesGroup_Data.indexOf(item)
+      this.thicknesGroup_Data.splice(x, 1);
+      this.editedItem.items.splice(x, 1)
+    },
+
+    saveMThinckness (data) {
+      // this.mThincknessNomalSize = data[0].mThincknessNomalSize
+      this.thicknesGroup_Data = data
+      // console.log("saveMThinckness result", data)
+
+      if(this.thicknesGroup_Data.length > 0) {
+        // this.editedItem.geometric_unsharpness = ''
+        // this.editedItem.sod = ''
+        // this.editedItem.exposure_time = ''
+        // 多選項尺寸使用
+        this.thicknesGroup_Data.forEach((element, index) => {
+          console.log("element", element)
+          // console.log("item default start", this.defaultItem.items[0][0])
+          // this.roleCalcFOG(element)
+          // this.roleCalcExTime(element, this.roleCalcSod(element))
+          if(!this.editedItem.items) {
+            this.editedItem.items = []
+          }
+          if(!this.editedItem.items[index] || this.editedItem.items[index].length == 0) {
+            this.editedItem.items[index] = []
+            this.editedItem.items[index].push(Object.assign({}, this.defaultItem.items[0][0]))
+            // console.log("item empty end", this.editedItem.items[index])
+          }
+          // console.log("item not empty end", this.editedItem.items[index])
+          var thickness = element.mThincknessNomalSize
+          // console.log("thickness", thickness)
+          this.editedItem.items[index].forEach((element1, i) => {
+            // console.log("start", this.editedItem.items[index][i])
+            // console.log("items", element1)
+            this.editedItem.items[index][i].exam_length = thickness
+            // console.log("end", this.editedItem.items[index][i])
+          })
+        })
+        // this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
+        // this.editedItem.sod = this.editedItem.sod.slice(1);
+        // this.editedItem.exposure_time = this.editedItem.exposure_time.slice(1);
+        this.thicknesGroupModelChoice = 0
+        this.thicknesGroupModel = 0
+        console.log(this.thicknesGroupModelChoice, this.editedItem.items)
+      }
+    },
+
+    toggleDialog () {
+      this.dialogThicknessChoice = !this.dialogThicknessChoice
+    }
   }
 }
 </script>
@@ -1583,5 +1766,8 @@ export default {
 <style lang="scss" scope>
 .v-file-input__text {
   cursor: pointer;
+}
+tr .v-text-field__details {
+  display: none !important;
 }
 </style>

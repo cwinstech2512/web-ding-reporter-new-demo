@@ -317,6 +317,87 @@
                       </v-card>
                     </v-col>
                   </v-row>
+                  <!-- row 1 -->
+                  <v-row
+                    class="mb-4 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          檢測人員
+                        </div>
+                        <div class="text-caption">
+                          Inspected By
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12" md="6">
+                              <v-text-field
+                                v-model="editedItem.obsert"
+                                :readonly="readonlyVisible"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 2; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          工單編號
+                        </div>
+                        <div class="text-caption">
+                          Job No.
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-text-field
+                                ref="job_no"
+                                v-model="editedItem.job_no"
+                                label="Regular"
+                                :readonly="readonlyVisible"
+                                :rules="[
+                                  (v) => !!v || '請填寫此欄位',
+                                ]"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
                   <!-- row 2 -->
                   <v-row
                     class="mb-4 d-flex"
@@ -769,7 +850,7 @@
                               </th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <draggable v-model="editedItem.items" tag="tbody" :sort="!readonlyVisible">
                             <tr v-if="loadingEditItems"><td colspan="6"><v-skeleton-loader v-if="loadingEditItems" :loading="loadingEditItems" type="list-item-three-line@4"></v-skeleton-loader>
                             </td>
                             </tr>
@@ -811,7 +892,7 @@
                               <template>
                             </template>
                             </tr>
-                          </tbody>
+                          </draggable>
                         </template>
                       </v-simple-table>
                     </v-card>
@@ -969,6 +1050,7 @@
 import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
+import draggable from "vuedraggable"
 const SAMPLE_PDF_PATH = 'chimei_ut'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -978,7 +1060,8 @@ export default {
 
   components: {
     PdfViewer,
-    DataTableStatus
+    DataTableStatus,
+    draggable
   },
 
   metaInfo () {
@@ -1036,6 +1119,7 @@ export default {
     editedItem: {
       id: 0,
       job_name: '',
+      job_no: '',
       exam_date: new Date,
       exam_place: '',
       equlpment_no: '',
@@ -1064,6 +1148,7 @@ export default {
     defaultItem: {
       id: 0,
       job_name: '',
+      job_no: '',
       exam_date: new Date,
       exam_place: '',
       equlpment_no: '',
@@ -1177,7 +1262,7 @@ export default {
               // this.editedItem.exam_time = this.editedItem.exam_time.split(',')
               // this.selectThickness = {thickness: this.editedItem.thicknes, value: this.editedItem.thicknes}
               if(!res.data.data.report_ut.items || res.data.data.report_ut.items.length < 1) {
-                this.editedItem.items = Object.assign({}, this.defaultItem.items)
+                this.editedItem.items = Object.assign([], this.defaultItem.items)
               }
               console.log(this.editedItem)
             } else {
@@ -1664,5 +1749,8 @@ export default {
 table > thead > tr > th  .v-text-field__slot .v-label {
   color: rgba(0, 0, 0, 0.87);
   font-size: 0.75rem !important;
+}
+tr .v-text-field__details {
+  display: none !important;
 }
 </style>

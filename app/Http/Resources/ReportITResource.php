@@ -11,6 +11,9 @@ class ReportITResource extends JsonResource
         if(isset($this->report_it->items)) {
             $this->report_it->items = json_decode($this->report_it->items);
         }
+        if(isset($this->report_it->thickness_objs)) {
+            $this->report_it->thickness_objs = isset($this->report_it->thickness_objs)? json_decode($this->report_it->thickness_objs) : null;
+        }
         
         return parent::toArray($request);
     }

@@ -11,6 +11,9 @@ class ReportPTResource extends JsonResource
         if(isset($this->report_pt->items)) {
             $this->report_pt->items = json_decode($this->report_pt->items);
         }
+        if(isset($this->report_pt->thickness_objs)) {
+            $this->report_pt->thickness_objs = isset($this->report_pt->thickness_objs)? json_decode($this->report_pt->thickness_objs) : null;
+        }
         
         return parent::toArray($request);
     }
