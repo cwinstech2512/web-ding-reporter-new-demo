@@ -43,7 +43,10 @@
             <v-spacer></v-spacer>
             <v-dialog
               v-model="dialogView"
-              max-width="500px"
+              fullscreen
+              hide-overlay
+              persistent
+              transition="dialog-bottom-transition"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -58,6 +61,32 @@
                 </v-btn>
               </template>
               <v-card>
+                <v-toolbar
+                  dark
+                  color="primary"
+                >
+                  <v-btn
+                    icon
+                    dark
+                    @click="closeView"
+                  >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                  <v-toolbar-title>{{ '派工單' }}</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-toolbar-items>
+                    <v-btn
+                      dark
+                      text
+                      v-if="editedIndex !== -2"
+                      @click="save"
+                      :loading="loadingSave"
+                    >
+                      儲存
+                    </v-btn>
+                  </v-toolbar-items>
+                </v-toolbar>
+
                 <v-card-title>
                   <span class="text-h5">{{ formTitle }}</span>
                 </v-card-title>
@@ -66,7 +95,7 @@
                   <v-container>
                     <v-row>
                       <v-col
-                        cols="12"
+                        cols="6"
                       >
                         <v-text-field
                           v-model="editedItem.customer"
@@ -77,7 +106,7 @@
                         ></v-text-field>
                       </v-col>
                       <v-col
-                        cols="12"
+                        cols="6"
                       >
                         <v-text-field
                           v-model="editedItem.job_name"
@@ -88,7 +117,7 @@
                         ></v-text-field>
                       </v-col>
                       <v-col
-                        cols="12"
+                        cols="6"
                       >
                       <v-menu
                         v-model="examDatePickShow"
@@ -101,8 +130,8 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="editedItem.exam_date"
-                                label="檢測日期(Exam. Date)"
-                                prepend-icon="mdi-calendar"
+                                label="起始檢測日期(Exam. Date)"
+                                prepend-icon="mdi-calendar-start"
                                 readonly
                                 outlined
                                 v-bind="attrs"
@@ -117,7 +146,36 @@
                       </v-menu>
                       </v-col>
                       <v-col
-                        cols="12"
+                        cols="6"
+                      >
+                      <v-menu
+                        v-model="examDateEPickShow"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                        >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                                v-model="editedItem.e_exam_date"
+                                label="結束檢測日期(Exam. Date)"
+                                prepend-icon="mdi-calendar-end"
+                                readonly
+                                outlined
+                                v-bind="attrs"
+                                v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="editedItem.e_exam_date"
+                            @input="examDateEPickShow = false"
+                            :readonly="readonlyVisible"
+                        ></v-date-picker>
+                      </v-menu>
+                      </v-col>
+                      <v-col
+                        cols="6"
                       >
                         <v-text-field
                           v-model="editedItem.exam_place"
@@ -128,17 +186,31 @@
                         ></v-text-field>
                       </v-col>
                       <v-col
-                        cols="12"
-                        v-if="editedIndex>=0 || editedIndex==-2"
+                        cols="6"
                       >
                          <v-select
                           v-model="editedItem.function_path"
                           :items="examFunctionPath"
+                          multiple
                           label="檢測分類"
                           item-text="text"
                           item-value="value"
                           outlined
-                          prepend-icon="mdi-map-marker"
+                          prepend-icon="mdi-distribute-horizontal-center"
+                          :readonly="readonlyVisible"
+                        ></v-select>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                         <v-select
+                          v-model="editedItem.transport"
+                          :items="listTransportation_Datas"
+                          label="交通工具"
+                          item-text="show_text"
+                          item-value="id"
+                          outlined
+                          prepend-icon="mdi-car-wrench"
                           :readonly="readonlyVisible"
                         ></v-select>
                       </v-col>
@@ -146,7 +218,7 @@
                   </v-container>
                 </v-card-text>
 
-                <v-card-actions>
+                <!-- <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
                     color="blue darken-1"
@@ -164,7 +236,7 @@
                   >
                     儲存
                   </v-btn>
-                </v-card-actions>
+                </v-card-actions> -->
               </v-card>
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="500px">
@@ -255,7 +327,7 @@ export default {
 
   computed: {
     formTitle () {
-      return this.editedIndex > 0? '派單編輯' : '派單'
+      return this.editedIndex > 0? '派單編輯' : '派工單'
     },
     readonlyVisible () {
       return this.editedIndex == -2
@@ -275,6 +347,7 @@ export default {
     search: '',
     dataItems: [],
     selectItem: [],
+    listTransportation_Datas:[],
     excelFile: null,
     headers: [
       {
@@ -295,27 +368,33 @@ export default {
       customer: '',
       job_name: '',
       exam_date: '',
+      e_exam_date: '',
       function_path: '',
       exam_place: '',
+      transport: 0,
       status: 0,
       id: -1,
     },
-    editedItem: {
+    defaultItem: {
       customer: '',
       job_name: '',
       exam_date: '',
+      e_exam_date: '',
       function_path: '',
       exam_place: '',
+      transport: 0,
       status: 0,
       id: -1,
     },
     examDatePickShow: false,
+    examDateEPickShow: false,
     examFunctionPath: [
       {text: '奇美PT', value: 'chimei.pt'},
       {text: '奇美RT', value: 'chimei.rt'},
       {text: '奇美MT', value: 'chimei.mt'},
       {text: '奇美UT', value: 'chimei.ut'},
       {text: '奇美IT', value: 'chimei.it'},
+      {text: '一般PT', value: 'normal.pt'},
       {text: '台塑油料廠', value: 'fpg.rtoil'},
       {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
       {text: '台塑煉製三廠', value: 'fpg.rthree'}
@@ -323,6 +402,7 @@ export default {
   }),
   methods: {
     initialize () {
+      this.transportGet()
       this.listDatas()
     },
     listDatas() {
@@ -337,10 +417,12 @@ export default {
                 job_name: res.data.data[idx].job_name,
                 customer: res.data.data[idx].customer,
                 exam_date: res.data.data[idx].exam_date,
+                e_exam_date: res.data.data[idx].e_exam_date,
                 exam_place: res.data.data[idx].exam_place,
                 status: res.data.data[idx].status,
                 updated_user: res.data.data[idx].updated_user,
                 updated_at: res.data.data[idx].updated_at,
+                transport: res.data.data[idx].transport,
                 id: res.data.data[idx].id
               }))
             this.loading = false
@@ -352,13 +434,32 @@ export default {
     },
     
     itemData() {
+      // let that = this
       let url = 'api/dispatch/data/first/' + this.editedItem.id
       let params = {}
       this.$axios
         .fetchGet(url, params)
           .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             this.editedItem = Object.assign({}, res.data.data)
+            this.editedItem.function_path = res.data.data.function_path.split(',')
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    },
+
+    transportGet() {
+      let url = 'api/transport'
+      let params = {}
+      this.$axios
+        .fetchGet(url, params)
+          .then(res => {
+            this.listTransportation_Datas = res.data.data.map((_, idx) => ({
+              id: res.data.data[idx].id,
+              show_text: '(' + res.data.data[idx].name + ') ' + res.data.data[idx].num_no,
+            }))
+            console.log(this.listTransportation_Datas)
           })
           .catch(err => {
             console.log(err)
@@ -520,6 +621,13 @@ export default {
           // let formData = new FormData();
           let url = 'api/dispatch/' + this.editedItem.id
           // formData.append("ex_file", this.editedItem);
+          this.editedItem.function_path = this.editedItem.function_path.join(',')
+          if(!this.editedItem.exam_date) {
+            this.editedItem.exam_date = this.editedItem.e_exam_date
+          }
+          if(!this.editedItem.e_exam_date) {
+            this.editedItem.e_exam_date = this.editedItem.exam_date
+          }
           this.$axios
             .fetchPut(url, this.editedItem)
               .then(res => {
@@ -561,6 +669,13 @@ export default {
           // let formData = new FormData();
           let url = 'api/dispatch'
           // formData.append("ex_file", this.editedItem);
+          this.editedItem.function_path = this.editedItem.function_path.join(',')
+          if(!this.editedItem.exam_date) {
+            this.editedItem.exam_date = this.editedItem.e_exam_date
+          }
+          if(!this.editedItem.e_exam_date) {
+            this.editedItem.e_exam_date = this.editedItem.exam_date
+          }
           this.$axios
             .fetchPost(url, this.editedItem)
               .then(res => {
