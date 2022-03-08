@@ -200,7 +200,7 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
-                  <v-toolbar-title>{{ editedItem.identify }} 的列表</v-toolbar-title>
+                  <v-toolbar-title>{{ editedItem.original_no }} 的列表</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -903,6 +903,20 @@
                         outlined
                         tile
                       >
+                      <v-card-text>
+                        <v-chip-group
+                          v-model="selection"
+                          mandatory
+                          active-class="deep-purple accent-4 white--text"
+                          column
+                        >
+                          <v-chip>2"</v-chip>
+
+                          <v-chip>2 1/2"</v-chip>
+
+                          <v-chip>3"</v-chip>
+                        </v-chip-group>
+                      </v-card-text>
                       <v-simple-table id="tab">
                         <template v-slot:default>
                           <thead>
@@ -924,8 +938,8 @@
                               
                             </tr>
                           </thead>
-                          <tbody>
                             <!-- 表格内容 -->
+                          <draggable v-model="editedItem.items" tag="tbody" :sort="!readonlyVisible">
                             <tr v-for="(item, index) in editedItem.items" :key="index">
                               <td><v-text-field
                                 :disabled="true"
@@ -1031,7 +1045,7 @@
                               </td>
                             </template>
                             </tr>
-                          </tbody>
+                          </draggable>
                         </template>
                       </v-simple-table>
                     </v-card>
@@ -1190,6 +1204,7 @@ import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
 import moment from 'moment'
+import draggable from "vuedraggable"
 const SAMPLE_PDF_PATH = 'fpg_rtoil'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -1199,7 +1214,8 @@ export default {
 
   components: {
     PdfViewer,
-    DataTableStatus
+    DataTableStatus,
+    draggable
   },
 
   metaInfo () {
@@ -1214,6 +1230,8 @@ export default {
     active: [],
     open: [],
     search: '',
+    isActive: false,
+    dragNdrop: [],
     sampleItems: [],
     page: 1,
     pageCount: 0,
@@ -1317,6 +1335,7 @@ export default {
     editedDispatchStatus: false,
     exportFinalPath: null,
     editedItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1355,6 +1374,7 @@ export default {
       ],
     },
     defaultItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1503,7 +1523,7 @@ export default {
                 this.editedItem = Object.assign({}, res.data.data.report_rtoil)
                 this.editedItem.film_size = this.editedItem.film_size.split(',')
                 if(!res.data.data.report_rtoil.items) {
-                  this.editedItem.items = Object.assign({}, this.defaultItem.items)
+                  this.editedItem.items = Object.assign([], this.defaultItem.items)
                 }
               } else {
                 let tmp = Object.assign({}, this.editedItem)
@@ -1564,7 +1584,7 @@ export default {
     authRoleVaild (key) {
       let co = SAMPLE_PDF_PATH.split('_');
       return this.user.menu.menus.find(e => Object.values(e.menu_info).find((obj) => {
-        console.log((co[0] + '_'+ key))
+        // console.log((co[0] + '_'+ key))
         return obj == ('/' + co[0] + '_'+ key + '/')
         }))
     },
@@ -1597,7 +1617,7 @@ export default {
       if(this.editedItem.items && this.editedItem.items.length > 0) {
         let tmpDefault = Object.assign({}, this.defaultItem.items[0])
         tmpDefault.object_no = this.editedItem.items.length + 1
-        console.log(tmpDefault)
+        // console.log(tmpDefault)
         this.editedItem.items.push(tmpDefault)
         this.editedItem.items.forEach((element, index) => {
           this.editedItem.items[index].object_no = (index+1)
@@ -2082,20 +2102,20 @@ export default {
     },
 
     roleCalcExTime() {
-      console.log(this.editedItem.layers)
+      // console.log(this.editedItem.layers)
       if(!this.mThincknessNomalSize || this.editedItem.layers == '') {
         return
       }
       // console.log(this.listRT_Datas)
       const rt = this.listRT_Datas.find(element => element.thickness == Math.round(this.mThincknessNomalSize * this.editedItem.layers))
-      console.log(rt)
+      // console.log(rt)
       if(this.editedItem.radiographic_tech !== '' && rt) {
         //單壁照相
         if(this.editedItem.radiographic_tech == 0) {
           if(this.mThincknessNomalSize && this.mThincknessNomalSize != 0.0 && rt) {
             var a = ((this.editedItem.sod + this.mThincknessNomalSize) * (this.editedItem.sod + this.mThincknessNomalSize) / this.editedItem.energy_strength)
             var b = (a * rt.numness * this.editedItem.film_brand) / (25.4*25.4)
-            console.log(b)
+            // console.log(b)
             this.editedItem.exposure_time = b
           }
         } else if(this.editedItem.radiographic_tech == 1) {

@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\SampleFixController;
-use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\TransportationController;
 use App\Http\Controllers\Api\FrontWebController;
 use App\Http\Controllers\Api\ImportController;
 use App\Http\Controllers\Api\DispatchController;
@@ -108,6 +108,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('roles/{role}', [RoleController::class, 'update']);
 
     Route::get('menu', [MenuController::class, 'index']);
+
+    Route::get('transport', [TransportationController::class, 'index']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

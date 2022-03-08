@@ -200,7 +200,7 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
-                  <v-toolbar-title>{{ editedItem.identify }} 的列表</v-toolbar-title>
+                  <v-toolbar-title>{{ editedItem.original_no }} 的列表</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -999,7 +999,7 @@
                               
                             </tr>
                           </thead>
-                          <tbody>
+                          <draggable v-model="editedItem.items" tag="tbody" :sort="!readonlyVisible">
                             <!-- 表格内容 -->
                             <tr v-for="(item, index) in editedItem.items" :key="index">
                               <td><v-text-field
@@ -1105,7 +1105,7 @@
                               </td>
                             </template>
                             </tr>
-                          </tbody>
+                          </draggable>
                         </template>
                       </v-simple-table>
                     </v-card>
@@ -1263,6 +1263,7 @@
 import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
+import draggable from "vuedraggable"
 import moment from 'moment'
 const SAMPLE_PDF_PATH = 'fpg_rthree'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -1273,7 +1274,8 @@ export default {
 
   components: {
     PdfViewer,
-    DataTableStatus
+    DataTableStatus,
+    draggable
   },
 
   metaInfo () {
@@ -1392,6 +1394,7 @@ export default {
     editedDispatchStatus: false,
     exportFinalPath: null,
     editedItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1432,6 +1435,7 @@ export default {
       ],
     },
     defaultItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1582,7 +1586,7 @@ export default {
                 this.editedItem = Object.assign({}, res.data.data.report_rthree)
                 this.editedItem.film_size = this.editedItem.film_size.split(',')
                 if(!res.data.data.report_rthree.items) {
-                  this.editedItem.items = Object.assign({}, this.defaultItem.items)
+                  this.editedItem.items = Object.assign([], this.defaultItem.items)
                 }
               } else {
                 let tmp = Object.assign({}, this.editedItem)

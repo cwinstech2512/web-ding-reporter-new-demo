@@ -210,7 +210,7 @@
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
-                  <v-toolbar-title>{{ editedItem.identify }} 的列表</v-toolbar-title>
+                  <v-toolbar-title>{{ editedItem.original_no }} 的列表</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -1533,9 +1533,9 @@ export default {
     pdfUrl: '',
     headers: [
       {
-        text: '業主',
+        text: '報告編號',
         align: 'start',
-        value: 'customer',
+        value: 'original_no',
       },
       { text: '工程名稱', value: 'job_name' },
       { text: '檢測日期', value: 'exam_date' },
@@ -1550,6 +1550,7 @@ export default {
     editedDispatchStatus: false,
     exportFinalPath: null,
     editedItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1582,6 +1583,7 @@ export default {
       ],
     },
     defaultItem: {
+      original_no: '',
       id: 0,
       dispatch_id: '',
       job_name: '',
@@ -1711,7 +1713,9 @@ export default {
                 status: res.data.data[idx].status,
                 updated_user: res.data.data[idx].updated_user,
                 updated_at: res.data.data[idx].updated_at,
-                id: res.data.data[idx].id
+                id: res.data.data[idx].id,
+                report_rt: res.data.data[idx].report_rt,
+                original_no: res.data.data[idx].report_rt? res.data.data[idx].report_rt.original_no : ''
               }))
             this.loading = false
           })
