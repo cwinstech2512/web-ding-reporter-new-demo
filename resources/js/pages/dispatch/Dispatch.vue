@@ -96,6 +96,18 @@
                     <v-row>
                       <v-col
                         cols="6"
+                        v-if="editedItem.serial_no"
+                      >
+                        <v-text-field
+                          v-model="editedItem.serial_no"
+                          label="委託單編號"
+                          outlined
+                          prepend-icon="mdi-counter"
+                          :readonly="true"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
                       >
                         <v-text-field
                           v-model="editedItem.customer"
@@ -366,6 +378,7 @@ export default {
     editedIndex: -1,
     editedItem: {
       customer: '',
+      serial_no: '',
       job_name: '',
       exam_date: '',
       e_exam_date: '',
@@ -377,6 +390,7 @@ export default {
     },
     defaultItem: {
       customer: '',
+      serial_no: '',
       job_name: '',
       exam_date: '',
       e_exam_date: '',

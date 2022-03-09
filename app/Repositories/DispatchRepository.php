@@ -59,7 +59,8 @@ class DispatchRepository
             }
             $array['status'] = 1;
         }
-        return true;
+        
+        return $this->createDispatchSerialNumber($first);
     }
 
     public function doubleVerifyFunPathDispatch($function_path, $id = -1)
@@ -146,6 +147,18 @@ class DispatchRepository
         
         $first->fill($array);
         return $first->save() && $this->createReportSerialNumber($first, $command);
+    }
+
+    private function createDispatchSerialNumber($model)
+    {
+        if(empty($model->serial_no)) {
+            if(!empty($model->id)) {
+                $serialNo = Carbon::now()->format('Ymd') . '-' . str_pad($model::where('created_at', Carbon::now())->count()+1, 4, "0", STR_PAD_LEFT);
+                $model->serial_no = $serialNo;
+                return $model->save();
+            }
+        }
+        return true;
     }
 
     private function createReportSerialNumber($model, $command)
