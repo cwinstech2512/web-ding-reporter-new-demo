@@ -33,12 +33,24 @@
               vertical
             ></v-divider>
             <v-spacer></v-spacer>
+            <v-select
+              v-model="listFilterStatus"
+              :items="listFilterStatus_Datas"
+              item-text="text"
+              item-value="value"
+              single-line
+              hide-details
+              outlined
+              label="篩選"
+            ></v-select>
+            <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
               append-icon="mdi-magnify"
               label="搜尋..."
               single-line
               hide-details
+              outlined
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog
@@ -344,6 +356,33 @@ export default {
     readonlyVisible () {
       return this.editedIndex == -2
     },
+    headers() {
+      return [
+        {
+          text: '委託單編號',
+          align: 'start',
+          value: 'serial_no',
+        },
+        {
+          text: '業主',
+          value: 'customer',
+        },
+        { text: '工程名稱', value: 'job_name' },
+        { text: '檢測日期', value: 'exam_date' },
+        { text: '檢測地點', value: 'exam_place' },
+        { 
+          text: '狀態', value: 'status', 
+          filter: value => {
+            if (!this.listFilterStatus) return true
+
+            return value == parseInt(this.listFilterStatus)
+          }, 
+        },
+        { text: '更新日期', value: 'updated_at' },
+        { text: '操作者', value: 'updated_user' },
+        { text: 'Actions', value: 'actions', sortable: false },
+      ];
+    }
   },
 
   data: () => ({
@@ -360,21 +399,8 @@ export default {
     dataItems: [],
     selectItem: [],
     listTransportation_Datas:[],
+    listFilterStatus: 1,
     excelFile: null,
-    headers: [
-      {
-        text: '業主',
-        align: 'start',
-        value: 'customer',
-      },
-      { text: '工程名稱', value: 'job_name' },
-      { text: '檢測日期', value: 'exam_date' },
-      { text: '檢測地點', value: 'exam_place' },
-      { text: '狀態', value: 'status' },
-      { text: '更新日期', value: 'updated_at' },
-      { text: '操作者', value: 'updated_user' },
-      { text: 'Actions', value: 'actions', sortable: false },
-    ],
     editedIndex: -1,
     editedItem: {
       customer: '',
@@ -412,7 +438,13 @@ export default {
       {text: '台塑油料廠', value: 'fpg.rtoil'},
       {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
       {text: '台塑煉製三廠', value: 'fpg.rthree'}
-    ]
+    ],
+    listFilterStatus_Datas: [
+      {text: '派單', value: 1},
+      {text: '製作報告', value: 2},
+      {text: '審核', value: 3},
+      {text: '通過', value: 4},
+    ],
   }),
   methods: {
     initialize () {
@@ -433,6 +465,7 @@ export default {
                 exam_date: res.data.data[idx].exam_date,
                 e_exam_date: res.data.data[idx].e_exam_date,
                 exam_place: res.data.data[idx].exam_place,
+                serial_no: res.data.data[idx].serial_no,
                 status: res.data.data[idx].status,
                 updated_user: res.data.data[idx].updated_user,
                 updated_at: res.data.data[idx].updated_at,

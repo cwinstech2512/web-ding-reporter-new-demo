@@ -17,7 +17,7 @@ class DispatchRepository
 
     public function dataListByModel()
     {
-        return Dispatch::orderBy('created_at', 'desc')->where('status', 0)->get();
+        return Dispatch::orderBy('created_at', 'desc')/*->where('status', 0)*/->get();
     }
 
     public function dataById($id)
