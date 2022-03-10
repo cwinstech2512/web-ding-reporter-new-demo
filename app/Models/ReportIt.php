@@ -19,7 +19,7 @@ class ReportIt extends Model
      *
      * @var array
      */
-    protected $fillable = ['dispatch_id', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
+    protected $fillable = ['dispatch_id', 'report_version', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
     'pipeline_no', 'equipement', 'testing_method', 'thickness', 'voltage', 'obsert', 'type', 'items', 'thickness_objs',
     'updated_user',
     'created_user'];

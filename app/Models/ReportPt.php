@@ -19,7 +19,7 @@ class ReportPt extends Model
      *
      * @var array
      */
-    protected $fillable = ['dispatch_id', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
+    protected $fillable = ['dispatch_id', 'report_version', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
     'thicknes', 'nominal_size', 'surface_status', 'exam_time', 'light_intensity', 'white_ligth_meter', 'surface_temp', 'obsert', 'items',
     'thickness_objs',
     'updated_user',

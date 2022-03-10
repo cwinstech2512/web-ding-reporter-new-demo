@@ -19,7 +19,7 @@ class ReportMt extends Model
      *
      * @var array
      */
-    protected $fillable = ['dispatch_id', 'job_name', 'job_no', 'exam_date', 'exam_place', 'equlpment_no', 'material', 
+    protected $fillable = ['dispatch_id', 'report_version', 'job_name', 'job_no', 'exam_date', 'exam_place', 'equlpment_no', 'material', 
     'magnetic_equipment', 'black_light_meter', 'surface_status', 'exam_time', 'type_of_particle_olor', 'applying_method', 'magnetizing_methon', 'obsert', 'items',
     'thickness_objs',
     'updated_user',
