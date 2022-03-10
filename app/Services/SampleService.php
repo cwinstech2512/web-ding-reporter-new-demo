@@ -9,6 +9,7 @@ use App\Services\ParseReport\ParseFpg;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\DispatchRepository;
 use App\Repositories\{SampleLogRepository};
+use App\Services\ParseReport\ParseNormal;
 
 class SampleService
 {
@@ -42,7 +43,6 @@ class SampleService
 		return $this->spRepo->lately('chimei.it');
 	}
 
-
     public function logsChimeiPT()
 	{
 		return $this->spRepo->logsAll('chimei.pt');
@@ -62,6 +62,10 @@ class SampleService
     public function logsChimeiIT()
 	{
 		return $this->spRepo->logsAll('chimei.it');
+	}
+    public function logsNormalPT()
+	{
+		return $this->spRepo->logsAll('normal.pt');
 	}
 
 	public function syncSample($path, $funName, $id = null)
@@ -117,6 +121,32 @@ class SampleService
     {
         $fpg = new ParseFpg($this->spRepo, $this->dispstchRepo);
         return $fpg->parseReportFpgRT_Three($function_path, $id);
+    }
+
+    public function parseReportNormalPT($function_path, $id)
+    {
+        $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportNormalPT($function_path, $id);
+    }
+    public function parseReportNormalIT($function_path, $id)
+    {
+        $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportNormalIT($function_path, $id);
+    }
+    public function parseReportNormalUT($function_path, $id)
+    {
+        $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportNormalUT($function_path, $id);
+    }
+    public function parseReportNormalRT($function_path, $id)
+    {
+        $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportNormalRT($function_path, $id);
+    }
+    public function parseReportNormalMT($function_path, $id)
+    {
+        $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportNormalMT($function_path, $id);
     }
 
     public function parseReportChimeiPT($function_path, $id)
@@ -710,7 +740,7 @@ class SampleService
         } else {
             $out['code'] = 5004;
             $out['message'] = "尚未通過審核";
-            Log::info(json_encode($array));
+            Log::info(json_encode($out));
         }
         return $out;
     }

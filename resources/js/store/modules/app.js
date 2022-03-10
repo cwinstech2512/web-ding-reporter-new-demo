@@ -122,6 +122,17 @@ const state = {
       ]
     },
     {
+      title: '一般檢測報告',
+      icon: 'mdi-alpha-n-box-outline',
+      items: [
+        {
+          title: '液滲檢測(PT)',
+          icon: 'mdi-alpha-p',
+          to: '/pt_nor/',
+        },
+      ]
+    },
+    {
       title: 'Icons',
       icon: 'mdi-chart-bubble',
       to: '/components/icons/',

@@ -84,6 +84,12 @@ class DispatchController extends Controller
             case 'fpg.rthree':
                 $this->smpService->parseReportFpgRT_Three($function_path, $id);
             break;
+            case 'normal.pt':
+                $this->smpService->parseReportNormalPT($function_path, $id);
+            break;
+            default:
+                return false;
+            break;
         }
         return new ResponseResource($this->dispatchService->verifyDispatch($function_path, $id));
     }
@@ -115,6 +121,9 @@ class DispatchController extends Controller
             break;
             case 'fpg.rthree':
                 return new ReportRTResource($this->smpService->parseReportFpgRT_Three($function_path, $id));
+            break;
+            case 'normal.pt':
+                // return new ReportPTResource($this->smpService->funPathDispatch($function_path, $id));
             break;
         }
     }
@@ -173,6 +182,9 @@ class DispatchController extends Controller
             break;
             case 'fpg.rthree':
                 return new ReportRTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'normal.pt':
+                return new ReportPTResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
         }
         

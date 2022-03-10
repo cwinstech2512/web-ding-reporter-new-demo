@@ -132,9 +132,9 @@ export default [
         component: page('report/fpg/RT_olll.vue')
       },
       {
-        path: '/rthree_fpg',
-        name: '煉製三廠檢測',
-        component: page('report/fpg/RT_three.vue')
+        path: '/pt_nor',
+        name: '液滲檢測',
+        component: page('report/normal/PT.vue')
       },
     ]
   },
