@@ -50,14 +50,15 @@ class ParseNormal
         $realPath = $sample->full_path;
        
         $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
+        // $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
+        $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $reporter->report_pt->original_no . '.docx';
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd(Storage::disk('public_sample'));
             $dirname = dirname($realPath);
             $samplePath = config('filesystems.disks.public_sample.root'). '/' .$dirname . '/' . basename($realPath);
             // $samplePath = public_path('uploads/sample/'.$dirname . '/' . basename($realPath));
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
-            $templateProcessor->setValue('Report No', 'XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT));
+            $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Job Name', $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
