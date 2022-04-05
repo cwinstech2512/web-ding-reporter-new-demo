@@ -73,21 +73,21 @@ const state = {
           icon: 'mdi-alpha-r',
           to: '/rt_chi/',
         },
-        {
-          title: '磁粒檢測(MT)',
-          icon: 'mdi-alpha-m',
-          to: '/mt_chi/',
-        },
-        {
-          title: '超音波測厚檢測(UT)',
-          icon: 'mdi-alpha-u',
-          to: '/ut_chi/',
-        },
-        {
-          title: '漏電檢測(IT)',
-          icon: 'mdi-alpha-i',
-          to: '/it_chi/',
-        }
+        // {
+        //   title: '磁粒檢測(MT)',
+        //   icon: 'mdi-alpha-m',
+        //   to: '/mt_chi/',
+        // },
+        // {
+        //   title: '超音波測厚檢測(UT)',
+        //   icon: 'mdi-alpha-u',
+        //   to: '/ut_chi/',
+        // },
+        // {
+        //   title: '漏電檢測(IT)',
+        //   icon: 'mdi-alpha-i',
+        //   to: '/it_chi/',
+        // }
       ]
     },
     {
@@ -129,6 +129,16 @@ const state = {
           title: '液滲檢測(PT)',
           icon: 'mdi-alpha-p',
           to: '/pt_nor/',
+        },
+        {
+          title: '射線檢測(RT)',
+          icon: 'mdi-alpha-p',
+          to: '/rt_nor/',
+        },
+        {
+          title: '磁粒檢測(MT)',
+          icon: 'mdi-alpha-m',
+          to: '/mt_nor/',
         },
       ]
     },

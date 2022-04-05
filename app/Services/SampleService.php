@@ -157,7 +157,7 @@ class SampleService
         // dd($reporter);
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'chimei/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
+        $copyPath = 'chimei/'.$serial.'/pt/' . $reporter->report_pt->original_no . '.docx';
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd(Storage::disk('public_sample'));
             $dirname = dirname($realPath);
@@ -165,7 +165,7 @@ class SampleService
             // $samplePath = public_path('uploads/sample/'.$dirname . '/' . basename($realPath));
             // dd($samplePath);
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
-            $templateProcessor->setValue('Report No', 'XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT));
+            $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Job No', '');
             $templateProcessor->setValue('Job Name', $reporter->job_name);
@@ -179,23 +179,44 @@ class SampleService
                 $templateProcessor->setValue('Thicknes', $reporter->report_pt->thicknes);
                 $templateProcessor->setValue('Light Intensity', $reporter->report_pt->light_intensity);
                 $items = json_decode($reporter->report_pt->items);
-                for($i = 1; $i < 21; $i++) {
-                    if(isset($items[$i-1])) {
-                        $templateProcessor->setValue('i'.$i.'1', isset($items[$i-1]->object_no)? $i : '');
-                        $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->object_no)? $items[$i-1]->object_no : '');
-                        $templateProcessor->setValue('i'.$i.'3', isset($items[$i-1]->weld_length)? $items[$i-1]->weld_length . '”' : '');
-                        $templateProcessor->setValue('i'.$i.'4', isset($items[$i-1]->welder_no)? $items[$i-1]->welder_no : '');
-                        $templateProcessor->setValue('i'.$i.'5', isset($items[$i-1]->defect_location)? $items[$i-1]->defect_location : '');
-                        $templateProcessor->setValue('i'.$i.'6', isset($items[$i-1]->type_of_defect)? $items[$i-1]->type_of_defect : '');
-                        $templateProcessor->setValue('i'.$i.'7', isset($items[$i-1]->defect_length)? $items[$i-1]->defect_length : '');
-                        $templateProcessor->setValue('i'.$i.'8', isset($items[$i-1]->result)? $items[$i-1]->result : '');
-                        $templateProcessor->setValue('i'.$i.'9', isset($items[$i-1]->remark)? $items[$i-1]->remark : '');
-                    } else {
-                        for($j = 1; $j < 10; $j++) {
-                            $templateProcessor->setValue('i'.$i.$j, '');
-                        }
+                $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
+                $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
+                
+                $hash = 1;
+                foreach($items as $objs) {
+                    $values = [];
+                    foreach($objs as $obj) {
+                        $itit['No#'.$hash] = $obj->object_no;
+                        $itit['Object No#'.$hash] = $obj->object_no;
+                        $itit['Weld Length#'.$hash] = $obj->weld_length;
+                        $itit['Welder No#'.$hash] = $obj->welder_no;
+                        $itit['Defect Location#'.$hash] = $obj->defect_location;
+                        $itit['Type of Defect#'.$hash] = $obj->type_of_defect;
+                        $itit['Defect Length#'.$hash] = $obj->defect_length;
+                        $itit['Result#'.$hash] = $obj->result == 0? '合格' : '不合格';
+                        $itit['Remark#'.$hash] = $obj->remark;
+                        array_push($values, $itit);
                     }
+                    $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
+                    $hash++;
                 }
+                // for($i = 1; $i < 21; $i++) {
+                //     if(isset($items[$i-1])) {
+                //         $templateProcessor->setValue('i'.$i.'1', isset($items[$i-1]->object_no)? $i : '');
+                //         $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->object_no)? $items[$i-1]->object_no : '');
+                //         $templateProcessor->setValue('i'.$i.'3', isset($items[$i-1]->weld_length)? $items[$i-1]->weld_length . '”' : '');
+                //         $templateProcessor->setValue('i'.$i.'4', isset($items[$i-1]->welder_no)? $items[$i-1]->welder_no : '');
+                //         $templateProcessor->setValue('i'.$i.'5', isset($items[$i-1]->defect_location)? $items[$i-1]->defect_location : '');
+                //         $templateProcessor->setValue('i'.$i.'6', isset($items[$i-1]->type_of_defect)? $items[$i-1]->type_of_defect : '');
+                //         $templateProcessor->setValue('i'.$i.'7', isset($items[$i-1]->defect_length)? $items[$i-1]->defect_length : '');
+                //         $templateProcessor->setValue('i'.$i.'8', isset($items[$i-1]->result)? $items[$i-1]->result : '');
+                //         $templateProcessor->setValue('i'.$i.'9', isset($items[$i-1]->remark)? $items[$i-1]->remark : '');
+                //     } else {
+                //         for($j = 1; $j < 10; $j++) {
+                //             $templateProcessor->setValue('i'.$i.$j, '');
+                //         }
+                //     }
+                // }
             }
             // dd(Storage::disk('export')->path($copyPath));
             // $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
@@ -219,7 +240,7 @@ class SampleService
         $out = [];
         $sample = $this->getChimeiRT();
         $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
-        // dd($reporter);
+        dd($reporter);
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
         $copyPath = 'chimei/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
@@ -332,36 +353,63 @@ class SampleService
                 $templateProcessor->setValue('Film Size', $film_size);
                 
                 // if($reporter->report_rt->exposure_time >= 1) {
-                $min = intval($reporter->report_rt->exposure_time);
-                $sec = intval(($reporter->report_rt->exposure_time - $min) * 60);
+                // $min = intval($reporter->report_rt->exposure_time);
+                // $sec = intval(($reporter->report_rt->exposure_time - $min) * 60);
                 // }
                 // $templateProcessor->setValue('Exposure Time', Carbon::create($reporter->report_rt->exposure_time)->format("i 分 s 秒"));
-                $templateProcessor->setValue('Exposure Time', $min . " 分 " . $sec  . " 秒");
+                // $templateProcessor->setValue('Exposure Time', $min . " 分 " . $sec  . " 秒");
+                $templateProcessor->setValue('Exposure Time', $reporter->report_rt->exposure_time);
                 
                 $examinationResults = true;
                 $items = json_decode($reporter->report_rt->items);
-                for($i = 1; $i < 21; $i++) {
-                    if(isset($items[$i-1])) {
-                        $templateProcessor->setValue('i'.$i.'1', $i);
-                        // $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->object_no)? $items[$i-1]->object_no : '');
-                        $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->film_or_weld_no)? $items[$i-1]->film_or_weld_no . '”' : '');
-                        $templateProcessor->setValue('i'.$i.'3', isset($items[$i-1]->thickness)? $items[$i-1]->thickness : '');
-                        $templateProcessor->setValue('i'.$i.'4', isset($items[$i-1]->welder_no)? $items[$i-1]->welder_no : '');
-                        $templateProcessor->setValue('i'.$i.'5', isset($items[$i-1]->sensitivity)? $items[$i-1]->sensitivity : '');
-                        $templateProcessor->setValue('i'.$i.'6', isset($items[$i-1]->defect_code)? $items[$i-1]->defect_code : '');
-                        $templateProcessor->setValue('i'.$i.'7', isset($items[$i-1]->result)? ($items[$i-1]->result == 0? 'V': ''): ''); //合格
-                        $templateProcessor->setValue('i'.$i.'8', isset($items[$i-1]->result)? ($items[$i-1]->result == 1? 'V': '') : '');//不合格
-                        $templateProcessor->setValue('i'.$i.'9', isset($items[$i-1]->remark)? $items[$i-1]->remark : '');
-
+                dd($reporter->report_pt);
+                $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
+                
+                $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
+                
+                $hash = 1;
+                foreach($items as $objs) {
+                    $values = [];
+                    foreach($objs as $obj) {
+                        $itit['No#'.$hash] = $obj->object_no;
+                        $itit['Film or Weld No#'.$hash] = $obj->film_or_weld_no;
+                        $itit['Thickness#'.$hash] = $obj->thickness;
+                        $itit['Welder No#'.$hash] = $obj->welder_no;
+                        $itit['Sensitivity#'.$hash] = $obj->sensitivity;
+                        $itit['Defect Code#'.$hash] = $obj->defect_code;
+                        $itit['Acceptable#'.$hash] = $obj->result == 0? 'V': '';
+                        $itit['Rejected#'.$hash] = $obj->result == 1? 'V': '';
+                        $itit['Remark#'.$hash] = $obj->remark;
+                        array_push($values, $itit);
                         if($examinationResults) {
-                            $examinationResults = $items[$i-1]->result == 0;
-                        }
-                    } else {
-                        for($j = 1; $j < 10; $j++) {
-                            $templateProcessor->setValue('i'.$i.$j, '');
+                            $examinationResults = $obj->result == 0;
                         }
                     }
+                    $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
+                    $hash++;
                 }
+                // for($i = 1; $i < 21; $i++) {
+                //     if(isset($items[$i-1])) {
+                //         $templateProcessor->setValue('i'.$i.'1', $i);
+                //         // $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->object_no)? $items[$i-1]->object_no : '');
+                //         $templateProcessor->setValue('i'.$i.'2', isset($items[$i-1]->film_or_weld_no)? $items[$i-1]->film_or_weld_no . '”' : '');
+                //         $templateProcessor->setValue('i'.$i.'3', isset($items[$i-1]->thickness)? $items[$i-1]->thickness : '');
+                //         $templateProcessor->setValue('i'.$i.'4', isset($items[$i-1]->welder_no)? $items[$i-1]->welder_no : '');
+                //         $templateProcessor->setValue('i'.$i.'5', isset($items[$i-1]->sensitivity)? $items[$i-1]->sensitivity : '');
+                //         $templateProcessor->setValue('i'.$i.'6', isset($items[$i-1]->defect_code)? $items[$i-1]->defect_code : '');
+                //         $templateProcessor->setValue('i'.$i.'7', isset($items[$i-1]->result)? ($items[$i-1]->result == 0? 'V': ''): ''); //合格
+                //         $templateProcessor->setValue('i'.$i.'8', isset($items[$i-1]->result)? ($items[$i-1]->result == 1? 'V': '') : '');//不合格
+                //         $templateProcessor->setValue('i'.$i.'9', isset($items[$i-1]->remark)? $items[$i-1]->remark : '');
+
+                //         if($examinationResults) {
+                //             $examinationResults = $items[$i-1]->result == 0;
+                //         }
+                //     } else {
+                //         for($j = 1; $j < 10; $j++) {
+                //             $templateProcessor->setValue('i'.$i.$j, '');
+                //         }
+                //     }
+                // }
                 // 檢  測  結  果 Examination results
                 $templateProcessor->setValue('Examination results', $examinationResults? "合格" : "不合格");
             }

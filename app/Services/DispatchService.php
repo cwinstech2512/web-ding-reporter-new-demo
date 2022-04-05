@@ -28,6 +28,33 @@ class DispatchService
         return $this->dispstchRepo->funPathDispatch($function_path, $id);
     }
 
+    public function copyDispatch($array, $id = null)
+    {
+        $params = $array['params'];
+        if(isset($params['copy_function']) && !empty($params['copy_function'])) {
+            $reporExplope = explode('.', $params['copy_function']);
+            $old = $this->dispstchRepo->fetchDispatchWithReport($id)->toArray();
+            if(!empty($old['function_path'])) {
+                $explode = explode('.', $old['function_path']);
+                $tmpReport = $old['report_' . $explode[1]];
+                $old['report_' . $explode[1]] = null;
+                $tmpReport['items'] = null;
+                $tmpReport['thickness_objs'] = null;
+            }
+            if(isset($tmpReport)) {
+                // dd($old['report_'.$reporExplope[1]]);
+                $old['report_'.$reporExplope[1]] = $tmpReport;
+            }
+            $old['function_path'] = $params['copy_function'];
+            $this->dispstchRepo->copyDispatchWithNewArray($old);
+            dd($old);
+        } else {
+            $out['code'] = 50001;
+            $out['message'] = "資料更新錯誤";
+        }
+        return $out;
+    }
+
     public function verifyDispatch($function_path, $id = -1)
     {
         if($this->dispstchRepo->verifyFunPathDispatch($function_path, $id)) {

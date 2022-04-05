@@ -14,7 +14,14 @@ class Dispatch extends Model
     use DateTimeFormatTrait;
     use UserStampsTrait;
     
-    protected $fillable = ['customer', 'exam_date', 'job_name', 'exam_place', 'e_exam_date', 'status', 'transport', 'function_path', 'export_final_path',
+    protected $fillable = ['customer', 'exam_date', 'concat_name', 'concat_phone'
+    , 'job_name', 'exam_place', 'e_exam_date', 'status', 'transport', 'function_path', 'export_final_path',
+    'material',
+    'thickness',
+    'leng',
+    'editor',
+    'special_film',
+    'special_medium',
     'updated_user',
     'created_user'];
 

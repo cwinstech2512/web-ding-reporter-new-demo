@@ -120,6 +120,31 @@
                       </v-col>
                       <v-col
                         cols="6"
+                        v-if="editedItem.serial_no"
+                      >
+                        <v-text-field
+                          v-model="editedItem.concat_name"
+                          label="委託者聯絡人"
+                          outlined
+                          prepend-icon="mdi-account-multiple"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                        v-if="editedItem.serial_no"
+                      >
+                        <v-text-field
+                          v-model="editedItem.concat_phone"
+                          label="委託者電話"
+                          outlined
+                          prepend-icon="mdi-phone"
+                          :readonly="readonlyVisible"
+                          placeholder="79938"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
                       >
                         <v-text-field
                           v-model="editedItem.customer"
@@ -213,16 +238,86 @@
                         cols="6"
                       >
                          <v-select
+                          ref="function_path"
                           v-model="editedItem.function_path"
                           :items="examFunctionPath"
-                          multiple
                           label="檢測分類"
                           item-text="text"
                           item-value="value"
                           outlined
                           prepend-icon="mdi-distribute-horizontal-center"
-                          :readonly="readonlyVisible"
+                          :readonly="editedItem.id > 0"
+                          :disabled="editedItem.id > 0"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-select>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.material"
+                          label="材質"
+                          outlined
+                          prepend-icon="mdi-palette-swatch"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.thickness"
+                          label="厚度"
+                          outlined
+                          prepend-icon="mdi-ruler-square"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.leng"
+                          label="數量（長度）"
+                          outlined
+                          prepend-icon="mdi-ruler"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.editor"
+                          label="填寫人"
+                          outlined
+                          prepend-icon="mdi-briefcase-edit-outline"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.special_film"
+                          label="工作特殊需求(底片)"
+                          outlined
+                          prepend-icon="mdi-filmstrip"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.special_medium"
+                          label="工作特殊需求(藥水)"
+                          outlined
+                          prepend-icon="mdi-bottle-tonic-plus-outline"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
                       </v-col>
                       <v-col
                         cols="6"
@@ -307,6 +402,29 @@
             >
             <v-icon small>mdi-delete</v-icon>
           </v-btn>
+          <v-menu
+            top
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                icon
+              >
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item
+                @click="copyFunctionPath(item)"
+              >
+                <v-list-item-title>複製到</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
         <template v-slot:no-data>
           <v-btn
@@ -323,13 +441,20 @@
           :length="pageCount"
         ></v-pagination>
       </div>
+      <DispatchCopy
+        v-if="formCopyItem"
+        :dialog="dialogCopy"
+        :formCopyItem="formCopyItem"
+        @saveDialog="saveDispatchCopy"
+        @toggleDialog="toggleDialog"
+      />
     </material-card>
-
   </v-container>
 </template>
 
 <script>
 import DataTableStatus from '../../components/DataTableStatus.vue'
+import DispatchCopy from '../../components/DispatchCopy.vue'
 
 export default {
   name: 'DispatchView',
@@ -337,7 +462,8 @@ export default {
   middleware: 'auth',
 
   components: {
-    DataTableStatus
+    DataTableStatus,
+    DispatchCopy,
   },
 
   metaInfo () {
@@ -391,6 +517,7 @@ export default {
     itemsPerPage: 10,
     dialogNew: false,
     dialogView: false,
+    dialogCopy: false,
     dialogDelete: false,
     loading: false,
     loadingSave: false,
@@ -398,30 +525,47 @@ export default {
     search: '',
     dataItems: [],
     selectItem: [],
+    formCopyItem: null,
     listTransportation_Datas:[],
     listFilterStatus: 1,
     excelFile: null,
     editedIndex: -1,
     editedItem: {
       customer: '',
+      concat_name: '',
+      concat_phone: '',
       serial_no: '',
       job_name: '',
       exam_date: '',
       e_exam_date: '',
       function_path: '',
       exam_place: '',
+      material: '',
+      thickness: '',
+      leng: '',
+      editor: '',
+      special_film: '',
+      special_medium: '',
       transport: 0,
       status: 0,
       id: -1,
     },
     defaultItem: {
       customer: '',
+      concat_name: '',
+      concat_phone: '',
       serial_no: '',
       job_name: '',
       exam_date: '',
       e_exam_date: '',
       function_path: '',
       exam_place: '',
+      material: '',
+      thickness: '',
+      leng: '',
+      editor: '',
+      special_film: '',
+      special_medium: '',
       transport: 0,
       status: 0,
       id: -1,
@@ -435,6 +579,8 @@ export default {
       {text: '奇美UT', value: 'chimei.ut'},
       {text: '奇美IT', value: 'chimei.it'},
       {text: '一般PT', value: 'normal.pt'},
+      {text: '一般RT', value: 'normal.rt'},
+      {text: '一般MT', value: 'normal.mt'},
       {text: '台塑油料廠', value: 'fpg.rtoil'},
       {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
       {text: '台塑煉製三廠', value: 'fpg.rthree'}
@@ -489,7 +635,7 @@ export default {
           .then(res => {
             // console.log(res.data)
             this.editedItem = Object.assign({}, res.data.data)
-            this.editedItem.function_path = res.data.data.function_path.split(',')
+            // this.editedItem.function_path = res.data.data.function_path.split(',')
           })
           .catch(err => {
             console.log(err)
@@ -615,6 +761,54 @@ export default {
       })
     },
 
+    copyFunctionPath (item) {
+      this.formCopyItem = item
+      this.toggleDialog()
+    },
+
+    saveDispatchCopy (obj) {
+      if(obj.fromDisptchId < 0) return
+      let url = 'api/dispatch_copy/' + obj.fromDisptchId
+      let data = {
+        copy_function: obj.selectCopyFunctionPath
+      }
+      let that = this
+      that.loadingSave = true
+      this.$axios
+        .fetchPost(url, data)
+          .then(res => {
+            that.loadingSave = false
+            that.toggleDialog()
+            that.listDatas()
+            let result = res.data.data
+            if(result.code == 1000) {
+                that.$swal.fire({
+                  title: "成功!",
+                  text: result.message,
+                  type: "success",
+                  confirmButtonClass: "btn btn-success"
+                });
+            } else {
+                that.$swal.fire({
+                  title: "錯誤!",
+                  text: result.message,
+                  type: "error",
+                  confirmButtonClass: "btn btn-danger"
+                });
+            }
+          })
+          .catch(err => {
+            that.loadingCopy = false
+            that.toggleDialog()
+            that.$swal.fire({
+              title: "錯誤!",
+              text: "系統錯誤，請稍後重新嘗試",
+              type: "error",
+              confirmButtonClass: "btn btn-danger"
+            });
+          })
+    },
+
     getStatusColor(status) {
       switch (status) {
         case 0:
@@ -660,6 +854,17 @@ export default {
     },
 
     save () {
+      var formError = false
+      Object.keys(this.editedItem).forEach(f => {
+        if(this.$refs[f] && !this.$refs[f].validate(true)) {
+          formError = true
+          return
+        }
+      })
+
+      if(formError) {
+        return
+      }
       let that = this
       if (this.editedIndex > -1) {
         console.log(this.editedItem, this.defaultItem)
@@ -668,7 +873,7 @@ export default {
           // let formData = new FormData();
           let url = 'api/dispatch/' + this.editedItem.id
           // formData.append("ex_file", this.editedItem);
-          this.editedItem.function_path = this.editedItem.function_path.join(',')
+          // this.editedItem.function_path = this.editedItem.function_path.join(',')
           if(!this.editedItem.exam_date) {
             this.editedItem.exam_date = this.editedItem.e_exam_date
           }
@@ -716,7 +921,7 @@ export default {
           // let formData = new FormData();
           let url = 'api/dispatch'
           // formData.append("ex_file", this.editedItem);
-          this.editedItem.function_path = this.editedItem.function_path.join(',')
+          // this.editedItem.function_path = this.editedItem.function_path.join(',')
           if(!this.editedItem.exam_date) {
             this.editedItem.exam_date = this.editedItem.e_exam_date
           }
@@ -758,6 +963,9 @@ export default {
               })
         }
       }
+    },
+    toggleDialog () {
+      this.dialogCopy = !this.dialogCopy
     },
     // handleFileUpload() {
     //   this.excelFile = this.$refs.file.files[0];

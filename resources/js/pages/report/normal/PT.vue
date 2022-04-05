@@ -281,100 +281,20 @@
                   </v-row>
                     
                   <!-- row 1 -->
+                  <BasicElements 
+                    :editedItem="editedItem"
+                    :readonlyVisible="readonlyVisible"
+                    :useFunctionView="'normal_pt'"
+                    :programBook="editedItem.report_version"
+                  />
                   <v-row
-                    class="mb-4 d-flex"
+                    class="my-2 d-flex"
                     justify="center"
                     no-gutters
                   >
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          檢測地點／類別
-                        </div>
-                        <div class="text-caption">
-                          Exam. Place/Type
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-text-field
-                          v-model="editedItem.exam_place"
-                          label="Regular"
-                          :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
-                        ></v-text-field>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2; " class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          檢測日期
-                        </div>
-                        <div class="text-caption">
-                          Exam. Date
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <!-- <v-text-field
-                          v-model="editedItem.exam_date"
-                          label="Regular"
-                          :readonly="readonlyVisible"
-                        ></v-text-field> -->
-                        <v-menu
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="auto"
-                          v-model="menuDatePicker"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              ref="exam_date"
-                              v-model="editedItem.exam_date"
-                              label="Regular"
-                              prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                              :rules="[
-                                (v) => !!v || '請填寫此欄位',
-                              ]"
-                              required
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker
-                            v-model="editedItem.exam_date"
-                            @input="menuDatePicker = false"
-                          ></v-date-picker>
-                        </v-menu>
-                      </v-card>
-                    </v-col>
+                    <v-divider
+                      inset
+                    ></v-divider>
                   </v-row>
                   <!-- row 1 -->
                   <v-row
@@ -382,7 +302,7 @@
                     justify="center"
                     no-gutters
                   >
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                    <v-col style="flex: 1; " class="d-flex align-stretch ">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -390,14 +310,14 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          檢測人員
+                          施加滲透劑
                         </div>
                         <div class="text-caption">
-                          Inspected By
+                          Penetrant Application
                         </div>
                       </v-card>
                     </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -407,63 +327,27 @@
                         <v-card-title>
                           <v-row>
                             <v-col cols="12">
-                              <v-text-field
-                                v-model="editedItem.obsert"
-                                :readonly="readonlyVisible"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-title>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2; " class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          工單編號
-                        </div>
-                        <div class="text-caption">
-                          Job No.
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-card-title>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                ref="job_no"
-                                v-model="editedItem.job_no"
-                                label="Regular"
-                                :readonly="readonlyVisible"
+                              <v-select
+                                ref="penetrant_application"
+                                v-model="editedItem.penetrant_application"
+                                :items="listPenetrantApplication_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
                                 :rules="[
-                                  (v) => !!v || '請填寫此欄位',
+                                  (v) => (v && v.length > 0) || '請填寫此欄位',
                                 ]"
                                 required
-                              ></v-text-field>
+                                :disabled="readonlyVisible"
+                              ></v-select>
                             </v-col>
                           </v-row>
                         </v-card-title>
                       </v-card>
                     </v-col>
-                  </v-row>
-                  <!-- row 2 -->
-                  <v-row
-                    class="mb-4 d-flex"
-                    justify="center"
-                    no-gutters
-                  >
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -471,54 +355,14 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          工程名稱
+                          滲透時間
                         </div>
                         <div class="text-caption">
-                          Project Name 
+                          Dwell Time
                         </div>
                       </v-card>
                     </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-card-title>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                ref="job_name"
-                                v-model="editedItem.job_name"
-                                label="Regular"
-                                :readonly="true"
-                                :rules="[
-                                  (v) => !!v || '請填寫此欄位',
-                                ]"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-title>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          材質
-                        </div>
-                        <div class="text-caption">
-                          Material 
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -526,157 +370,13 @@
                         tile
                       >
                         <v-text-field
-                          ref="material"
-                          v-model="editedItem.material"
-                          label="Regular"
+                          ref="dwell_time"
+                          v-model="editedItem.dwell_time"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
-                  </v-row>
-                  <!-- row 2 -->
-                  <v-row
-                    class="mb-4 d-flex"
-                    justify="center"
-                    no-gutters
-                  >
-                    <v-col style="flex: 2; " class="d-flex align-stretch ">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          設備編號
-                        </div>
-                        <div class="text-caption">
-                          Equlpment No
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                      <v-card-title>
-                        <v-row>
-                          <v-col cols="12">
-                            <v-text-field
-                              ref="equlpment_no"
-                              v-model="editedItem.equlpment_no"
-                              label="(空白)"
-                              :readonly="true"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-card-title>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2; " class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          
-                        </div>
-                        <div class="text-caption">
-                          
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                      <v-card-title>
-                        <v-row>
-                          <!-- <v-col cols="12" md="6">
-                            <v-select
-                              v-model="selectNominalSize"
-                              :items="listRTPT_Datas"
-                              label="尺寸"
-                              item-text="nominal_size"
-                              item-value="id"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col>
-                          <v-col cols="12" md="6">
-                            <v-select
-                              v-model="selectThickness"
-                              :items="listThickness_Datas"
-                              label="厚度"
-                              item-text="thickness"
-                              item-value="value"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col> -->
-                        </v-row>
-                      </v-card-title>
-                      <v-card-subtitle>
-                        <div v-text="mThincknessNomalSize"></div>
-                      </v-card-subtitle>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                  <!-- row 3 -->
-                  <v-row
-                    class="mb-4 d-flex"
-                    justify="center"
-                    no-gutters
-                  >
-                    <v-col style="flex: 2; " class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <div class="text-subtitle-2">
-                          工作表面亮度
-                        </div>
-                        <div class="text-caption">
-                          Light Intensity
-                        </div>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
-                      <v-card
-                        class="pa-2 align-stretch"
-                        style="flex: 1;"
-                        outlined
-                        tile
-                      >
-                        <v-text-field
-                          ref="light_intensity"
-                          v-model="editedItem.light_intensity"
-                          label="Regular"
-                          :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
-                        ></v-text-field>
-                      </v-card>
-                    </v-col>
-                    <v-col style="flex: 2;" class="d-flex align-stretch">
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -691,7 +391,7 @@
                         </div>
                       </v-card>
                     </v-col>
-                    <v-col style="flex: 5;" class="d-flex align-stretch">
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
                       <v-card
                         class="pa-2 align-stretch"
                         style="flex: 1;"
@@ -699,13 +399,394 @@
                         tile
                       >
                         <v-text-field
-                          ref="surface_temp"
-                          v-model="editedItem.surface_temp"
+                          ref="surface_temperature"
+                          v-model="editedItem.surface_temperature"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- row 2 -->
+                  <v-row
+                    class="mb-4 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 1; " class="d-flex align-stretch ">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          滲透劑去除
+                        </div>
+                        <div class="text-caption">
+                          Removal
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="removal"
+                                v-model="editedItem.removal"
+                                :items="listRemoval_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
+                                :rules="[
+                                  (v) => (v && v.length > 0) || '請填寫此欄位',
+                                ]"
+                                required
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          乾燥時間
+                        </div>
+                        <div class="text-caption">
+                          Drying Time
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="drying_time"
+                          v-model="editedItem.drying_time"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          檢測時機
+                        </div>
+                        <div class="text-caption">
+                          Exam. Time
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="exam_time"
+                                v-model="editedItem.exam_time"
+                                :items="listExamTime_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
+                                :rules="[
+                                  (v) => (v && v.length > 0) || '請填寫此欄位',
+                                ]"
+                                required
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- row 3 -->
+                  <v-row
+                    class="mb-4 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          檢測方法
+                        </div>
+                        <div class="text-caption">
+                          Examination Method
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="exam_method"
+                                v-model="editedItem.exam_method"
+                                :items="listExamMethod_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
+                                :rules="[
+                                  (v) => (v && v.length > 0) || '請填寫此欄位',
+                                ]"
+                                required
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          顯像時間
+                        </div>
+                        <div class="text-caption">
+                          Developing Time
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="developing_time"
+                          v-model="editedItem.developing_time"
                           label="Regular"
                           :readonly="readonlyVisible"
                           :rules="[
                             (v) => !!v || '請填寫此欄位',
                           ]"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          後清理
+                        </div>
+                        <div class="text-caption">
+                          Post Clean
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="post_clean"
+                                v-model="editedItem.post_clean"
+                                :items="listPostClean_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
+                                :rules="[
+                                  (v) => (v && v.length > 0) || '請填寫此欄位',
+                                ]"
+                                required
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- row 4 -->
+                  <v-row
+                    class="mb-2 d-flex"
+                    no-gutters
+                  >
+                    <v-col cols="1" style="flex: 1; " class="d-flex align-stretch ">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          施加顯像劑
+                        </div>
+                        <div class="text-caption">
+                          Developing
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="3" style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="developing"
+                          v-model="editedItem.developing"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                  <!-- row 4 -->
+                  <v-row
+                    class="mb-2 d-flex"
+                    justify="center"
+                    no-gutters
+                  >
+                    <v-col style="flex: 1; " class="d-flex align-stretch ">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          清洗劑
+                        </div>
+                        <div class="text-caption">
+                          Cleaner
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="cleaner"
+                          v-model="editedItem.cleaner"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          滲透劑
+                        </div>
+                        <div class="text-caption">
+                          Penetrant
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="penetrant"
+                          v-model="editedItem.penetrant"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1; " class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          顯像劑
+                        </div>
+                        <div class="text-caption">
+                          Developer
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="developer"
+                          v-model="editedItem.developer"
+                          :readonly="readonlyVisible"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -760,10 +841,19 @@
                               </v-app-bar>
                               <v-card-text
                                 :class="active ? 'white--text' : ''"
+                                v-if="thicknesGroup_Data[n-1].thickOrQu == 0"
                               >
                                 {{thicknesGroup_Data[n-1].selectThickness.thickness.toUpperCase()}}
                               <v-divider class="mx-2"></v-divider>
                                 {{thicknesGroup_Data[n-1].selectNominalSize.nominal_size}}
+                              </v-card-text>
+                              <v-card-text
+                                :class="active ? 'white--text' : ''"
+                                v-elseif="thicknesGroup_Data[n-1].thickOrQu == 1"
+                              >
+                                {{'面積'}}
+                              <v-divider class="mx-2"></v-divider>
+                                {{thicknesGroup_Data[n-1].mAreaSize}}
                               </v-card-text>
                             </v-card>
                             <v-card
@@ -842,7 +932,7 @@
                               <td>
                                 <v-text-field
                                 v-model="item.welder_no"
-                                :readonly="true"
+                                :readonly="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
@@ -886,10 +976,16 @@
                                 <!-- 按钮区域 -->
                               <td>
                                 <template v-if="!readonlyVisible">
-                                  <!-- 修改界面显示取消 -->
-                                  <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items[thicknesGroupModelChoice].length - 1" @click="insertEditItems(thicknesGroupModelChoice)">插入下一行</v-btn>
-                                  <!-- 修改界面显示取消 -->
-                                  <v-btn rounded color="error" dark small v-else @click="deleteEditItems(item)">刪除</v-btn>
+                                  <div class="d-flex justify-space-around">
+                                    <!-- 修改界面显示取消 -->
+                                    <v-btn fab color="error" dark x-small @click="deleteEditItems(item)">
+                                      <v-icon>mdi-minus</v-icon>
+                                    </v-btn>
+                                    <!-- 修改界面显示取消 -->
+                                    <v-btn fab color="success" dark x-small @click="insertEditItems(index)">
+                                      <v-icon>mdi-plus</v-icon>
+                                    </v-btn>
+                                  </div>
                                 </template>
                               </td>
                             </template>
@@ -1053,6 +1149,7 @@ import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
 import ThicknessChoice from '../../../components/ThicknessChoice.vue'
+import BasicElements from '../../../components/report/BasicElements.vue'
 import draggable from "vuedraggable"
 const SAMPLE_PDF_PATH = 'normal_pt'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -1065,7 +1162,8 @@ export default {
     PdfViewer,
     DataTableStatus,
     draggable,
-    ThicknessChoice
+    ThicknessChoice,
+    BasicElements
   },
 
   metaInfo () {
@@ -1122,10 +1220,16 @@ export default {
     editedDispatchStatus: false,
     exportFinalPath: null,
     editedItem: {
+      customer: '',
       original_no: '',
       report_version: 0,
       id: 0,
       dispatch_id: '',
+      applicable_code: '',
+      criteria: '',
+      procedure_no: '',
+      region: '',  //區域/品名
+      contract_no: '', //合約編號
       job_name: '',
       job_no: '',
       exam_date: new Date,
@@ -1136,9 +1240,21 @@ export default {
       nominal_size: '',
       surface_status: '',
       exam_time: '',
+      exam_method: '',
       light_intensity: '',
       white_ligth_meter: '',
       surface_temp: '',
+      penetrant_application: '', //施加滲透劑
+      dwell_time: '', //滲透時間
+      surface_temperature: '', //檢測時表面溫度
+      removal: '', //滲透劑去除
+      drying_time: '', //乾燥時間
+      developing_time: '', //顯像時間
+      developing: '', //施加顯像劑
+      post_clean: '', //後清理
+      cleaner: '', //清洗劑
+      penetrant: '', //滲透劑
+      developer: '', //顯像劑dd
       obsert: '',
       thickness_objs: [],
       items:[
@@ -1157,12 +1273,18 @@ export default {
       ],
     },
     defaultItem: {
+      customer: '',
       original_no: '',
       report_version: 0,
       id: 0,
       dispatch_id: '',
       job_name: '',
       job_no: '',
+      applicable_code: '',
+      criteria: '',
+      procedure_no: '',
+      region: '',  //區域/品名
+      contract_no: '', //合約編號
       exam_date: new Date,
       exam_place: '',
       exam_type: '',
@@ -1171,10 +1293,22 @@ export default {
       nominal_size: '',
       surface_status: '',
       exam_time: '',
+      exam_method: '',
       light_intensity: '',
       white_ligth_meter: '',
       surface_temp: '',
       obsert: '',
+      penetrant_application: '', //施加滲透劑
+      dwell_time: '', //滲透時間
+      surface_temperature: '', //檢測時表面溫度
+      removal: '', //滲透劑去除
+      drying_time: '', //乾燥時間
+      developing_time: '', //顯像時間
+      developing: '', //施加顯像劑
+      post_clean: '', //後清理
+      cleaner: '', //清洗劑
+      penetrant: '', //滲透劑
+      developer: '', //顯像劑dd
       thickness_objs: [],
       items:[
         [
@@ -1200,6 +1334,39 @@ export default {
       {text: 'AWS D1.1│D1.1M-02', value: 'awsd1'},
       {text: 'CNS11398-02', value: 'cns11398'},
       {text: 'CNS13464-01', value: 'cns13464'},
+    ],
+    listSurfaceStatus_Datas:[
+      {text: '銲接表面As-Welded', value: '0'},
+      {text: '輥軋表面As-Rolled', value: '1'},
+      {text: '研磨表面As-ground', value: '2'},
+      {text: '機械加工As-machined', value: '3'},
+      {text: '其它Other', value: '4'},
+    ],
+    listExamTime_Datas:[
+      {text: '銲接後After Welded', value: '0'},
+      {text: '銲前表面準備Prepared Surface', value: '1'},
+      {text: '熱處理後 After HT', value: '2'},
+      {text: '試壓後After Hydro. Test', value: '3'},
+      {text: '其它Other', value: '4'},
+    ],
+    listExamMethod_Datas:[
+      {text: '色比 Color Contrast', value: '0'},
+      {text: '螢光 Fluorescent', value: '1'},
+      {text: '溶劑去除 Solvent Removable', value: '2'},
+      {text: '水洗 Water Washable', value: '3'},
+    ],
+    listRemoval_Datas:[
+      {text: '清潔布Dry Cloths', value: '0'},
+      {text: '擦拭紙Absorbent Paper', value: '1'},
+    ],
+    listPenetrantApplication_Datas:[
+      {text: '噴霧Spraying', value: '0'},
+      {text: '刷塗Brushing', value: '1'},
+    ],
+    listPostClean_Datas:[
+      {text: '溶劑Solvent', value: '0'},
+      {text: '水洗Water', value: '1'},
+      {text: '其他Other', value: '2'},
     ],
   }),
 
@@ -1370,20 +1537,20 @@ export default {
       return list[n]
     },
 
-    insertEditItems() {
+    insertEditItems(index) {
       var choiceIndex = this.thicknesGroupModelChoice
       if(choiceIndex < 0) return
       if(this.editedItem.items && this.editedItem.items[choiceIndex] && this.editedItem.items[choiceIndex].length > 0) {
-        let tmpDefault = Object.assign({}, this.editedItem.items[choiceIndex][0])
-        tmpDefault.object_no = this.editedItem.items[choiceIndex].length + 1
-        this.editedItem.items[choiceIndex].push(tmpDefault)
-        // 重新排編號
-        this.editedItem.items[choiceIndex].forEach((element, index) => {
-          var a = this.editedItem.items[choiceIndex][index]
-          a.object_no = (index+1)
-          this.$set(this.editedItem.items[choiceIndex], index, a)
-          // element.object_no = (index+1)
+        let _ = this.editedItem.items
+        let tmpDefault = Object.assign({}, _[choiceIndex][index])
+        let newArr = Object.assign([], _)
+        tmpDefault.object_no = newArr[choiceIndex].length + 1
+        console.log(tmpDefault)
+        newArr[choiceIndex].splice(index+1, 0, tmpDefault)
+        newArr[choiceIndex].forEach((element, index) => {
+          newArr[choiceIndex][index].object_no = (index+1)
         })
+        this.editedItem.items = newArr
       }
     },
 
@@ -1804,12 +1971,23 @@ export default {
           // console.log("item not empty end", this.editedItem.items[index])
           var thickness = element.mThincknessNomalSize
           // console.log("thickness", thickness)
-          this.editedItem.items[index].forEach((element1, i) => {
-            // console.log("start", this.editedItem.items[index][i])
-            // console.log("items", element1)
-            this.editedItem.items[index][i].weld_length = thickness
-            // console.log("end", this.editedItem.items[index][i])
-          })
+          // 面積
+          if(element.thickOrQu == 1) {
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].weld_length = element.mAreaSize
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          } else {
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].weld_length = thickness
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          }
+          
         })
         // this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
         // this.editedItem.sod = this.editedItem.sod.slice(1);

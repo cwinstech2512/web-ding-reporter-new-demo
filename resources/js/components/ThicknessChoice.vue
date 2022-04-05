@@ -2,6 +2,7 @@
   <v-dialog
     v-model="dialog"
     max-width="500px"
+    persistent
   >
     <v-card>
       <v-card-title class="text-h5">
@@ -10,6 +11,19 @@
       <v-card-text>
         <v-container>
         <v-row>
+          <v-col cols="12" md="10">
+            <v-select
+              v-model="thick_or_qu"
+              :items="listThickOrQu_Datas"
+              label="尺寸/面積"
+              item-text="text"
+              item-value="value"
+              dense
+              outlined
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row v-if="thick_or_qu == 0">
           <v-col cols="12" md="10">
             <v-select
               v-model="selectNominalSize"
@@ -23,7 +37,7 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="thick_or_qu == 0">
           <v-col cols="12" md="10">
             <v-select
               v-model="selectThickness"
@@ -37,7 +51,17 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="thick_or_qu == 1">
+          <v-col cols="12" md="10">
+            <v-text-field
+              label="請輸入面積"
+              outlined
+              dense
+              v-model="mAreaSize"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row v-if="thick_or_qu == 0">
           <v-col cols="12" md="10">
             <v-text-field
               label="查表結果"
@@ -48,7 +72,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row v-if="channalType == 'chimei_rt'">
+        <v-row v-if="channalType == 'chimei_rt' || channalType == 'normal_rt'">
           <v-col cols="12" md="10">
             <v-select
               v-model="radiographic_tech"
@@ -76,7 +100,7 @@
           color="green darken-1"
           text
           @click="saveMThinckness"
-          :disabled="!isSave"
+          :disabled="isDisableSave()"
         >
           儲存
         </v-btn>
@@ -124,12 +148,25 @@
         {text: '單層壁Single Wall Exposure', value: 0},
         {text: '雙層壁Double Wall Exposure', value: 1},
       ],
-      radiographic_tech: null
+      listThickOrQu_Datas: [
+        {text: '尺寸', value: 0},
+        {text: '面積', value: 1},
+      ],
+      radiographic_tech: null,
+      thick_or_qu: 0,
+      mAreaSize: 0,
     }),
 
     watch: {
       thicknesGroupModel (val, oldVal) {
         if (val === oldVal) return
+      },
+      thick_or_qu (val, oldVal) {
+        if (val === oldVal) return
+        this.mAreaSize = 0
+        this.mThincknessNomalSize = null
+        this.selectNominalSize = {}
+        this.selectThickness = {}
       },
       // selectNominalSize (val, oldVal) {
       //   if (val === oldVal) return
@@ -149,14 +186,20 @@
     },
 
     methods: {
+      isDisableSave () {
+        if(this.mAreaSize || this.mThincknessNomalSize) return false
+        else return true
+      },
       saveMThinckness () {
-        if(this.mThincknessNomalSize > 0) {
+        if(!this.isDisableSave()) {
           var obj = {
             selectThickness: this.selectThickness,
             selectNominalSize: this.selectNominalSize,
             mThincknessNomalSize: this.mThincknessNomalSize,
             radiographic_tech: this.radiographic_tech,
             thicknesGroupModel: this.thicknesGroupModel,
+            thickOrQu: this.thick_or_qu,
+            mAreaSize: this.mAreaSize,
           }
           if(this.thicknesGroupModel >= this.thicknesGroup_Data.length) {
             this.thicknesGroup_Data.push(obj)

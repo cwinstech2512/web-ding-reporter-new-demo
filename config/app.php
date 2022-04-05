@@ -186,6 +186,8 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
         Barryvdh\DomPDF\ServiceProvider::class,
+
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

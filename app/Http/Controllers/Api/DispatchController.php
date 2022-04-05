@@ -87,6 +87,12 @@ class DispatchController extends Controller
             case 'normal.pt':
                 $this->smpService->parseReportNormalPT($function_path, $id);
             break;
+            case 'normal.rt':
+                $this->smpService->parseReportNormalRT($function_path, $id);
+            break;
+            case 'normal.mt':
+                $this->smpService->parseReportNormalMT($function_path, $id);
+            break;
             default:
                 return false;
             break;
@@ -186,6 +192,12 @@ class DispatchController extends Controller
             case 'normal.pt':
                 return new ReportPTResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
+            case 'normal.rt':
+                return new ReportRTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'normal.mt':
+                return new ReportMTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
         }
         
     }
@@ -215,5 +227,10 @@ class DispatchController extends Controller
     public function delete(Request $request, $id) 
     {
         return new ResponseResource($this->dispatchService->deleteDispatch($id));
+    }
+
+    public function copy(Request $request, $id) 
+    {
+        return new ResponseResource($this->dispatchService->copyDispatch($request->all(), $id));
     }
 }

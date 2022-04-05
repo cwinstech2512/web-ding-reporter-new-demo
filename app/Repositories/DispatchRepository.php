@@ -54,6 +54,7 @@ class DispatchRepository
                 if(sizeof($reporExplope)==2) {
                     $reportData['dispatch_id'] = $dispatch_id;
                     unset($reportData['id']);
+                    // 建立報告
                     $this->saveFunPathByArray($reportData, $reporExplope[1]);
                 }
             }
@@ -99,6 +100,58 @@ class DispatchRepository
         }
     }
 
+    public function copyDispatchWithNewArray($from = null, $to = null)
+    {
+        if(is_null($from) || !is_array($from)) {
+            return null;
+        }
+        if(is_null($to)) {
+            $to = new Dispatch;
+        }
+        unset($from['export_final_path']);
+        $from['status'] = 2;
+        $to->fill($from);
+        $to->save();
+        $dispatch_id = $to->id;
+        if(isset($to->function_path) && !empty($to->function_path)) {
+            $function_path = $to->function_path;
+            $exFun = explode(',', $function_path);
+            
+            foreach($exFun as $ex) {
+                $reporExplope = explode('.', $ex);
+                if(sizeof($reporExplope)==2) {
+                    $reportData = $from['report_'.$reporExplope[1]];
+                    $reportData['dispatch_id'] = $dispatch_id;
+                    unset($reportData['id']);
+                    // 建立報告
+                    $this->saveFunPathByArray($reportData, $reporExplope[1]);
+                }
+            }
+            $array['status'] = 1;
+        }
+
+        return $this->createDispatchSerialNumber($to);;
+    }
+
+    public function fetchDispatchWithReport($id)
+    {
+        $fromFirst = $this->dataById($id);
+        if(!$fromFirst) {
+            return null;
+        }
+        if(empty($fromFirst->function_path)) {
+            return null;
+        }
+        $reporExplope = explode('.', $fromFirst->function_path);
+        return $this->model::where('id', $id)->with(
+            [
+                'report_'.$reporExplope[1] => function($query) {
+                    
+                }
+            ]
+        )->first();
+    }
+
     public function verifyFunPathDispatch($function_path, $id = -1)
     {
         if(!empty($function_path) && $id == -1) {
@@ -126,26 +179,32 @@ class DispatchRepository
         $command = substr(ucfirst($command), 0, 2);
         $model = app("App\Models\Report{$command}");
         
+        // 有帶入報告id，報告已存在，報告介面更新
         if(isset($array['id']) && $array['id'] > 0) {
             if(!($first = $model::find($array['id']))) {
                 $first = new $model;
             }
         } else {
+            // 派單以建立
             if(isset($array['dispatch_id']) && $array['dispatch_id'] > 0) {
                 // 第一次建立派單後，產生得報告黨
                 if(!($first = $model::where('dispatch_id', $array['dispatch_id'])->first())) {
+                    // 產生空白報告黨
                     $first = new $model;
+                    // 預設為編輯報告狀態
                     $array['status'] = 2;
                 }
             } else {
+                // 不應該有
                 $first = new $model;
+                return;
             }
         }
         if(empty($first->items) || is_null($first->items)) {
             $array['items'] = $this->initItemReportData($array, $command);
         }
         
-        $first->fill($array);
+        $first->fill(array_filter( $array, function( $v ) { return !is_null( $v ); } ));
         return $first->save() && $this->createReportSerialNumber($first, $command);
     }
 

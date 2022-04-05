@@ -37,6 +37,11 @@ export default [
         name: '修改密碼',
         component: page('auth/password/Change.vue')
       },
+      {
+        path: '/profile',
+        name: '個人中心',
+        component: page('auth/Profile.vue')
+      },
       // {
       //   path: 'ss',
       //   name: '相似問題選單連結',
@@ -135,6 +140,16 @@ export default [
         path: '/pt_nor',
         name: '液滲檢測',
         component: page('report/normal/PT.vue')
+      },
+      {
+        path: '/rt_nor',
+        name: '射線檢測',
+        component: page('report/normal/RT.vue')
+      },
+      {
+        path: '/mt_nor',
+        name: '磁粒檢測',
+        component: page('report/normal/MT.vue')
       },
     ]
   },

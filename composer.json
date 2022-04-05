@@ -21,6 +21,7 @@
         "tymon/jwt-auth": "^1.0.1"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.12",
         "doctrine/dbal": "^2.12",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
@@ -37,7 +38,8 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-              "laravel/dusk"
+              "laravel/dusk",
+              "barryvdh/laravel-ide-helper"
             ]
         }
     },

@@ -1828,13 +1828,16 @@ export default {
       var choiceIndex = this.thicknesGroupModelChoice
       if(choiceIndex < 0) return
       if(this.editedItem.items && this.editedItem.items[choiceIndex] && this.editedItem.items[choiceIndex].length > 0) {
-        let tmpDefault = Object.assign({}, this.editedItem.items[choiceIndex][0])
-        tmpDefault.object_no = this.editedItem.items[choiceIndex].length + 1
+        let _ = this.editedItem.items
+        let tmpDefault = Object.assign({}, _[choiceIndex][0])
+        let newArr = Object.assign([], _)
+        tmpDefault.object_no = newArr[choiceIndex].length + 1
         console.log(tmpDefault)
-        this.editedItem.items[choiceIndex].push(tmpDefault)
-        this.editedItem.items[choiceIndex].forEach((element, index) => {
-          this.editedItem.items[index].object_no = (index+1)
+        newArr[choiceIndex].push(tmpDefault)
+        newArr[choiceIndex].forEach((element, index) => {
+          newArr[choiceIndex][index].object_no = (index+1)
         })
+        this.editedItem.items = newArr
       }
     },
 

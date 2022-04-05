@@ -38,7 +38,7 @@ class ParseFpg
         
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.xlsx';
+        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $reporter->report_rthree->original_no . '.xlsx';
         if(is_null($reporter)){
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
@@ -547,7 +547,7 @@ class ParseFpg
         
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.xlsx';
+        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $reporter->report_rtolll->original_no . '.xlsx';
         if(is_null($reporter)){
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
@@ -1001,7 +1001,7 @@ class ParseFpg
         
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
-        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.xlsx';
+        $copyPath = 'fpg/'.$serial.'/rt/XID-RT-' . $reporter->report_rtoil->original_no . '.xlsx';
         if(is_null($reporter)){
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
