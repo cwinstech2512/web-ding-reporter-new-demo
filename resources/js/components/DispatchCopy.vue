@@ -117,9 +117,9 @@
       examFunctionPath: [
         {text: '奇美PT', value: 'chimei.pt'},
         {text: '奇美RT', value: 'chimei.rt'},
-        {text: '奇美MT', value: 'chimei.mt'},
-        {text: '奇美UT', value: 'chimei.ut'},
-        {text: '奇美IT', value: 'chimei.it'},
+        // {text: '奇美MT', value: 'chimei.mt'},
+        // {text: '奇美UT', value: 'chimei.ut'},
+        // {text: '奇美IT', value: 'chimei.it'},
         {text: '一般PT', value: 'normal.pt'},
         {text: '一般RT', value: 'normal.rt'},
         {text: '一般MT', value: 'normal.mt'},
