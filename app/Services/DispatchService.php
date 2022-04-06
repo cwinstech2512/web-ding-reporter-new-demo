@@ -46,8 +46,13 @@ class DispatchService
                 $old['report_'.$reporExplope[1]] = $tmpReport;
             }
             $old['function_path'] = $params['copy_function'];
-            $this->dispstchRepo->copyDispatchWithNewArray($old);
-            dd($old);
+            if($this->dispstchRepo->copyDispatchWithNewArray($old)) {
+                $out['code'] = 1000;
+                $out['message'] = "資料更新成功";
+            } else {
+                $out['code'] = 50002;
+                $out['message'] = "資料更新錯誤";
+            }
         } else {
             $out['code'] = 50001;
             $out['message'] = "資料更新錯誤";
