@@ -50,7 +50,7 @@ class ParseNormal
        
         $serial = Carbon::now()->format('Ymd');
         // $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
-        $copyPath = 'normal/'.$serial.'/mt/' . $reporter->report_mt->original_no . '.docx';
+        $copyPath = 'normal/'.$serial.'/mt/' . $reporter->report_mt->original_no . '_' . Carbon::now()->timestamp . '.docx';
         
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd(Storage::disk('public_sample'));
@@ -354,7 +354,7 @@ class ParseNormal
        
         $serial = Carbon::now()->format('Ymd');
         // $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
-        $copyPath = 'normal/'.$serial.'/rt/' . $reporter->report_rt->original_no . '.docx';
+        $copyPath = 'normal/'.$serial.'/rt/' . $reporter->report_rt->original_no . '_' . Carbon::now()->timestamp . '.docx';
         
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd(Storage::disk('public_sample'));
@@ -590,7 +590,7 @@ class ParseNormal
        
         $serial = Carbon::now()->format('Ymd');
         // $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
-        $copyPath = 'normal/'.$serial.'/pt/' . $reporter->report_pt->original_no . '.docx';
+        $copyPath = 'normal/'.$serial.'/pt/' . $reporter->report_pt->original_no . '_' . Carbon::now()->timestamp . '.docx';
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd(Storage::disk('public_sample'));
             $dirname = dirname($realPath);
