@@ -442,9 +442,9 @@ class ParseNormal
                 //照射方法
                 $radiographicTech = "";
                 if($tmpReport->radiographic_tech == 0) {
-                    $radiographicTech = "■ 單層壁 Single Wall Exposure<br />□ 雙層壁 Double Wall Exposure";
+                    $radiographicTech = "■ 單層壁 Single Wall Exposure □ 雙層壁 Double Wall Exposure";
                 } else if($tmpReport->radiographic_tech == 1) {
-                    $radiographicTech = "□ 單層壁 Single Wall Exposure<br />■ 雙層壁 Double Wall Exposure";
+                    $radiographicTech = "□ 單層壁 Single Wall Exposure ■ 雙層壁 Double Wall Exposure";
                 }
                 $templateProcessor->setValue('Radiographic Tech', $radiographicTech);
 
@@ -454,19 +454,19 @@ class ParseNormal
                 //底片判讀方式 Interpret
                 $interpret = "";
                 if($tmpReport->interpret == 0) {
-                    $interpret = "■單壁判讀Single View<br />□雙壁判讀Double View";
+                    $interpret = "■單壁判讀Single View □雙壁判讀Double View";
                     
                 } else if($tmpReport->interpret == 1) {
-                    $interpret = "□單壁判讀Single View<br />■雙壁判讀Double View";
+                    $interpret = "□單壁判讀Single View ■雙壁判讀Double View";
                 }
                 $templateProcessor->setValue('Interpret', $interpret);
 
                  //像質計位置 iqi_location_mark
                  $iqi_location_mark = "";
                  if($tmpReport->iqi_location_mark == 0) {
-                     $iqi_location_mark = "■射源側 Source Side<br />□底片側 Film Side";
+                     $iqi_location_mark = "■射源側 Source Side □底片側 Film Side";
                  } else if($tmpReport->iqi_location_mark == 1) {
-                     $iqi_location_mark = "□射源側 Source Side<br />■底片側 Film Side";
+                     $iqi_location_mark = "□射源側 Source Side ■底片側 Film Side";
                  }
                  $templateProcessor->setValue('IQI/Location Mark', $iqi_location_mark);
 
@@ -481,7 +481,7 @@ class ParseNormal
                         } else {
                             $iqi_no .= ('□' . $listIQINo[$i] . " ");
                         }
-                        if($listIQINo[$i] == '1B' && ($i + 1) < sizeof($listIQINo)) $iqi_no .= "<br />";
+                        if($listIQINo[$i] == '1B' && ($i + 1) < sizeof($listIQINo)) $iqi_no .= " ";
                     }
                 }
                 $templateProcessor->setValue('IQI No', $iqi_no);
@@ -657,9 +657,9 @@ class ParseNormal
                 //施加滲透劑 Penetrant Application
                 $penetrant_application = '';
                 if($tmpReport->penetrant_application == 0) {
-                    $penetrant_application = "■噴霧Spraying<br />□刷塗Brushing";
+                    $penetrant_application = "■噴霧Spraying □刷塗Brushing";
                 } else if($tmpReport->penetrant_application == 1) {
-                    $penetrant_application = "□噴霧Spraying<br />■刷塗Brushing";
+                    $penetrant_application = "□噴霧Spraying ■刷塗Brushing";
                 }
                 $templateProcessor->setValue('Penetrant Application', $penetrant_application);
 
