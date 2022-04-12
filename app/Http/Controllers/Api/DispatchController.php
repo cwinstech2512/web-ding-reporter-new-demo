@@ -137,8 +137,7 @@ class DispatchController extends Controller
             case 'normal.mt':
                 $out = $this->smpService->parseReportNormalMT($function_path, $id);
                 if($out && isset($out['data']['export_final_path'])) {
-                    // $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
-                    $out['data']['export_final_path'] = 'https://stable-dinxing.xinlidadigi.com/storage/file/export/normal/20220410/pt/XID-PT-20220413-0001.docx';
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
                 }
                 return new ResponseResource($out);
             break;
