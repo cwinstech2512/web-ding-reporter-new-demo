@@ -6,13 +6,15 @@ use App\Repositories\{SampleLogRepository};
 use App\Repositories\DispatchRepository;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use File;
 
 class ParseNormal
 {
     private $spRepo = null;
     private $dispstchRepo = null;
+    private $previewNotUse = array("&");
 
-    public function __construct(SampleLogRepository $spRepo, DispatchRepository $dispstchRepo) 
+    public function __construct(SampleLogRepository $spRepo, DispatchRepository $dispstchRepo)
 	{
 		$this->spRepo = $spRepo;
         $this->dispstchRepo = $dispstchRepo;
@@ -66,7 +68,7 @@ class ParseNormal
                 $templateProcessor->setValue('Material', $tmpReport->material);
                 $templateProcessor->setValue('Thicknes', $tmpReport->thicknes);
                 $templateProcessor->setValue('Region', $tmpReport->region);
-                $templateProcessor->setValue('Applicable Code', $tmpReport->applicable_code);
+                $templateProcessor->setValue('Applicable Code', str_replace($this->previewNotUse, " ", $tmpReport->applicable_code));
                 $templateProcessor->setValue('Contract No', $tmpReport->contract_no);
                 $templateProcessor->setValue('Criteria', $tmpReport->criteria);
                 $templateProcessor->setValue('Procedure No', $tmpReport->procedure_no);
@@ -110,7 +112,7 @@ class ParseNormal
                         } else {
                             $surface_status .= "□";
                         }
-                        $surface_status .= $elem; 
+                        $surface_status .= $elem;
                     }
                 }
                 $templateProcessor->setValue('Surface Preparation', $surface_status);
@@ -161,9 +163,9 @@ class ParseNormal
                 //施加方式 magnetic_equipment
                 $applying_method = '';
                 if($tmpReport->applying_method == 0) {
-                    $applying_method = "■撒 Dusting or Blowing<br />□噴 Spraying";
+                    $applying_method = "■撒 Dusting or Blowing □噴 Spraying";
                 } else if($tmpReport->applying_method == 1) {
-                    $applying_method = "□撒 Dusting or Blowing<br />■噴 Spraying";
+                    $applying_method = "□撒 Dusting or Blowing ■噴 Spraying";
                 }
                 $templateProcessor->setValue('Applying Method', $applying_method);
 
@@ -260,7 +262,7 @@ class ParseNormal
                         } else {
                             $magnetizing_methon .= "□";
                         }
-                        $magnetizing_methon .= ($elem . "<br />"); 
+                        $magnetizing_methon .= ($elem . " "); 
                     }
                 }
                 $templateProcessor->setValue('Magnetizing Methon', $magnetizing_methon);
@@ -309,10 +311,12 @@ class ParseNormal
             }
 
             $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
+            // File::copy($templateProcessor->save(), Storage::disk('export')->path($copyPath));
             $array['id'] = $id;
             $array['export_final_path'] = $copyPath;
             if($this->dispstchRepo->saveDispatchByArray($array)) {
                 $out['code'] = 1000;
+                $out['data'] = $array;
                 $out['message'] = "資料更新成功";
                 Log::info(json_encode($array));
             } else {
@@ -320,6 +324,7 @@ class ParseNormal
                 $out['message'] = "資料更新錯誤";
             }
         }
+        return $out;
     }
     public function parseReportNormalUT($function_path, $id)
     {
@@ -368,7 +373,7 @@ class ParseNormal
                 $templateProcessor->setValue('Material', $tmpReport->material);
                 $templateProcessor->setValue('Thicknes', $tmpReport->thicknes);
                 $templateProcessor->setValue('Region', $tmpReport->region);
-                $templateProcessor->setValue('Applicable Code', $tmpReport->applicable_code);
+                $templateProcessor->setValue('Applicable Code', str_replace($this->previewNotUse, " ", $tmpReport->applicable_code));
                 $templateProcessor->setValue('Contract No', $tmpReport->contract_no);
                 $templateProcessor->setValue('Criteria', $tmpReport->criteria);
                 $templateProcessor->setValue('Procedure No', $tmpReport->procedure_no);
@@ -549,6 +554,7 @@ class ParseNormal
             $array['export_final_path'] = $copyPath;
             if($this->dispstchRepo->saveDispatchByArray($array)) {
                 $out['code'] = 1000;
+                $out['data'] = $array;
                 $out['message'] = "資料更新成功";
                 Log::info(json_encode($array));
             } else {
@@ -556,6 +562,7 @@ class ParseNormal
                 $out['message'] = "資料更新錯誤";
             }
         }
+        return $out;
     }
     public function parseReportNormalIT($function_path, $id)
     {
@@ -601,7 +608,7 @@ class ParseNormal
                 $templateProcessor->setValue('Material', $tmpReport->material);
                 $templateProcessor->setValue('Thicknes', $tmpReport->thicknes);
                 $templateProcessor->setValue('Region', $tmpReport->region);
-                $templateProcessor->setValue('Applicable Code', $tmpReport->applicable_code);
+                $templateProcessor->setValue('Applicable Code', str_replace($this->previewNotUse, " ", $tmpReport->applicable_code));
                 $templateProcessor->setValue('Contract No', $tmpReport->contract_no);
                 $templateProcessor->setValue('Criteria', $tmpReport->criteria);
                 $templateProcessor->setValue('Procedure No', $tmpReport->procedure_no);
@@ -805,6 +812,7 @@ class ParseNormal
             $array['export_final_path'] = $copyPath;
             if($this->dispstchRepo->saveDispatchByArray($array)) {
                 $out['code'] = 1000;
+                $out['data'] = $array;
                 $out['message'] = "資料更新成功";
                 Log::info(json_encode($array));
             } else {
@@ -812,5 +820,6 @@ class ParseNormal
                 $out['message'] = "資料更新錯誤";
             }
         }
+        return $out;
     }
 }

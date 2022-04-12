@@ -191,6 +191,12 @@
               :listThickness_Datas="listThickness_Datas">
             </ThicknessChoice>
             <v-dialog
+              v-model="dialogPreview"
+              width="600px"
+              transition="dialog-bottom-transition">
+              <VueDocPreview :value="docPreviewUrlPath" :type="'office'" />
+            </v-dialog>
+            <v-dialog
               v-model="dialogView"
               width="600px"
               fullscreen
@@ -216,6 +222,15 @@
                     <v-btn
                       dark
                       text
+                      @click="preview"
+                      :disabled="editedDispatchStatus < 2"
+                    >
+                      預覽
+                    </v-btn>
+                    <v-btn
+                      dark
+                      text
+                      :disabled="editedDispatchStatus > 2"
                       @click="save"
                     >
                       儲存
@@ -1347,7 +1362,8 @@ import { mapGetters } from 'vuex'
 import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
 import ThicknessChoice from '../../../components/ThicknessChoice.vue'
-import draggable from "vuedraggable"
+import draggable      from "vuedraggable"
+import VueDocPreview  from 'vue-doc-preview'
 const SAMPLE_PDF_PATH = 'normal_mt'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -1359,7 +1375,8 @@ export default {
     PdfViewer,
     DataTableStatus,
     draggable,
-    ThicknessChoice
+    ThicknessChoice,
+    VueDocPreview
   },
 
   metaInfo () {
@@ -1382,6 +1399,7 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogPreview: false,
     dialogThicknessChoice: false,
     loading: false,
     loadingSave: false,
@@ -1400,6 +1418,7 @@ export default {
     selectExamTime: null,
     selectApplyingMethod: null,
     selectMagnetizingMethon: null,
+    docPreviewUrlPath: '',
     listReportVersion_Datas: [
       {text: 'ASME-02', value: 'asme02'},
       {text: 'AWS D1.1│D1.1M-02', value: 'awsd1'},
@@ -1468,7 +1487,7 @@ export default {
     ],
     menuDatePicker: false,
     editedIndex: -1,
-    editedDispatchStatus: false,
+    editedDispatchStatus: -1,
     exportFinalPath: null,
     editedItem: {
       customer: '',
@@ -2072,7 +2091,7 @@ export default {
       })
     },
 
-    save () {
+    preview () {
       var formError = false
       Object.keys(this.editedItem).forEach(f => {
         if(this.$refs[f] && !this.$refs[f].validate(true)) {
@@ -2085,10 +2104,85 @@ export default {
         return
       }
 
+      var route_name = 'dispatch_preview'
+
       let params = this.editedItem
       let co = SAMPLE_PDF_PATH.split('_');
       let that = this
-      let url = `api/dispatch/${co[0]}/${co[1]}` + (this.editedItem.id === -1? '' : ('/'+this.editedItem.id))
+      let url = `api/${route_name}/${co[0]}/${co[1]}` + (this.editedItem.id === -1? '' : ('/'+this.editedItem.dispatch_id))
+      this.$swal.fire({
+        title: '預覽報告前請確定儲存?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          params.nominal_size = that.selectNominalSize.nominal_size
+          params.thicknes = that.selectThickness.thickness
+          params.thickness_objs = that.thicknesGroup_Data
+
+          // params.surface_status = that.editedItem.surface_status.join(',')
+          // params.exam_time = that.editedItem.exam_time.join(',')
+          // params.type_of_particle_olor = that.editedItem.type_of_particle_olor.join(',')
+          // params.magnetizing_methon = that.editedItem.magnetizing_methon.join(',')
+          return this.$axios
+            .fetchPut(url, params)
+            .then(res => {
+              return res.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
+        if(result.isConfirmed) {
+          if(result.value.code == 1000) {
+            var file = result.value.data
+            if(file.export_final_path) {
+              this.docPreviewUrlPath = file.export_final_path
+              this.dialogPreview = true
+              //  window.open('https://docs.google.com/viewer?url=' + file.export_final_path, '_blank')
+            }
+            // that.$swal.fire({
+            //   title: "成功!",
+            //   text: "儲存數據成功",
+            //   type: "success",
+            //   confirmButtonClass: "btn btn-success"
+            // });
+            // this.closeView()
+          } else {
+              that.$swal.fire({
+                title: "錯誤!",
+                text: "儲存數據錯誤",
+                type: "error",
+                confirmButtonClass: "btn btn-danger"
+              });
+              // this.closeView()
+          }
+        }
+      })
+    },
+
+    save (preview = false) {
+      var formError = false
+      Object.keys(this.editedItem).forEach(f => {
+        if(this.$refs[f] && !this.$refs[f].validate(true)) {
+          formError = true
+          return
+        }
+      })
+
+      if(formError) {
+        return
+      }
+
+      var route_name = 'dispatch'
+
+      let params = this.editedItem
+      let co = SAMPLE_PDF_PATH.split('_');
+      let that = this
+      let url = `api/${route_name}/${co[0]}/${co[1]}` + (this.editedItem.id === -1? '' : ('/'+this.editedItem.id))
       this.$swal.fire({
         title: '確定要儲存數據?',
         showCancelButton: true,

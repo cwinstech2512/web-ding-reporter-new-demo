@@ -129,7 +129,21 @@ class DispatchController extends Controller
                 return new ReportRTResource($this->smpService->parseReportFpgRT_Three($function_path, $id));
             break;
             case 'normal.pt':
-                // return new ReportPTResource($this->smpService->funPathDispatch($function_path, $id));
+                return new ReportPTResource($this->smpService->parseReportNormalPT($function_path, $id));
+            break;
+            case 'normal.rt':
+                return new ReportRTResource($this->smpService->parseReportNormalRT($function_path, $id));
+            break;
+            case 'normal.mt':
+                $out = $this->smpService->parseReportNormalMT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    // $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                    $out['data']['export_final_path'] = 'https://stable-dinxing.xinlidadigi.com/storage/file/export/normal/20220410/pt/XID-PT-20220413-0001.docx';
+                }
+                return new ResponseResource($out);
+            break;
+            default:
+                return false;
             break;
         }
     }
@@ -232,5 +246,10 @@ class DispatchController extends Controller
     public function copy(Request $request, $id) 
     {
         return new ResponseResource($this->dispatchService->copyDispatch($request->all(), $id));
+    }
+
+    public function preview(Request $request, $corperation, $command, $id) 
+    {
+        return $this->funPathDispatchExport($request, $corperation, $command, $id);
     }
 }

@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('dispatch/{id}', [DispatchController::class, 'update']);
     Route::delete('dispatch/{id}', [DispatchController::class, 'delete']);
     Route::post('dispatch_copy/{id}', [DispatchController::class, 'copy']);
+    Route::put('dispatch_preview/{corperation}/{command}/{id}', [DispatchController::class, 'preview']);
     Route::get('dispatch/{corperation}/{command}/{id}', [DispatchController::class, 'showFunPathDispatch'])
         ->whereAlpha('corperation')
         ->whereAlpha('command')

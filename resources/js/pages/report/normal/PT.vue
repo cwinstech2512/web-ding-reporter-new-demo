@@ -216,6 +216,14 @@
                     <v-btn
                       dark
                       text
+                      @click="preview"
+                      :disabled="editedDispatchStatus < 2"
+                    >
+                      預覽
+                    </v-btn>
+                    <v-btn
+                      dark
+                      text
                       @click="save"
                       :disabled="editedDispatchStatus > 2"
                     >
