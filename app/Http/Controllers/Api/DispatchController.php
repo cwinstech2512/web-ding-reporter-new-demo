@@ -129,10 +129,18 @@ class DispatchController extends Controller
                 return new ReportRTResource($this->smpService->parseReportFpgRT_Three($function_path, $id));
             break;
             case 'normal.pt':
-                return new ReportPTResource($this->smpService->parseReportNormalPT($function_path, $id));
+                $out = $this->smpService->parseReportNormalPT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
             break;
             case 'normal.rt':
-                return new ReportRTResource($this->smpService->parseReportNormalRT($function_path, $id));
+                $out = $this->smpService->parseReportNormalRT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
             break;
             case 'normal.mt':
                 $out = $this->smpService->parseReportNormalMT($function_path, $id);
