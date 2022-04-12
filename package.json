@@ -27,15 +27,16 @@
     "sweetalert2": "^10.9.0",
     "vform": "^1.0.1",
     "vue": "^2.6.12",
+    "vue-doc-preview": "^0.3.2",
     "vue-i18n": "^8.22.1",
     "vue-loading-overlay": "^3.4.2",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.4.8",
+    "vuedraggable": "^2.23.2",
     "vuetify": "^2.4.0",
     "vuex": "^3.5.1",
     "vuex-pathify": "^1.4.1",
-    "vuex-router-sync": "^5.0.0",
-    "vuedraggable": "^2.23.2"
+    "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
