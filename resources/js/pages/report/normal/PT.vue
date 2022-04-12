@@ -190,6 +190,12 @@
               :listRTPT_Datas="listRTPT_Datas"
               :listThickness_Datas="listThickness_Datas">
             </ThicknessChoice>
+             <v-dialog
+              v-model="dialogPreview"
+              width="600px"
+              transition="dialog-bottom-transition">
+              <VueDocPreview :value="docPreviewUrlPath" :type="'office'" />
+            </v-dialog>
             <v-dialog
               v-model="dialogView"
               width="600px"
@@ -1159,6 +1165,7 @@ import DataTableStatus from '../../../components/DataTableStatus.vue'
 import ThicknessChoice from '../../../components/ThicknessChoice.vue'
 import BasicElements from '../../../components/report/BasicElements.vue'
 import draggable from "vuedraggable"
+import VueDocPreview  from 'vue-doc-preview'
 const SAMPLE_PDF_PATH = 'normal_pt'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -1171,7 +1178,8 @@ export default {
     DataTableStatus,
     draggable,
     ThicknessChoice,
-    BasicElements
+    BasicElements,
+    VueDocPreview
   },
 
   metaInfo () {
@@ -1194,7 +1202,9 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogPreview: false,
     dialogThicknessChoice: false,
+    
     loading: false,
     loadingSave: false,
     thicknesGroup_Data: [],
@@ -1209,6 +1219,7 @@ export default {
     selectNominalSize: {},
     excelFile: null,
     pdfUrl: '',
+    docPreviewUrlPath: '',
     headers: [
       {
         text: '報告編號',
@@ -1951,7 +1962,7 @@ export default {
         }
       })
     },
-    
+
     save () {
       var formError = false
       Object.keys(this.editedItem).forEach(f => {
