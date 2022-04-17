@@ -27,7 +27,9 @@ class ReportMTResource extends JsonResource
             $this->report_mt->exam_method = isset($this->report_mt->exam_method)? json_decode($this->report_mt->exam_method) : null;
         }
         if(isset($this->report_mt->magnetic_equipment)) {
-            $this->report_mt->magnetic_equipment = isset($this->report_mt->magnetic_equipment)? json_decode($this->report_mt->magnetic_equipment) : null;
+            $this->report_mt->magnetic_equipment = isset($this->report_mt->magnetic_equipment)? 
+                (!is_null(json_decode($this->report_mt->magnetic_equipment))? json_decode($this->report_mt->magnetic_equipment) : $this->report_mt->magnetic_equipment) : 
+                null;
         }
         if(isset($this->report_mt->magnetizing_current)) {
             $this->report_mt->magnetizing_current = isset($this->report_mt->magnetizing_current)? json_decode($this->report_mt->magnetizing_current) : null;
@@ -41,7 +43,9 @@ class ReportMTResource extends JsonResource
         if(isset($this->report_mt->magnetizing_methon)) {
             $this->report_mt->magnetizing_methon = isset($this->report_mt->magnetizing_methon)? json_decode($this->report_mt->magnetizing_methon) : null;
         }
-        
+        if(isset($this->report_mt->joint_type)) {
+            $this->report_mt->joint_type = isset($this->report_mt->joint_type)? json_decode($this->report_mt->joint_type) : null;
+        }
         return parent::toArray($request);
     }
 }

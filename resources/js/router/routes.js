@@ -151,6 +151,16 @@ export default [
         name: '磁粒檢測',
         component: page('report/normal/MT.vue')
       },
+      {
+        path: '/vt_sdm',
+        name: '目視檢測',
+        component: page('report/singda/VT.vue')
+      },
+      {
+        path: '/mt_sdm',
+        name: '磁粒檢測',
+        component: page('report/singda/MT.vue')
+      },
     ]
   },
   {

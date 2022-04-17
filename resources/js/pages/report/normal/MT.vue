@@ -1067,10 +1067,19 @@
                               </v-app-bar>
                               <v-card-text
                                 :class="active ? 'white--text' : ''"
+                                v-if="thicknesGroup_Data[n-1].thickOrQu == 0"
                               >
                                 {{thicknesGroup_Data[n-1].selectThickness.thickness.toUpperCase()}}
                               <v-divider class="mx-2"></v-divider>
                                 {{thicknesGroup_Data[n-1].selectNominalSize.nominal_size}}
+                              </v-card-text>
+                              <v-card-text
+                                :class="active ? 'white--text' : ''"
+                                v-elseif="thicknesGroup_Data[n-1].thickOrQu == 1"
+                              >
+                                {{'面積'}}
+                              <v-divider class="mx-2"></v-divider>
+                                {{thicknesGroup_Data[n-1].mAreaSize}}
                               </v-card-text>
                             </v-card>
                             <v-card

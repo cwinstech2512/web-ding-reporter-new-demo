@@ -178,7 +178,7 @@ class DispatchRepository
         if(empty($command)) return;
         $command = substr(ucfirst($command), 0, 2);
         $model = app("App\Models\Report{$command}");
-        
+
         // 有帶入報告id，報告已存在，報告介面更新
         if(isset($array['id']) && $array['id'] > 0) {
             if(!($first = $model::find($array['id']))) {
@@ -212,7 +212,7 @@ class DispatchRepository
     {
         if(empty($model->serial_no)) {
             if(!empty($model->id)) {
-                $serialNo = Carbon::now()->format('Ymd') . '-' . str_pad($model::where('created_at', Carbon::now())->count()+1, 4, "0", STR_PAD_LEFT);
+                $serialNo = Carbon::now()->format('Ymd') . '-' . str_pad($model::whereDate('created_at', Carbon::now()->format('Y-m-d'))->count()+1, 4, "0", STR_PAD_LEFT);
                 $model->serial_no = $serialNo;
                 return $model->save();
             }

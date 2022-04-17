@@ -569,9 +569,11 @@
           return
         }
         let co = this.useFunctionView.split('_');
-        const found = this.applicable_code[co[1]][this.editedItem.report_version].findIndex(element => element.value == val);
-        this.editedItem.criteria = this.criteria[co[1]][this.editedItem.report_version][found].text
-        this.editedItem.procedure_no = this.procedure[co[1]][this.editedItem.report_version][found]
+        if (this.applicable_code[co[1]][this.editedItem.report_version]) {
+          const found = this.applicable_code[co[1]][this.editedItem.report_version].findIndex(element => element.value == val);
+          this.editedItem.criteria = this.criteria[co[1]][this.editedItem.report_version][found].text
+          this.editedItem.procedure_no = this.procedure[co[1]][this.editedItem.report_version][found]
+        }
       },
       useFunctionView (val, oldVal) {
         console.log(val);

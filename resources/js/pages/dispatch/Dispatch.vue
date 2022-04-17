@@ -575,12 +575,14 @@ export default {
     examFunctionPath: [
       {text: '奇美PT', value: 'chimei.pt'},
       {text: '奇美RT', value: 'chimei.rt'},
-      {text: '奇美MT', value: 'chimei.mt'},
-      {text: '奇美UT', value: 'chimei.ut'},
-      {text: '奇美IT', value: 'chimei.it'},
+      // {text: '奇美MT', value: 'chimei.mt'},
+      // {text: '奇美UT', value: 'chimei.ut'},
+      // {text: '奇美IT', value: 'chimei.it'},
       {text: '一般PT', value: 'normal.pt'},
       {text: '一般RT', value: 'normal.rt'},
       {text: '一般MT', value: 'normal.mt'},
+      {text: '海基MT', value: 'sdm.mt'},
+      {text: '海基VT', value: 'sdm.vt'},
       {text: '台塑油料廠', value: 'fpg.rtoil'},
       {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
       {text: '台塑煉製三廠', value: 'fpg.rthree'}

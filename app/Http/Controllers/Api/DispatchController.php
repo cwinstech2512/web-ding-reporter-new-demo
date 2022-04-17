@@ -12,6 +12,7 @@ use App\Http\Resources\ReportMTResource;
 use App\Http\Resources\ReportPTResource;
 use App\Http\Resources\ReportRTResource;
 use App\Http\Resources\ReportUTResource;
+use App\Http\Resources\ReportVTResource;
 use App\Http\Resources\ResponseResource;
 
 class DispatchController extends Controller
@@ -218,6 +219,15 @@ class DispatchController extends Controller
             break;
             case 'normal.mt':
                 return new ReportMTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'sdm.mt':
+                return new ReportMTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'sdm.vt':
+                return new ReportVTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'sdm.ut':
+                return new ReportUTResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
         }
         

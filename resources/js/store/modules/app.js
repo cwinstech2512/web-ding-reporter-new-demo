@@ -91,6 +91,43 @@ const state = {
       ]
     },
     {
+      title: '海基檢測報告',
+      icon: 'mdi-alpha-s-box-outline',
+      items: [
+        {
+          title: '磁粒檢測(MT)',
+          icon: 'mdi-alpha-m',
+          to: '/mt_sdm/',
+        },
+        {
+          title: '檢測報告(VT)',
+          icon: 'mdi-alpha-v',
+          to: '/vt_sdm/',
+        }
+      ]
+    },
+    {
+      title: '一般檢測報告',
+      icon: 'mdi-alpha-n-box-outline',
+      items: [
+        {
+          title: '液滲檢測(PT)',
+          icon: 'mdi-alpha-p',
+          to: '/pt_nor/',
+        },
+        {
+          title: '射線檢測(RT)',
+          icon: 'mdi-alpha-p',
+          to: '/rt_nor/',
+        },
+        {
+          title: '磁粒檢測(MT)',
+          icon: 'mdi-alpha-m',
+          to: '/mt_nor/',
+        },
+      ]
+    },
+    {
       title: '台塑檢測報告',
       icon: 'mdi-alpha-f-box-outline',
       items: [
@@ -119,27 +156,6 @@ const state = {
           icon: 'mdi-alpha-i',
           to: '/it_fpg/',
         }
-      ]
-    },
-    {
-      title: '一般檢測報告',
-      icon: 'mdi-alpha-n-box-outline',
-      items: [
-        {
-          title: '液滲檢測(PT)',
-          icon: 'mdi-alpha-p',
-          to: '/pt_nor/',
-        },
-        {
-          title: '射線檢測(RT)',
-          icon: 'mdi-alpha-p',
-          to: '/rt_nor/',
-        },
-        {
-          title: '磁粒檢測(MT)',
-          icon: 'mdi-alpha-m',
-          to: '/mt_nor/',
-        },
       ]
     },
     {
