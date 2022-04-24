@@ -161,6 +161,11 @@ export default [
         name: '磁粒檢測',
         component: page('report/singda/MT.vue')
       },
+      {
+        path: '/ut_sdm',
+        name: '超音波檢測',
+        component: page('report/singda/UT.vue')
+      },
     ]
   },
   {

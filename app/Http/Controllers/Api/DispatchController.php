@@ -94,6 +94,12 @@ class DispatchController extends Controller
             case 'normal.mt':
                 $this->smpService->parseReportNormalMT($function_path, $id);
             break;
+            case 'normal.vt':
+                $this->smpService->parseReportNormalMT($function_path, $id);
+            break;
+            case 'normal.ut':
+                $this->smpService->parseReportNormalMT($function_path, $id);
+            break;
             default:
                 return false;
             break;

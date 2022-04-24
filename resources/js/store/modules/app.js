@@ -103,6 +103,11 @@ const state = {
           title: '檢測報告(VT)',
           icon: 'mdi-alpha-v',
           to: '/vt_sdm/',
+        },
+        {
+          title: '檢測報告(UT)',
+          icon: 'mdi-alpha-u',
+          to: '/ut_sdm/',
         }
       ]
     },

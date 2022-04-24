@@ -161,7 +161,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editedItem.applicable_code"
-                  v-if="!app_applicable_code"
+                  v-if="app_applicable_code.length == 0"
                   label="Regular"
                   :readonly="readonlyVisible"
                   :rules="[
@@ -170,7 +170,7 @@
                 ></v-text-field>
                 <v-select
                   v-model="editedItem.applicable_code"
-                  v-if="app_applicable_code"
+                  v-if="app_applicable_code.length > 0"
                   :items="app_applicable_code"
                   label="請選擇..."
                   item-text="text"
@@ -569,7 +569,7 @@
           return
         }
         let co = this.useFunctionView.split('_');
-        if (this.applicable_code[co[1]][this.editedItem.report_version]) {
+        if (this.applicable_code[co[1]] && this.applicable_code[co[1]][this.editedItem.report_version]) {
           const found = this.applicable_code[co[1]][this.editedItem.report_version].findIndex(element => element.value == val);
           this.editedItem.criteria = this.criteria[co[1]][this.editedItem.report_version][found].text
           this.editedItem.procedure_no = this.procedure[co[1]][this.editedItem.report_version][found]
@@ -581,14 +581,16 @@
           return
         }
         let co = this.useFunctionView.split('_');
-        this.app_applicable_code = this.applicable_code[co[1]][val]
+        if(this.applicable_code[co[1]])
+          this.app_applicable_code = this.applicable_code[co[1]][val]
       },
       'editedItem.report_version' (val, oldVal) {
         if(!this.useFunctionView || val === oldVal) {
           return
         }
         let co = this.useFunctionView.split('_');
-        this.app_applicable_code = this.applicable_code[co[1]][val]
+        if(this.applicable_code[co[1]])
+          this.app_applicable_code = this.applicable_code[co[1]][val]
       },
     },
 
