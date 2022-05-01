@@ -324,7 +324,7 @@ class ParseSdm
 
                 //探傷儀		    UT Equipment
                 $r_ut_equipment = $tmpReport->ut_equipment != 'N/A'? explode('/', $tmpReport->ut_equipment) : '';
-                $listRowUtEquipment = ['D', 'H', 'H'];
+                $listRowUtEquipment = ['D', 'F', 'H'];
                 if(is_array($r_ut_equipment)) {
                     for($i = 0; $i < sizeof($r_ut_equipment); $i++) {
                         $spreadsheet_0->setCellValue($listRowUtEquipment[$i] . '21', $r_ut_equipment[$i]);
@@ -335,7 +335,7 @@ class ParseSdm
 
                 //其它		    Others
                 $r_Others = $tmpReport->Others != 'N/A'? explode('/', $tmpReport->Others) : '';
-                $listRowOthers = ['D', 'H', 'H'];
+                $listRowOthers = ['D', 'F', 'H'];
                 if(is_array($r_Others)) {
                     for($i = 0; $i < sizeof($r_Others); $i++) {
                         $spreadsheet_0->setCellValue($listRowOthers[$i] . '23', $r_Others[$i]);
