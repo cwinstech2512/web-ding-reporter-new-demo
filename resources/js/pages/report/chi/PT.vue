@@ -1047,6 +1047,7 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogPreview: false,
     dialogThicknessChoice: false,
     loading: false,
     loadingSave: false,

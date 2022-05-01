@@ -191,6 +191,12 @@
               :listThickness_Datas="listThickness_Datas">
             </ThicknessChoice>
             <v-dialog
+              v-model="dialogPreview"
+              width="600px"
+              transition="dialog-bottom-transition">
+              <VueDocPreview :value="docPreviewUrlPath" :type="'office'" />
+            </v-dialog>
+            <v-dialog
               v-model="dialogView"
               width="600px"
               fullscreen
@@ -216,7 +222,16 @@
                     <v-btn
                       dark
                       text
+                      @click="preview"
+                      :disabled="editedDispatchStatus < 2"
+                    >
+                      預覽
+                    </v-btn>
+                    <v-btn
+                      dark
+                      text
                       @click="save"
+                      :disabled="editedDispatchStatus < 2"
                     >
                       儲存
                     </v-btn>
@@ -962,7 +977,8 @@ import PdfViewer from '../../../components/PdfViewer.vue'
 import DataTableStatus from '../../../components/DataTableStatus.vue'
 import ThicknessChoice from '../../../components/ThicknessChoice.vue'
 import draggable from "vuedraggable"
-import { reportSave } from "../../../_help/report_action.js"
+import VueDocPreview  from 'vue-doc-preview'
+import { reportSave, reportPreview } from "../../../_help/report_action.js"
 const SAMPLE_PDF_PATH = 'sdm_vt'
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default {
@@ -974,7 +990,8 @@ export default {
     PdfViewer,
     DataTableStatus,
     draggable,
-    ThicknessChoice
+    ThicknessChoice,
+    VueDocPreview
   },
 
   metaInfo () {
@@ -997,6 +1014,7 @@ export default {
     dialogView: false,
     dialogDelete: false,
     dialogSample: false,
+    dialogPreview: false,
     dialogThicknessChoice: false,
     loading: false,
     loadingSave: false,
@@ -1080,6 +1098,7 @@ export default {
     ],
     excelFile: null,
     pdfUrl: '',
+    docPreviewUrlPath: '',
     headers: [
       {
         text: '報告編號',
@@ -1674,6 +1693,10 @@ export default {
 
         }
       })
+    },
+
+    preview () {
+      reportPreview(this, SAMPLE_PDF_PATH)
     },
 
     save () {
