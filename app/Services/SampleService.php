@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Repositories\DispatchRepository;
 use App\Repositories\{SampleLogRepository};
 use App\Services\ParseReport\ParseNormal;
+use App\Services\ParseReport\ParseSdm;
 
 class SampleService
 {
@@ -147,6 +148,24 @@ class SampleService
     {
         $fpg = new ParseNormal($this->spRepo, $this->dispstchRepo);
         return $fpg->parseReportNormalMT($function_path, $id);
+    }
+
+    public function parseReportSdmMT($function_path, $id)
+    {
+        $fpg = new ParseSdm($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportSdmMT($function_path, $id);
+    }
+
+    public function parseReportSdmVT($function_path, $id)
+    {
+        $fpg = new ParseSdm($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportSdmVT($function_path, $id);
+    }
+
+    public function parseReportSdmUT($function_path, $id)
+    {
+        $fpg = new ParseSdm($this->spRepo, $this->dispstchRepo);
+        return $fpg->parseReportSdmUT($function_path, $id);
     }
 
     public function parseReportChimeiPT($function_path, $id)

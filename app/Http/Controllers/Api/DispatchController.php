@@ -100,6 +100,15 @@ class DispatchController extends Controller
             case 'normal.ut':
                 $this->smpService->parseReportNormalMT($function_path, $id);
             break;
+            case 'sdm.mt':
+                $this->smpService->parseReportSdmMT($function_path, $id);
+            break;
+            case 'sdm.vt':
+                $this->smpService->parseReportSdmVT($function_path, $id);
+            break;
+            case 'sdm.ut':
+                $this->smpService->parseReportSdmUT($function_path, $id);
+            break;
             default:
                 return false;
             break;
@@ -151,6 +160,27 @@ class DispatchController extends Controller
             break;
             case 'normal.mt':
                 $out = $this->smpService->parseReportNormalMT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
+            break;
+            case 'sdm.mt':
+                $out = $this->smpService->parseReportSdmMT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
+            break;
+            case 'sdm.vt':
+                $out = $this->smpService->parseReportSdmVT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
+            break;
+            case 'sdm.ut':
+                $out = $this->smpService->parseReportSdmUT($function_path, $id);
                 if($out && isset($out['data']['export_final_path'])) {
                     $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
                 }

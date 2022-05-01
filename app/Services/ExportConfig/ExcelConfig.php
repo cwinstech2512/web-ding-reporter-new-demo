@@ -142,4 +142,17 @@ class ExcelConfig
             ),
         );
     }
+
+    public static function sdmSheetStyle()
+    {
+        return array(  
+            'font' => array(  
+                'italic' => false,
+            ),  
+            'alignment' => array(  
+                'horizontal' => 'center',  
+                'vertical' => 'center',  
+            ),
+        );
+    }
 }

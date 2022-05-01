@@ -1395,11 +1395,14 @@ export default {
       {text: '其它Other', value: '4'},
     ],
     listExamTime_Datas:[
-      {text: '銲接後After Welded', value: '0'},
-      {text: '銲前表面準備Prepared Surface', value: '1'},
-      {text: '熱處理後 After HT', value: '2'},
-      {text: '試壓後After Hydro. Test', value: '3'},
-      {text: '其它Other機械加工As-machined', value: '4'},
+      {text: '銲接後 After Welded(>48hrs)', value: '0'},
+      {text: '軋延後 After Rolling', value: '1'},
+      {text: '鍛造後 After Forging', value: '2'},
+      {text: '其他 Other', value: '3'},
+      {text: '銲接後 After Welded(< 48hrs)', value: '4'},
+      {text: '熱處理前 Before H.T', value: '5'},
+      {text: '熱處理後 After H.T', value: '6'},
+      {text: '維修檢測 In-service', value: '7'},
     ],
     listTypeOfParticle_Datas:[
       {text: '色比Visible', value: '0'},
@@ -1560,12 +1563,18 @@ export default {
       items:[
         [
           {
+            serial_no: '',
             object_no: '',
             weld_no: '',
+            material_thickness: '',
+            drawing_no: '',
+            inspection_length: '',
+            defect_no: '',
             exam_length: '',
             defect_location: '',
             type_of_defect: '',
             defect_length: '',
+            exam_datetime: '',
             duplicate_examines: '',
             result: '',
             remark: '',

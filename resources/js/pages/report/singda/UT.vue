@@ -756,17 +756,17 @@
                           <thead>
                             <!--  表头 -->
                             <tr>
-                              <th class="text-left">項次</th>
-                              <th class="text-left">流水號<br>Serial No.</th>
-                              <th class="text-left">銲道編號<br>Weld No.</th>
-                              <th class="text-left">材質/厚度<br>Material/Thickness</th>
-                              <th class="text-left">圖號<br>Drawing No.</th>
-                              <th class="text-left">檢測長度<br>Inspection length</th>
+                              <th class="text-left">探頭資料</th>
+                              <th class="text-left">探頭序號<br>Prob Serial No.</th>
+                              <th class="text-left">探頭角度<br>Probe Angle</th>
+                              <th class="text-left">探頭頻率<br>Probe Freq.</th>
+                              <th class="text-left">探頭尺寸<br>Probe size</th>
+                              <th class="text-left">A1校正角度<br>Correction Angle</th>
                               <th class="text-left">缺陷類型<br>Type of Defect</th>
-                              <th class="text-left">檢驗日期時間<br>"Date/Time(YYYY.MM.DD/00:00~24:00)"	</th>
-                              <th class="text-left">檢測結果<br>Result</th>
-                              <th class="text-left">複檢<br>Duplicate examines</th>
-                              <th class="text-left">備註<br>Remark</th>
+                              <th class="text-left">靈敏度<br>(dB) Sensibility</th>
+                              <th class="text-left">傳輸修正值(dB)<br>Transfer Correction</th>
+                              <th class="text-left">時基線範圍(Skip)<br>Time base range</th>
+                              <th class="text-left">探頭位置<br>Probe position</th>
                             </tr>
                           </thead>
                           <draggable v-if="editedItem.items" v-model="editedItem.items[thicknesGroupModelChoice]" tag="tbody" :sort="!readonlyVisible">
@@ -779,59 +779,55 @@
                                 :value="(index+1)"
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.serial_no"
+                                v-model="item.prob_serial_no"
                                 :disabled="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.weld_no"
+                                v-model="item.probe_angle"
                                 :disabled="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.material_thickness"
+                                v-model="item.probe_freq"
                                 :disabled="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.drawing_no"
+                                v-model="item.probe_size"
                                 :disabled="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.inspection_length"
+                                v-model="item.correction_angle"
                                 :readonly="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.type_of_defect"
+                                v-model="item.sensibility"
                                 :readonly="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
                               <td><v-text-field
-                                v-model="item.exam_datetime"
+                                v-model="item.transfer_correction"
                                 :readonly="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>
-                              <td><v-select
-                                  v-model="item.result"
-                                  :items="listResult_Datas"
-                                  item-text="text"
-                                  item-value="value"
-                                  dense
-                                  single-line
-                                  outlined
-                                  :readonly="readonlyVisible"
-                                ></v-select></td>
                               <td><v-text-field
-                                v-model="item.remark"
+                                v-model="item.time_base_range"
+                                :readonly="readonlyVisible"
+                                outlined
+                                dense
+                              ></v-text-field></td>
+                              <td><v-text-field
+                                v-model="item.probe_position"
                                 :readonly="readonlyVisible"
                                 outlined
                                 dense
@@ -1090,8 +1086,8 @@ export default {
     ],
     listReferenceBlock_Datas:[
       {text: 'T40-L', value: '0'},
-      {text: 'T40-T', value: '1'},
-      {text: 'T75-L', value: '2'},
+      {text: 'T75-L', value: '1'},
+      {text: 'T40-T', value: '2'},
       {text: 'T75-T', value: '3'},
     ],
     listExamMethod_Datas:[
@@ -1169,15 +1165,15 @@ export default {
         [
           {
             serial_no: '',
-            weld_no: '',
-            material_thickness: '',
-            drawing_no: '',
-            inspection_length: '',
-            exam_length: '',
-            type_of_defect: '',
-            exam_datetime: '',
-            result: '',
-            remark: '',
+            prob_serial_no: '',
+            probe_angle: '',
+            probe_freq: '',
+            probe_size: '',
+            correction_angle: '',
+            sensibility: '',
+            transfer_correction: '',
+            time_base_range: '',
+            probe_position: '',
           }
         ]
       ],
@@ -1212,15 +1208,15 @@ export default {
         [
           {
             serial_no: '',
-            weld_no: '',
-            material_thickness: '',
-            drawing_no: '',
-            inspection_length: '',
-            exam_length: '',
-            type_of_defect: '',
-            exam_datetime: '',
-            result: '',
-            remark: '',
+            prob_serial_no: '',
+            probe_angle: '',
+            probe_freq: '',
+            probe_size: '',
+            correction_angle: '',
+            sensibility: '',
+            transfer_correction: '',
+            time_base_range: '',
+            probe_position: '',
           }
         ]
       ],
