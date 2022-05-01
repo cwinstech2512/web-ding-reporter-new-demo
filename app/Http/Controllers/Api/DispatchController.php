@@ -121,10 +121,18 @@ class DispatchController extends Controller
         $function_path = $corperation . '.' . $command;
         switch($function_path) {
             case 'chimei.pt':
-                return new ResponseResource($this->smpService->parseReportChimeiPT($function_path, $id));
+                $out = $this->smpService->parseReportChimeiPT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
             break;
             case 'chimei.rt':
-                return new ResponseResource($this->smpService->parseReportChimeiRT($function_path, $id));
+                $out = $this->smpService->parseReportChimeiRT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
             break;
             case 'chimei.mt':
                 return new ReportMTResource($this->smpService->parseReportChimeiMT($function_path, $id));
