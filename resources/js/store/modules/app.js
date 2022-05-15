@@ -130,39 +130,44 @@ const state = {
           icon: 'mdi-alpha-m',
           to: '/mt_nor/',
         },
+        {
+          title: '檢測報告(UT)',
+          icon: 'mdi-alpha-m',
+          to: '/ut_nor/',
+        },
       ]
     },
-    {
-      title: '台塑檢測報告',
-      icon: 'mdi-alpha-f-box-outline',
-      items: [
-        {
-          title: '烯烴三廠檢測(RT)',
-          icon: 'mdi-alpha-r',
-          to: '/rtolll_fpg/',
-        },
-        {
-          title: '油料處檢測(RT)',
-          icon: 'mdi-alpha-r',
-          to: '/rtoil_fpg/',
-        },
-        {
-          title: '煉製三廠(RT)',
-          icon: 'mdi-alpha-r',
-          to: '/rthree_fpg/',
-        },
-        {
-          title: '超音波測厚檢測(UT)',
-          icon: 'mdi-alpha-u',
-          to: '/ut_fpg/',
-        },
-        {
-          title: '漏電檢測(IT)',
-          icon: 'mdi-alpha-i',
-          to: '/it_fpg/',
-        }
-      ]
-    },
+    // {
+    //   title: '台塑檢測報告',
+    //   icon: 'mdi-alpha-f-box-outline',
+    //   items: [
+    //     {
+    //       title: '烯烴三廠檢測(RT)',
+    //       icon: 'mdi-alpha-r',
+    //       to: '/rtolll_fpg/',
+    //     },
+    //     {
+    //       title: '油料處檢測(RT)',
+    //       icon: 'mdi-alpha-r',
+    //       to: '/rtoil_fpg/',
+    //     },
+    //     {
+    //       title: '煉製三廠(RT)',
+    //       icon: 'mdi-alpha-r',
+    //       to: '/rthree_fpg/',
+    //     },
+    //     {
+    //       title: '超音波測厚檢測(UT)',
+    //       icon: 'mdi-alpha-u',
+    //       to: '/ut_fpg/',
+    //     },
+    //     {
+    //       title: '漏電檢測(IT)',
+    //       icon: 'mdi-alpha-i',
+    //       to: '/it_fpg/',
+    //     }
+    //   ]
+    // },
     {
       title: 'Icons',
       icon: 'mdi-chart-bubble',
