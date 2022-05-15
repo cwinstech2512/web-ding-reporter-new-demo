@@ -1598,7 +1598,7 @@ export default {
         .fetchGet(url, params)
           .then(res => {
             // console.log(res.data)
-            if(res.data.data.full_path) {
+            if(res.data.data && res.data.data.full_path) {
               that.pdfUrl = that.$base_url + '/' + res.data.data.full_path
             }
           })
