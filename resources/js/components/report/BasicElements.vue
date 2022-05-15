@@ -582,7 +582,7 @@
         }
         let co = this.useFunctionView.split('_');
         if(this.applicable_code[co[1]])
-          this.app_applicable_code = this.applicable_code[co[1]][val]
+          this.app_applicable_code = this.applicable_code[co[1]][val]? this.applicable_code[co[1]][val] : []
       },
       'editedItem.report_version' (val, oldVal) {
         if(!this.useFunctionView || val === oldVal) {
@@ -590,7 +590,7 @@
         }
         let co = this.useFunctionView.split('_');
         if(this.applicable_code[co[1]])
-          this.app_applicable_code = this.applicable_code[co[1]][val]
+          this.app_applicable_code = this.applicable_code[co[1]][val]? this.applicable_code[co[1]][val] : []
       },
     },
 
