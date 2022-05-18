@@ -1854,10 +1854,10 @@ export default {
     },
 
     deleteEditItems (item) {
-      let x = this.editedItem.items.indexOf(item)
-      this.editedItem.items.splice(x, 1);
-      this.editedItem.items.forEach((element, index) => {
-        this.editedItem.items[index].object_no = (index+1)
+      let x = this.editedItem.items[this.thicknesGroupModelChoice].indexOf(item)
+      this.editedItem.items[this.thicknesGroupModelChoice].splice(x, 1);
+      this.editedItem.items[this.thicknesGroupModelChoice].forEach((element, index) => {
+        this.editedItem.items[this.thicknesGroupModelChoice][index].object_no = (index+1)
       })
     },
 
