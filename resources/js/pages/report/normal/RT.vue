@@ -276,7 +276,7 @@
                             item-text="text"
                             item-value="value"
                             hide-details
-                            :readonly="readonlyVisible"
+                            :readonly="true"
                           ></v-select>
                         </div>
                         </v-card>
@@ -2465,15 +2465,25 @@ export default {
             this.editedItem.items[index].push(Object.assign({}, this.defaultItem.items[0][0]))
             // console.log("item empty end", this.editedItem.items[index])
           }
-          // console.log("item not empty end", this.editedItem.items[index])
-          var thickness = element.mThincknessNomalSize
-          // console.log("thickness", thickness)
-          this.editedItem.items[index].forEach((element1, i) => {
-            // console.log("start", this.editedItem.items[index][i])
-            // console.log("items", element1)
-            this.editedItem.items[index][i].thickness = thickness
-            // console.log("end", this.editedItem.items[index][i])
-          })
+
+          if(element.thickOrQu == 1 || element.thickOrQu == 2) {
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].weld_length = element.mAreaSize
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          } else {
+            // console.log("item not empty end", this.editedItem.items[index])
+            var thickness = element.mThincknessNomalSize
+            // console.log("thickness", thickness)
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].thickness = thickness
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          }
         })
         this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
         this.editedItem.sod = this.editedItem.sod.slice(1);

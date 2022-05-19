@@ -16,8 +16,13 @@ class Dispatch extends Model
     
     protected $fillable = ['customer', 'exam_date', 'concat_name', 'concat_phone'
     , 'job_name', 'exam_place', 'e_exam_date', 'status', 'transport', 'function_path', 'export_final_path',
+    'report_version',
+    'applicable_code',
+    'criteria',
+    'procedure_no',
     'material',
     'delegator',
+    'inspector',
     'original_no',
     'thickness',
     'leng',

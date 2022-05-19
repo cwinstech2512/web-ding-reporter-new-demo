@@ -276,7 +276,7 @@
                             item-text="text"
                             item-value="value"
                             hide-details
-                            :readonly="readonlyVisible"
+                            :readonly="true"
                           ></v-select>
                         </div>
                         </v-card>

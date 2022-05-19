@@ -112,6 +112,10 @@ class DispatchService
                 $tmp['params']['exam_place'] = $array['params']['exam_place'];
                 $tmp['params']['exam_date'] = $array['params']['exam_date'];
                 $tmp['params']['original_no'] = $array['params']['original_no'];
+                $tmp['params']['applicable_code'] = $array['params']['applicable_code'];
+                $tmp['params']['criteria'] = $array['params']['criteria'];
+                $tmp['params']['procedure_no'] = $array['params']['procedure_no'];
+                $tmp['params']['report_version'] = $array['params']['report_version'];
                 // $tmp = array_where($array['params'], function($key, $value)
                 // {
                 //     return $key == 'job_name' || $key == 'exam_place' || $key == 'exam_date';

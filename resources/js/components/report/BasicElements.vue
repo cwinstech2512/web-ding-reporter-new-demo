@@ -163,7 +163,7 @@
                   v-model="editedItem.applicable_code"
                   v-if="app_applicable_code.length == 0"
                   label="Regular"
-                  :readonly="readonlyVisible"
+                  :readonly="true"
                   :rules="[
                     (v) => !!v || '請填寫此欄位',
                   ]"
@@ -177,7 +177,7 @@
                   item-value="value"
                   dense
                   single-line
-                  :disabled="readonlyVisible"
+                  :disabled="true"
                 ></v-select>
               </v-col>
             </v-row>
@@ -209,7 +209,7 @@
           <v-text-field
             v-model="editedItem.criteria"
             label="Regular"
-            :readonly="readonlyVisible"
+            :readonly="true"
             :rules="[
               (v) => !!v || '請填寫此欄位',
             ]"
@@ -241,7 +241,7 @@
           <v-text-field
             v-model="editedItem.procedure_no"
             label="Regular"
-            :readonly="readonlyVisible"
+            :readonly="true"
             :rules="[
               (v) => !!v || '請填寫此欄位',
             ]"

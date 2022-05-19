@@ -315,6 +315,17 @@
                         cols="6"
                       >
                         <v-text-field
+                          v-model="editedItem.inspector"
+                          label="檢測人員"
+                          outlined
+                          prepend-icon="mdi-briefcase-edit-outline"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
+                      >
+                        <v-text-field
                           v-model="editedItem.special_film"
                           label="工作特殊需求(底片)"
                           outlined
@@ -348,6 +359,10 @@
                         ></v-select>
                       </v-col>
                     </v-row>
+                    <BasicDispatch
+                      :editedItem="editedItem"
+                      :readonlyVisible="readonlyVisible"
+                    />
                   </v-container>
                 </v-card-text>
 
@@ -469,6 +484,7 @@
 <script>
 import DataTableStatus from '../../components/DataTableStatus.vue'
 import DispatchCopy from '../../components/DispatchCopy.vue'
+import BasicDispatch from '../../components/report/BasicDispatch.vue'
 
 export default {
   name: 'DispatchView',
@@ -478,6 +494,7 @@ export default {
   components: {
     DataTableStatus,
     DispatchCopy,
+    BasicDispatch,
   },
 
   metaInfo () {
@@ -545,8 +562,13 @@ export default {
     excelFile: null,
     editedIndex: -1,
     editedItem: {
+      report_version: '',
+      applicable_code: '',
+      criteria: '',
+      procedure_no: '',
       customer: '',
       delegator: '',
+      inspector: '',
       concat_name: '',
       concat_phone: '',
       serial_no: '',
@@ -566,8 +588,13 @@ export default {
       id: -1,
     },
     defaultItem: {
+      report_version: '',
+      applicable_code: '',
+      criteria: '',
+      procedure_no: '',
       customer: '',
       delegator: '',
+      inspector: '',
       concat_name: '',
       concat_phone: '',
       serial_no: '',
