@@ -124,8 +124,10 @@
                     <template v-slot:default>
                       <thead>
                         <tr>
-                          <th class="text-left"> 公稱尺寸	</th>
+                          <th class="text-left"> 公稱尺寸-A	</th>
+                          <th class="text-left"> 公稱尺寸-B	</th>
                           <th class="text-left"> 外徑 </th>
+                          <th class="text-left"> SCH 5 </th>
                           <th class="text-left"> SCH 10 </th>
                           <th class="text-left"> SCH 20 </th>
                           <th class="text-left"> SCH 30 </th>
@@ -151,8 +153,10 @@
                           v-for="(item, index) in selectItem"
                           :key="index"
                         >
+                          <td>{{ item.nominal_size_a }}</td>
                           <td>{{ item.nominal_size }}</td>
                           <td>{{ item.od_out }}</td>
+                          <td>{{ item.sch5 }}</td>
                           <td>{{ item.sch10 }}</td>
                           <td>{{ item.sch20 }}</td>
                           <td>{{ item.sch30 }}</td>
