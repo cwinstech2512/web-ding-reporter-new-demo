@@ -120,6 +120,17 @@
                       </v-col>
                       <v-col
                         cols="6"
+                      >
+                        <v-text-field
+                          v-model="editedItem.delegator"
+                          label="委託者"
+                          outlined
+                          prepend-icon="mdi-account-multiple"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="6"
                         v-if="editedItem.serial_no"
                       >
                         <v-text-field
@@ -232,6 +243,9 @@
                           outlined
                           prepend-icon="mdi-map-marker"
                           :readonly="readonlyVisible"
+                          :rules="[
+                            (v) => !!v || '請填寫此欄位',
+                          ]"
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -489,12 +503,12 @@ export default {
           align: 'start',
           value: 'serial_no',
         },
+        { text: '報告編號', value: 'original_no' },
         {
           text: '業主',
           value: 'customer',
         },
         { text: '工程名稱', value: 'job_name' },
-        { text: '檢測日期', value: 'exam_date' },
         { text: '檢測地點', value: 'exam_place' },
         { 
           text: '狀態', value: 'status', 
@@ -532,6 +546,7 @@ export default {
     editedIndex: -1,
     editedItem: {
       customer: '',
+      delegator: '',
       concat_name: '',
       concat_phone: '',
       serial_no: '',
@@ -552,6 +567,7 @@ export default {
     },
     defaultItem: {
       customer: '',
+      delegator: '',
       concat_name: '',
       concat_phone: '',
       serial_no: '',
@@ -612,6 +628,7 @@ export default {
                 job_name: res.data.data[idx].job_name,
                 customer: res.data.data[idx].customer,
                 exam_date: res.data.data[idx].exam_date,
+                original_no: res.data.data[idx].original_no,
                 e_exam_date: res.data.data[idx].e_exam_date,
                 exam_place: res.data.data[idx].exam_place,
                 serial_no: res.data.data[idx].serial_no,
