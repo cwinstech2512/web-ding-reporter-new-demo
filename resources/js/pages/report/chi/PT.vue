@@ -270,9 +270,6 @@
                           v-model="editedItem.exam_place"
                           label="Regular"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -320,9 +317,6 @@
                               readonly
                               v-bind="attrs"
                               v-on="on"
-                              :rules="[
-                                (v) => !!v || '請填寫此欄位',
-                              ]"
                               required
                             ></v-text-field>
                           </template>
@@ -348,10 +342,10 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          檢測人員
+                          監工
                         </div>
                         <div class="text-caption">
-                          Inspected By
+                          Obsert
                         </div>
                       </v-card>
                     </v-col>
@@ -362,16 +356,10 @@
                         outlined
                         tile
                       >
-                        <v-card-title>
-                          <v-row>
-                            <v-col cols="12" md="6">
-                              <v-text-field
-                                v-model="editedItem.obsert"
-                                :readonly="readonlyVisible"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-title>
+                        <v-text-field
+                          v-model="editedItem.obsert"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
                       </v-card>
                     </v-col>
                     <v-col style="flex: 2; " class="d-flex align-stretch">
@@ -396,22 +384,13 @@
                         outlined
                         tile
                       >
-                        <v-card-title>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-text-field
-                                ref="job_no"
-                                v-model="editedItem.job_no"
-                                label="Regular"
-                                :readonly="readonlyVisible"
-                                :rules="[
-                                  (v) => !!v || '請填寫此欄位',
-                                ]"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-card-title>
+                        <v-text-field
+                          ref="job_no"
+                          v-model="editedItem.job_no"
+                          label="Regular"
+                          :readonly="readonlyVisible"
+                          required
+                        ></v-text-field>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -451,9 +430,6 @@
                                 v-model="editedItem.job_name"
                                 label="Regular"
                                 :readonly="true"
-                                :rules="[
-                                  (v) => !!v || '請填寫此欄位',
-                                ]"
                                 required
                               ></v-text-field>
                             </v-col>
@@ -530,9 +506,6 @@
                           v-model="editedItem.material"
                           label="Regular"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -547,7 +520,7 @@
                           
                         </div>
                         <div class="text-caption">
-                          
+                           
                         </div>
                       </v-card>
                     </v-col>
@@ -558,39 +531,12 @@
                         outlined
                         tile
                       >
-                      <v-card-title>
-                        <v-row>
-                          <!-- <v-col cols="12" md="6">
-                            <v-select
-                              v-model="selectNominalSize"
-                              :items="listRTPT_Datas"
-                              label="尺寸"
-                              item-text="nominal_size"
-                              item-value="id"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col>
-                          <v-col cols="12" md="6">
-                            <v-select
-                              v-model="selectThickness"
-                              :items="listThickness_Datas"
-                              label="厚度"
-                              item-text="thickness"
-                              item-value="value"
-                              dense
-                              return-object
-                              single-line
-                              :disabled="readonlyVisible"
-                            ></v-select>
-                          </v-col> -->
-                        </v-row>
-                      </v-card-title>
-                      <v-card-subtitle>
-                        <div v-text="mThincknessNomalSize"></div>
-                      </v-card-subtitle>
+                        <!-- <v-text-field
+                          ref="obsert"
+                          v-model="editedItem.obsert"
+                          label="Regular"
+                          :readonly="readonlyVisible"
+                        ></v-text-field> -->
                       </v-card>
                     </v-col>
                   </v-row>
@@ -627,9 +573,6 @@
                           v-model="editedItem.light_intensity"
                           label="Regular"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -660,9 +603,6 @@
                           v-model="editedItem.surface_temp"
                           label="Regular"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -843,10 +783,16 @@
                                 <!-- 按钮区域 -->
                               <td>
                                 <template v-if="!readonlyVisible">
-                                  <!-- 修改界面显示取消 -->
-                                  <v-btn rounded color="success" dark small v-if="editedItem.items && index == editedItem.items[thicknesGroupModelChoice].length - 1" @click="insertEditItems(thicknesGroupModelChoice)">插入下一行</v-btn>
-                                  <!-- 修改界面显示取消 -->
-                                  <v-btn rounded color="error" dark small v-else @click="deleteEditItems(item)">刪除</v-btn>
+                                  <div class="d-flex justify-space-around">
+                                    <!-- 修改界面显示取消 -->
+                                    <v-btn fab color="error" dark x-small @click="deleteEditItems(item)">
+                                      <v-icon>mdi-minus</v-icon>
+                                    </v-btn>
+                                    <!-- 修改界面显示取消 -->
+                                    <v-btn fab color="success" dark x-small @click="insertEditItems(index)">
+                                      <v-icon>mdi-plus</v-icon>
+                                    </v-btn>
+                                  </div>
                                 </template>
                               </td>
                             </template>
@@ -1365,10 +1311,10 @@ export default {
     },
 
     deleteEditItems (item) {
-      let x = this.editedItem.items.indexOf(item)
-      this.editedItem.items.splice(x, 1);
-      this.editedItem.items.forEach((element, index) => {
-        this.editedItem.items[index].object_no = (index+1)
+      let x = this.editedItem.items[this.thicknesGroupModelChoice].indexOf(item)
+      this.editedItem.items[this.thicknesGroupModelChoice].splice(x, 1);
+      this.editedItem.items[this.thicknesGroupModelChoice].forEach((element, index) => {
+        this.editedItem.items[this.thicknesGroupModelChoice][index].object_no = (index+1)
       })
     },
 

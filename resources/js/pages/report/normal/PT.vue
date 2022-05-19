@@ -277,9 +277,6 @@
                             item-value="value"
                             hide-details
                             :readonly="readonlyVisible"
-                            :rules="[
-                              (v) => !!v || '請選擇此欄位',
-                            ]"
                           ></v-select>
                         </div>
                         </v-card>
@@ -350,9 +347,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -460,9 +454,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -534,9 +525,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -586,9 +574,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -624,9 +609,6 @@
                           v-model="editedItem.developing_time"
                           label="Regular"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            (v) => !!v || '請填寫此欄位',
-                          ]"
                         ></v-text-field>
                       </v-card>
                     </v-col>
@@ -664,9 +646,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -2064,7 +2043,7 @@ export default {
           var thickness = element.mThincknessNomalSize
           // console.log("thickness", thickness)
           // 面積
-          if(element.thickOrQu == 1) {
+          if(element.thickOrQu == 1 || element.thickOrQu == 2) {
             this.editedItem.items[index].forEach((element1, i) => {
               // console.log("start", this.editedItem.items[index][i])
               // console.log("items", element1)

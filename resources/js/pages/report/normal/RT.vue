@@ -277,9 +277,6 @@
                             item-value="value"
                             hide-details
                             :readonly="readonlyVisible"
-                            :rules="[
-                              (v) => !!v || '請選擇此欄位',
-                            ]"
                           ></v-select>
                         </div>
                         </v-card>
@@ -530,9 +527,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>

@@ -1312,7 +1312,7 @@ export default {
         .fetchGet(url, params)
           .then(res => {
             // console.log(res.data)
-            if(res.data.data.full_path) {
+            if(res.data.data && res.data.data.full_path) {
               that.pdfUrl = that.$base_url + '/' + res.data.data.full_path
             }
           })
@@ -1370,10 +1370,10 @@ export default {
     },
 
     deleteEditItems (item) {
-      let x = this.editedItem.items.indexOf(item)
-      this.editedItem.items.splice(x, 1);
-      this.editedItem.items.forEach((element, index) => {
-        this.editedItem.items[index].object_no = (index+1)
+      let x = this.editedItem.items[this.thicknesGroupModelChoice].indexOf(item)
+      this.editedItem.items[this.thicknesGroupModelChoice].splice(x, 1);
+      this.editedItem.items[this.thicknesGroupModelChoice].forEach((element, index) => {
+        this.editedItem.items[this.thicknesGroupModelChoice][index].object_no = (index+1)
       })
     },
 

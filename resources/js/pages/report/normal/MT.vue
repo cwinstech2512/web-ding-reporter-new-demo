@@ -277,9 +277,7 @@
                             item-value="value"
                             hide-details
                             :readonly="readonlyVisible"
-                            :rules="[
-                              (v) => !!v || '請選擇此欄位',
-                            ]"
+                            
                           ></v-select>
                         </div>
                         </v-card>
@@ -349,9 +347,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -394,9 +389,6 @@
                               item-value="value"
                               dense
                               multiple
-                              :rules="[
-                                (v) => (v && v.length > 0) || '請填寫此欄位',
-                              ]"
                               required
                               :disabled="readonlyVisible"
                             ></v-select>
@@ -432,9 +424,6 @@
                           v-model="editedItem.surface_temperature"
                           label="Surface Temperature"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.surface_temperature || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -473,9 +462,6 @@
                           v-model="editedItem.light_intensity"
                           label="?? lx/ ?? μW/cm2"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.light_intensity || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -507,9 +493,6 @@
                           v-model="editedItem.magnetic_equipment"
                           label="廠牌Brand /型號Type /序號Ser.No"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.magnetic_equipment || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -548,9 +531,6 @@
                               item-value="value"
                               dense
                               multiple
-                              :rules="[
-                                (v) => (v && v.length > 0) || '請填寫此欄位',
-                              ]"
                               required
                               :disabled="readonlyVisible"
                             ></v-select>
@@ -591,9 +571,6 @@
                           ref="lifting_test"
                           v-model="editedItem.lifting_test"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.lifting_test || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -624,9 +601,6 @@
                           ref="yoke_probe_space"
                           v-model="editedItem.yoke_probe_space"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.yoke_probe_space || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -658,9 +632,6 @@
                           v-model="editedItem.magnetic_field_indicator"
                           label="廠牌Brand /型號Type /序號Ser.No"
                           :readonly="readonlyVisible"
-                          :rules="[
-                            () => !!editedItem.magnetic_field_indicator || '請填寫此欄位',
-                          ]"
                           required
                         ></v-text-field>
                       </v-card>
@@ -706,9 +677,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -914,9 +882,6 @@
                                 item-text="text"
                                 item-value="value"
                                 dense
-                                :rules="[
-                                  (v) => v !== '' || '請填寫此欄位',
-                                ]"
                                 required
                                 multiple
                                 :disabled="readonlyVisible"
@@ -959,9 +924,6 @@
                                 item-text="text"
                                 item-value="value"
                                 dense
-                                :rules="[
-                                  (v) => v !== '' || '請填寫此欄位',
-                                ]"
                                 required
                                 multiple
                                 :disabled="readonlyVisible"
@@ -1005,9 +967,6 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :rules="[
-                                  (v) => (v && v.length > 0) || '請填寫此欄位',
-                                ]"
                                 required
                                 :disabled="readonlyVisible"
                               ></v-select>
@@ -2286,15 +2245,24 @@ export default {
             this.editedItem.items[index].push(Object.assign({}, this.defaultItem.items[0][0]))
             // console.log("item empty end", this.editedItem.items[index])
           }
-          // console.log("item not empty end", this.editedItem.items[index])
-          var thickness = element.mThincknessNomalSize
-          // console.log("thickness", thickness)
-          this.editedItem.items[index].forEach((element1, i) => {
-            // console.log("start", this.editedItem.items[index][i])
-            // console.log("items", element1)
-            this.editedItem.items[index][i].exam_length = this.calcExamLength(element.selectNominalSize.id)
-            // console.log("end", this.editedItem.items[index][i])
-          })
+          if(element.thickOrQu == 1 || element.thickOrQu == 2) {
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].weld_length = element.mAreaSize
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          } else {
+            // console.log("item not empty end", this.editedItem.items[index])
+            var thickness = element.mThincknessNomalSize
+            // console.log("thickness", thickness)
+            this.editedItem.items[index].forEach((element1, i) => {
+              // console.log("start", this.editedItem.items[index][i])
+              // console.log("items", element1)
+              this.editedItem.items[index][i].exam_length = this.calcExamLength(element.selectNominalSize.id)
+              // console.log("end", this.editedItem.items[index][i])
+            })
+          }
         })
         // this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
         // this.editedItem.sod = this.editedItem.sod.slice(1);
