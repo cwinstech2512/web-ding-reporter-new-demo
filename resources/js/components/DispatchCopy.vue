@@ -126,9 +126,9 @@
         {text: '海基MT', value: 'sdm.mt'},
         {text: '海基VT', value: 'sdm.vt'},
         {text: '海基UT', value: 'sdm.ut'},
-        {text: '台塑油料廠', value: 'fpg.rtoil'},
-        {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
-        {text: '台塑煉製三廠', value: 'fpg.rthree'}
+        // {text: '台塑油料廠', value: 'fpg.rtoil'},
+        // {text: '台塑烯烴三廠', value: 'fpg.rtolll'},
+        // {text: '台塑煉製三廠', value: 'fpg.rthree'}
       ],
     }),
 
