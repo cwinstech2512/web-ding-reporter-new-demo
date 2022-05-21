@@ -774,7 +774,7 @@
                               <th class="text-left">探頭頻率<br>Probe Freq.</th>
                               <th class="text-left">探頭尺寸<br>Probe size</th>
                               <th class="text-left">A1校正角度<br>Correction Angle</th>
-                              <th class="text-left">缺陷類型<br>Type of Defect</th>
+                              <!-- <th class="text-left">缺陷類型<br>Type of Defect</th> -->
                               <th class="text-left">靈敏度<br>(dB) Sensibility</th>
                               <th class="text-left">傳輸修正值(dB)<br>Transfer Correction</th>
                               <th class="text-left">時基線範圍(Skip)<br>Time base range</th>
