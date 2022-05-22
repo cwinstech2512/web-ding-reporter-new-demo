@@ -107,7 +107,7 @@ class DispatchService
             if(isset($array['params']['items']) && is_array($array['params']['items'])) {
                 $array['params']['items'] = json_encode($array['params']['items']);
             }
-            if($this->dispstchRepo->saveFunPathByArray($array['params'], $command)) {
+            if($this->dispstchRepo->saveFunPathByArray($array['params'], $command, $corperation)) {
                 $tmp['params']['job_name'] = $array['params']['job_name'];
                 $tmp['params']['exam_place'] = $array['params']['exam_place'];
                 $tmp['params']['exam_date'] = $array['params']['exam_date'];

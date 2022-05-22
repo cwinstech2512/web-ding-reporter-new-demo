@@ -55,7 +55,7 @@ class DispatchRepository
                     $reportData['dispatch_id'] = $dispatch_id;
                     unset($reportData['id']);
                     // 建立報告
-                    $this->saveFunPathByArray($reportData, $reporExplope[1]);
+                    $this->saveFunPathByArray($reportData, $reporExplope[1], $reporExplope[0]);
                 }
             }
             $array['status'] = 1;
@@ -124,7 +124,7 @@ class DispatchRepository
                     $reportData['dispatch_id'] = $dispatch_id;
                     unset($reportData['id']);
                     // 建立報告
-                    $this->saveFunPathByArray($reportData, $reporExplope[1]);
+                    $this->saveFunPathByArray($reportData, $reporExplope[1], $reporExplope[0]);
                 }
             }
             $array['status'] = 1;
@@ -172,7 +172,7 @@ class DispatchRepository
         }
     }
 
-    public function saveFunPathByArray($array, $command)
+    public function saveFunPathByArray($array, $command, $corperation = null)
     {
         $first = null;
         if(empty($command)) return;
@@ -201,7 +201,7 @@ class DispatchRepository
             }
         }
         if(empty($first->items) || is_null($first->items)) {
-            $array['items'] = $this->initItemReportData($array, $command);
+            $array['items'] = $this->initItemReportData($array, $command, $corperation);
         }
         
         $first->fill(array_filter( $array, function( $v ) { return !is_null( $v ); } ));
@@ -233,9 +233,9 @@ class DispatchRepository
         return true;
     }
 
-    private function initItemReportData($object, $command)
+    private function initItemReportData($object, $command, $corperation)
     {
-        if($command == "Ut") {
+        if($command == "Ut" && $corperation == 'sdm') {
             if(!isset($object['items']) || empty($object['items'])) {
                 // return ('[{"thickness_result":"E1-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E1-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S1-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S2-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"S3-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-C","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-T","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-B","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-R","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null},{"thickness_result":"E2-L","design_thickness":null,"corrosion_margin":null,"minimum_thickness":null,"date1":null,"date2":null,"date3":null}]');
                 return ('[[{"serial_no":null,"prob_serial_no":"S-14237","probe_angle":"70\u02da","probe_freq":"2MHz","probe_size":"14*14","correction_angle":"68.3","sensibility":"36.8dB","transfer_correction":"+7dB","time_base_range":"1.5","probe_position":"2,3,11,12","object_no":1},{"serial_no":null,"prob_serial_no":"S-14234","probe_angle":"60\u02da","probe_freq":"2MHz","probe_size":"14*14","correction_angle":"63","sensibility":"37.5dB","transfer_correction":"+6dB","time_base_range":"1.5","probe_position":"2,3,11,12","object_no":2},{"serial_no":null,"prob_serial_no":"S-14232","probe_angle":"45\u02da","probe_freq":"2MHz","probe_size":"14*14","correction_angle":"47","sensibility":"37.2dB","transfer_correction":"+6dB","time_base_range":"1.5","probe_position":"2,3,11,12","object_no":3},{"serial_no":null,"prob_serial_no":"S-14192","probe_angle":"0\u02da","probe_freq":"2MHz","probe_size":"20","correction_angle":"0","sensibility":"49dB","transfer_correction":"+0dB","time_base_range":"2ndBW","probe_position":"1","object_no":4}]]');
