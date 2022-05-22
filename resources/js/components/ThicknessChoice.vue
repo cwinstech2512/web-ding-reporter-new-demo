@@ -15,7 +15,7 @@
             <v-select
               v-model="thick_or_qu"
               :items="listThickOrQu_Datas"
-              label="尺寸/面積"
+              label="尺寸/面積/長度"
               item-text="text"
               item-value="value"
               dense
@@ -51,10 +51,10 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-row v-if="thick_or_qu == 1">
+        <v-row v-if="thick_or_qu == 1 || thick_or_qu == 2">
           <v-col cols="12" md="10">
             <v-text-field
-              label="請輸入面積"
+              label="請輸入數值"
               outlined
               dense
               v-model="mAreaSize"
@@ -151,6 +151,7 @@
       listThickOrQu_Datas: [
         {text: '尺寸', value: 0},
         {text: '面積', value: 1},
+        {text: '長度', value: 2},
       ],
       radiographic_tech: null,
       thick_or_qu: 0,
@@ -164,7 +165,7 @@
       thick_or_qu (val, oldVal) {
         if (val === oldVal) return
         this.mAreaSize = 0
-        this.mThincknessNomalSize = null
+        if(this.mThincknessNomalSize) this.mThincknessNomalSize = null
         this.selectNominalSize = {}
         this.selectThickness = {}
       },
