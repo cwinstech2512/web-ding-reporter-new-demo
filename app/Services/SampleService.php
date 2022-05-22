@@ -187,7 +187,7 @@ class SampleService
             $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Job No', '');
-            $templateProcessor->setValue('Job Name', $reporter->job_name);
+            $templateProcessor->setValue('Job Name', $reporter->delegator . "<br />" . $reporter->exam_place . "<br />" . $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
             $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
