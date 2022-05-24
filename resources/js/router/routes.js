@@ -152,6 +152,11 @@ export default [
         component: page('report/normal/MT.vue')
       },
       {
+        path: '/ut_nor',
+        name: '超音波檢測',
+        component: page('report/normal/UT.vue')
+      },
+      {
         path: '/vt_sdm',
         name: '目視檢測',
         component: page('report/singda/VT.vue')

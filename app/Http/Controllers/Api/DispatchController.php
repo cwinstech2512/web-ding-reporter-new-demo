@@ -173,6 +173,13 @@ class DispatchController extends Controller
                 }
                 return new ResponseResource($out);
             break;
+            case 'normal.ut':
+                $out = $this->smpService->parseReportNormalUT($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
+            break;
             case 'sdm.mt':
                 $out = $this->smpService->parseReportSdmMT($function_path, $id);
                 if($out && isset($out['data']['export_final_path'])) {
@@ -263,6 +270,9 @@ class DispatchController extends Controller
             break;
             case 'normal.mt':
                 return new ReportMTResource($this->dispatchService->funPathDispatch($function_path, $id));
+            break;
+            case 'normal.ut':
+                return new ReportUTResource($this->dispatchService->funPathDispatch($function_path, $id));
             break;
             case 'sdm.mt':
                 return new ReportMTResource($this->dispatchService->funPathDispatch($function_path, $id));

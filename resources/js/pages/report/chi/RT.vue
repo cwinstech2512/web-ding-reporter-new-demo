@@ -1495,8 +1495,10 @@ export default {
       {text: '2層', value: 2},
     ],
     listFileSize_Datas: [
-      {text: '4 1/2 in.×8 1/2 in.', value: '0'},
-      {text: '3 1/3 in.× 6 in.', value: '1'},
+      {text: '4 1/2 in x 8 1/2 in', value: '0'},
+      {text: '4 1/2 in x 17 in', value: '1'},
+      {text: '3 1/3 in.× 6 in.', value: '2'},
+      {text: '3 1/3 in x 12 in.', value: '3'},
     ],
     listQty_Datas:[
       {text: '單 Single', value: '0'},
