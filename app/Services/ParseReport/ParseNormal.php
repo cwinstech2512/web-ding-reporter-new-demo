@@ -35,6 +35,11 @@ class ParseNormal
 		return $this->spRepo->lately('normal.mt.' . $version);
 	}
 
+    public function getNormalUT($version)
+	{
+		return $this->spRepo->lately('normal.ut.' . $version);
+	}
+
     public function parseReportNormalMT($function_path, $id)
     {
         $out = [];
@@ -328,6 +333,58 @@ class ParseNormal
     }
     public function parseReportNormalUT($function_path, $id)
     {
+        $out = [];
+        $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
+        
+        if(!isset($reporter->report_ut)) {
+            return false;
+        }
+        
+        $sample = $this->getNormalUT($reporter->report_ut->report_version);
+        
+        $report_version_footer = [
+            'ASME-SA578' => 'ASME-SA578-02',
+            'CNS14136' => 'CNS14136',
+            'ASME-SA435' => 'ASME-SA435-02',
+            'CNS14135' => 'CNS14135-02',
+        ];
+        
+        $realPath = $sample->full_path;
+       
+        $serial = Carbon::now()->format('Ymd');
+        // $copyPath = 'normal/'.$serial.'/pt/XID-PT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
+        $copyPath = 'normal/'.$serial.'/ut/' . $reporter->report_ut->original_no . '_' . Carbon::now()->timestamp . '.docx';
+        
+        if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
+            // dd(Storage::disk('public_sample'));
+            $dirname = dirname($realPath);
+            $samplePath = config('filesystems.disks.public_sample.root'). '/' .$dirname . '/' . basename($realPath);
+            // $samplePath = public_path('uploads/sample/'.$dirname . '/' . basename($realPath));
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
+            $templateProcessor->setValue('Report No', $reporter->report_ut->original_no);
+            $templateProcessor->setValue('Customer', $reporter->customer);
+            $templateProcessor->setValue('Job Name', $reporter->job_name);
+            $templateProcessor->setValue('Exam Date', $reporter->exam_date);
+            $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
+            $templateProcessor->setValue('Pro Ver. Footer', $report_version_footer[$reporter->report_ut->report_version]);
+            if(isset($reporter->report_ut)) {
+                $tmpReport = $reporter->report_ut;
+            }
+
+            $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
+            $array['id'] = $id;
+            $array['export_final_path'] = $copyPath;
+            if($this->dispstchRepo->saveDispatchByArray($array)) {
+                $out['code'] = 1000;
+                $out['data'] = $array;
+                $out['message'] = "資料更新成功";
+                Log::info(json_encode($array));
+            } else {
+                $out['code'] = 50001;
+                $out['message'] = "資料更新錯誤";
+            }
+        }
+        return $out;
     }
     public function parseReportNormalRT($function_path, $id)
     {
