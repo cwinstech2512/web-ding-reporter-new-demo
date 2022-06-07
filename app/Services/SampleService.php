@@ -187,7 +187,7 @@ class SampleService
             $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Job No', '');
-            $templateProcessor->setValue('Job Name', $reporter->delegator . "<br />" . $reporter->exam_place . "<br />" . $reporter->job_name);
+            $templateProcessor->setValue('Job Name', $reporter->delegator . "     " . $reporter->exam_place . "     " . $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
             $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
@@ -301,9 +301,9 @@ class SampleService
                 //照射方法
                 $radiographicTech = "";
                 if($reporter->report_rt->radiographic_tech == 0) {
-                    $radiographicTech = "■ 單層壁 Single Wall Exposure<br />□ 雙層壁 Double Wall Exposure";
+                    $radiographicTech = "■ 單層壁 Single Wall Exposure     □ 雙層壁 Double Wall Exposure";
                 } else if($reporter->report_rt->radiographic_tech == 1) {
-                    $radiographicTech = "□ 單層壁 Single Wall Exposure<br />■ 雙層壁 Double Wall Exposure";
+                    $radiographicTech = "□ 單層壁 Single Wall Exposure     ■ 雙層壁 Double Wall Exposure";
                 }
                 $templateProcessor->setValue('Radiographic Tech', $radiographicTech);
 
@@ -313,9 +313,9 @@ class SampleService
                 //像質計位置 iqi_location_mark
                 $iqi_location_mark = "";
                 if($reporter->report_rt->iqi_location_mark == 0) {
-                    $iqi_location_mark = "■射源側 Source Side<br />□底片側 Film Side";
+                    $iqi_location_mark = "■射源側 Source Side     □底片側 Film Side";
                 } else if($reporter->report_rt->iqi_location_mark == 1) {
-                    $iqi_location_mark = "□射源側 Source Side<br />■底片側 Film Side";
+                    $iqi_location_mark = "□射源側 Source Side     ■底片側 Film Side";
                 }
                 $templateProcessor->setValue('IQI/Location Mark', $iqi_location_mark);
 
@@ -331,10 +331,10 @@ class SampleService
                 //底片判讀方式 Interpret
                 $interpret = "";
                 if($reporter->report_rt->interpret == 0) {
-                    $interpret = "■單壁判讀Single View<br />□雙壁判讀Double View";
+                    $interpret = "■單壁判讀Single View     □雙壁判讀Double View";
                     
                 } else if($reporter->report_rt->interpret == 1) {
-                    $interpret = "□單壁判讀Single View<br />■雙壁判讀Double View";
+                    $interpret = "□單壁判讀Single View     ■雙壁判讀Double View";
                 }
                 $templateProcessor->setValue('Interpret', $interpret);
 
@@ -383,7 +383,7 @@ class SampleService
                 $examinationResults = true;
                 $items = json_decode($reporter->report_rt->items);
                 // dd($reporter->report_pt);
-                $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
+                $thickness_objs = json_decode($reporter->report_rt->thickness_objs? $reporter->report_rt->thickness_objs : '');
                 
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 
@@ -550,9 +550,9 @@ class SampleService
                 //施加方式 magnetic_equipment
                 $applying_method = '';
                 if($tmpReport->applying_method == 0) {
-                    $applying_method = "■撒 Dusting or Blowing<br />□噴 Spraying";
+                    $applying_method = "■撒 Dusting or Blowing     □噴 Spraying";
                 } else if($tmpReport->applying_method == 1) {
-                    $applying_method = "□撒 Dusting or Blowing<br />■噴 Spraying";
+                    $applying_method = "□撒 Dusting or Blowing     ■噴 Spraying";
                 }
                 $templateProcessor->setValue('Applying Method', $applying_method);
 
@@ -571,7 +571,7 @@ class SampleService
                         } else {
                             $magnetizing_methon .= "□";
                         }
-                        $magnetizing_methon .= ($elem . '<br />'); 
+                        $magnetizing_methon .= ($elem . '     '); 
                     }
                 }
                 $templateProcessor->setValue('Magnetizing Methon', $magnetizing_methon);
