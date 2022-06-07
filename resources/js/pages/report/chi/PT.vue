@@ -739,7 +739,7 @@
                               <td>
                                 <v-text-field
                                 v-model="item.welder_no"
-                                :readonly="true"
+                                :readonly="readonlyVisible"
                                 outlined
                                 dense
                               ></v-text-field></td>

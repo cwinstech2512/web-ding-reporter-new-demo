@@ -1270,7 +1270,10 @@ export default {
     selectApplyingMethod: null,
     selectMagnetizingMethon: null,
     listReportVersion_Datas: [
-      {text: 'ISO 17637', value: 'iso17367'},
+      {text: 'ASME-SA578-02', value: 'ASME-SA578'},
+      {text: 'CNS14136', value: 'CNS14136'},
+      {text: 'ASME-SA435-02', value: 'ASME-SA435'},
+      {text: 'CNS14135-02', value: 'CNS14135'},
     ],
     listMagnetizingCurrent_Datas:[
       {text: '交流 AC 110V', value: '0'},
