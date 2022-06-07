@@ -260,7 +260,7 @@ class SampleService
         $out = [];
         $sample = $this->getChimeiRT();
         $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
-        dd($reporter);
+        // dd($reporter);
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
         $copyPath = 'chimei/'.$serial.'/rt/XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT) . '.docx';
@@ -382,7 +382,7 @@ class SampleService
                 
                 $examinationResults = true;
                 $items = json_decode($reporter->report_rt->items);
-                dd($reporter->report_pt);
+                // dd($reporter->report_pt);
                 $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
                 
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);

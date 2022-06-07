@@ -35,6 +35,9 @@ class ReportRTResource extends JsonResource
                 if(isset($this->report_rt->film_size)) {
                     $this->report_rt->film_size = isset($this->report_rt->film_size)? json_decode($this->report_rt->film_size) : null;
                 }
+                if(isset($this->report_rt->film_brand)) {
+                    $this->report_rt->film_brand = isset($this->report_rt->film_brand)? json_decode($this->report_rt->film_brand) : null;
+                }
                 unset($this->report_rtoil);
                 unset($this->report_rtolll);
                 unset($this->report_rthree);
