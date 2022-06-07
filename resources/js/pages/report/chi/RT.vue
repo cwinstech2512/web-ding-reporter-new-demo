@@ -421,7 +421,7 @@
                           ref="job_name"
                           v-model="editedItem.job_name"
                           label="Regular"
-                          :readonly="true"
+                          :readonly="readonlyVisible"
                           required
                         ></v-text-field>
                       </v-card>
@@ -705,6 +705,7 @@
                                 item-text="text"
                                 item-value="value"
                                 dense
+                                multiple
                                 :readonly="readonlyVisible"
                               ></v-select>
                             </v-col>
@@ -2261,8 +2262,8 @@ export default {
         preConfirm: () => {
           params.nominal_size = that.selectNominalSize.nominal_size
           params.thicknes = that.selectThickness.thickness
-          params.film_size = that.editedItem.film_size.join(',')
-          params.radiographic_tech = that.editedItem.radiographic_tech.join(',')
+          params.film_size = that.editedItem.film_size? that.editedItem.film_size.join(',') : ''
+          params.radiographic_tech = that.editedItem.radiographic_tech? that.editedItem.radiographic_tech.join(',') : ''
           params.thickness_objs = that.thicknesGroup_Data
           return this.$axios
             .fetchPut(url, params)
