@@ -536,7 +536,7 @@
                               item-value="value"
                               dense
                               single-line
-                              :disabled="readonlyVisible"
+                              :disabled="true"
                             ></v-select>
                           </v-col>
                         </v-row>
@@ -706,7 +706,7 @@
                                 item-value="value"
                                 dense
                                 multiple
-                                :readonly="readonlyVisible"
+                                :disabled="true"
                               ></v-select>
                             </v-col>
                           </v-row>
@@ -1692,10 +1692,10 @@ export default {
       if (val === oldVal) return
       // this.roleCalcSod()
       // this.roleCalcExTime()
-      if(val == '1' || val == '1.5')
-        this.editedItem.film_type = 'Class I'
-      else
-        this.editedItem.film_type = 'Class II'
+      // if(val == '1' || val == '1.5')
+      //   this.editedItem.film_type = 'Class I'
+      // else
+      //   this.editedItem.film_type = 'Class II'
     }
   },
 
@@ -2427,29 +2427,29 @@ export default {
           }
         }
       } else {
-        if(!obj.mThincknessNomalSize || this.editedItem.layers == '') {
+        if(!obj.mThincknessNomalSize || obj.layers == '') {
           return
         }
         // console.log(this.listRT_Datas)
-        const rt = this.listRT_Datas.find(element => element.thickness == Math.round(obj.mThincknessNomalSize * this.editedItem.layers))
+        const rt = this.listRT_Datas.find(element => element.thickness == Math.round(obj.mThincknessNomalSize * obj.layers))
         // console.log(rt)
         if(obj.radiographic_tech !== '' && rt) {
           //單壁照相
           if(obj.radiographic_tech == 0) {
             if(obj.mThincknessNomalSize && obj.mThincknessNomalSize != 0.0 && rt) {
               var a = ((sod + obj.mThincknessNomalSize) * (sod + obj.mThincknessNomalSize) / this.editedItem.energy_strength)
-              var b = (a * rt.numness * this.editedItem.film_brand) / (25.4*25.4)
+              var b = (a * rt.numness * obj.film_brand) / (25.4*25.4)
               // console.log(b)
               this.editedItem.exposure_time += (";" + this.formateExTime(b))
             }
           } else if(obj.radiographic_tech == 1) {
             if(this.editedItem.sin_dou == 0) {
-              var a = sod * 9 / 8 * sod * 9 / 8 / this.editedItem.energy_strength * obj.mThincknessNomalSize * this.editedItem.film_brand
+              var a = sod * 9 / 8 * sod * 9 / 8 / this.editedItem.energy_strength * obj.mThincknessNomalSize * obj.film_brand
               var b = a / 25.4 / 25.4
               this.editedItem.exposure_time += (";" + this.formateExTime(b))
             } else if(this.editedItem.sin_dou == 1) {
               if(obj.selectNominalSize) {
-                var a = obj.selectNominalSize.od_out * obj.selectNominalSize.od_out / this.editedItem.energy_strength * obj.mThincknessNomalSize * this.editedItem.film_brand
+                var a = obj.selectNominalSize.od_out * obj.selectNominalSize.od_out / this.editedItem.energy_strength * obj.mThincknessNomalSize * obj.film_brand
                 var b = a / 25.4 / 25.4
                 this.editedItem.exposure_time += (";" + this.formateExTime(b))
               }
@@ -2554,6 +2554,13 @@ export default {
             this.editedItem.items[index][i].thickness = thickness
             // console.log("end", this.editedItem.items[index][i])
           })
+          if(element.film_brand) {
+            if(element.film_brand == '1' || element.film_brand == '1.5')
+              this.editedItem.film_type += 'Class I;'
+            else
+              this.editedItem.film_type += 'Class II;'
+          }
+          
         })
         this.editedItem.geometric_unsharpness = this.editedItem.geometric_unsharpness.slice(1);
         this.editedItem.sod = this.editedItem.sod.slice(1);

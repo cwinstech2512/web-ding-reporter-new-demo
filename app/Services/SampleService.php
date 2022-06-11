@@ -279,16 +279,21 @@ class SampleService
             $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Examination place', $reporter->exam_place);
             if(isset($reporter->report_rt)) {
+                $tmpReport = $reporter->report_rt;
+                $thickness_objs = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '', true);
                 $filmBrand = ''; $filmType = '';
-                if($reporter->report_rt->film_brand == '1') {
-                    $filmBrand = '■D4    □D7';
-                    $filmType = '■Class I   □Class II';
-                } else if($reporter->report_rt->film_brand == '1.5') {
-                    $filmBrand = '■D5    □D7';
-                    $filmType = '■Class I   □Class II';
-                } else if($reporter->report_rt->film_brand == '3') {
-                    $filmBrand = '□D5    ■D7';
-                    $filmType = '□Class II   ■Class II';
+                //底片廠牌 Film Brand
+                $listFilmBrand = ['1' => 'D4', '1.5' => 'D5', '3' => 'D7'];
+                // $r_report_size = explode(',', $tmpReport->film_brand);
+                if(is_array($thickness_objs)) {
+                    $film_brands = array_column($thickness_objs, 'film_brand');
+                    foreach($listFilmBrand as $key => $value) {
+                        if(in_array($key, $film_brands)) {
+                            $filmBrand .= ('■' . $value . " ");
+                        } else {
+                            $filmBrand .= ('□' . $value . " ");
+                        }
+                    }
                 }
                 $templateProcessor->setValue('Film Brand', $filmBrand);
                 $templateProcessor->setValue('Film Type', $filmType);
@@ -392,7 +397,7 @@ class SampleService
                     $values = [];
                     foreach($objs as $obj) {
                         $itit['No#'.$hash] = $obj->object_no;
-                        $itit['Film or Weld No#'.$hash] = $obj->film_or_weld_no;
+                        $itit['FoWNo#'.$hash] = $obj->film_or_weld_no;
                         $itit['Thickness#'.$hash] = $obj->thickness;
                         $itit['Welder No#'.$hash] = $obj->welder_no;
                         $itit['Sensitivity#'.$hash] = $obj->sensitivity;

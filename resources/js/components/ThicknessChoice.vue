@@ -85,6 +85,32 @@
             ></v-select>
           </v-col>
         </v-row>
+        <v-row v-if="channalType == 'chimei_rt' || channalType == 'normal_rt'">
+          <v-col cols="12" md="10">
+            <v-select
+              v-model="layers"
+              :items="listLayer_Datas"
+              label="層數"
+              item-text="text"
+              item-value="value"
+              dense
+              outlined
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row v-if="channalType == 'chimei_rt' || channalType == 'normal_rt'">
+          <v-col cols="12" md="10">
+            <v-select
+              v-model="film_brand"
+              :items="listFilmBrand_Datas"
+              label="底片廠牌"
+              item-text="text"
+              item-value="value"
+              dense
+              outlined
+            ></v-select>
+          </v-col>
+        </v-row>
         </v-container>
       </v-card-text>
       <v-card-actions>
@@ -153,7 +179,18 @@
         {text: '面積', value: 1},
         {text: '長度', value: 2},
       ],
+      listLayer_Datas: [
+        {text: '1層', value: 1},
+        {text: '2層', value: 2},
+      ],
+      listFilmBrand_Datas: [
+        {text: 'Agfa D4', value: '1'},
+        {text: 'Agfa D5', value: '1.5'},
+        {text: 'Agfa D7', value: '3'},
+      ],
       radiographic_tech: null,
+      layers: null,
+      film_brand: null,
       thick_or_qu: 0,
       mAreaSize: 0,
     }),
@@ -201,6 +238,8 @@
             thicknesGroupModel: this.thicknesGroupModel,
             thickOrQu: this.thick_or_qu,
             mAreaSize: this.mAreaSize,
+            layers: this.layers,
+            film_brand: this.film_brand,
           }
           if(this.thicknesGroupModel >= this.thicknesGroup_Data.length) {
             this.thicknesGroup_Data.push(obj)
