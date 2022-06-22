@@ -273,9 +273,10 @@ class ParseNormal
                 $templateProcessor->setValue('Magnetizing Methon', $magnetizing_methon);
 
                 $examinationResults = true;
-                $items = json_decode($tmpReport->items);
+                $items = !is_null(json_decode($tmpReport->items))? json_decode($tmpReport->items) : [];
                 // dd($tmpReport);
-                $thickness_objs = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $tmpThicknessObj = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $thickness_objs = !is_null($tmpThicknessObj)? $tmpThicknessObj  : [];
                 
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
 
@@ -548,9 +549,10 @@ class ParseNormal
                 $templateProcessor->setValue('FP_Time', '  ' . $tmpReport->film_processing_min . '  ');
 
                 $examinationResults = true;
-                $items = json_decode($tmpReport->items);
+                $items = !is_null(json_decode($tmpReport->items))? json_decode($tmpReport->items) : [];
                 // dd($tmpReport);
-                $thickness_objs = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $tmpThicknessObj = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $thickness_objs = !is_null($tmpThicknessObj)? $tmpThicknessObj  : [];
                 
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 $interpret0 = false;
@@ -823,8 +825,11 @@ class ParseNormal
                 }
                 $templateProcessor->setValue('Post Clean', $post_clean);
                 
-                $items = json_decode($tmpReport->items);
-                $thickness_objs = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $items = !is_null(json_decode($tmpReport->items))? json_decode($tmpReport->items) : [];
+                // dd($tmpReport);
+                $tmpThicknessObj = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '');
+                $thickness_objs = !is_null($tmpThicknessObj)? $tmpThicknessObj  : [];
+                
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 
                 $hash = 1;
