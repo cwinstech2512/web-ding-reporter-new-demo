@@ -1741,16 +1741,16 @@ export default {
       var choiceIndex = this.thicknesGroupModelChoice
       if(choiceIndex < 0) return
       if(this.editedItem.items && this.editedItem.items[choiceIndex] && this.editedItem.items[choiceIndex].length > 0) {
-        let _ = this.editedItem.items
-        let tmpDefault = Object.assign({}, _[choiceIndex][index])
-        let newArr = Object.assign([], _)
-        tmpDefault.object_no = newArr[choiceIndex].length + 1
-        console.log(tmpDefault)
-        newArr[choiceIndex].splice(index+1, 0, tmpDefault)
-        newArr[choiceIndex].forEach((element, index) => {
-          newArr[choiceIndex][index].object_no = (index+1)
-        })
-        this.editedItem.items = newArr
+        // let _ = this.editedItem.items
+        // let tmpDefault = Object.assign({}, _[choiceIndex][index])
+        // let newArr = Object.assign([], _)
+        // tmpDefault.object_no = newArr[choiceIndex].length + 1
+        // console.log(tmpDefault)
+        // newArr[choiceIndex].splice(index+1, 0, tmpDefault)
+        // newArr[choiceIndex].forEach((element, index) => {
+        //   newArr[choiceIndex][index].object_no = (index+1)
+        // })
+        // this.editedItem.items = newArr
       }
     },
 
