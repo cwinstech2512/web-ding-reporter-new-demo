@@ -1462,6 +1462,7 @@ export default {
       {text: 'CNS', value: 3},
       {text: 'F02', value: 4},
       {text: 'F04', value: 5},
+      {text: 'S02', value: 6},
     ],
     listInterpret_Datas:[
       {text: '單壁判讀Single View', value: 0},
