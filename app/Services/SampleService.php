@@ -242,8 +242,8 @@ class SampleService
             $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
             if(isset($reporter->report_pt)) {
-                $templateProcessor->setValue('eType2', $reporter->report_pt->exam_type == 1? '■' : '□');
-                $templateProcessor->setValue('eType1', $reporter->report_pt->exam_type == 0? '■' : '□');
+                $templateProcessor->setValue('eType2', $reporter->report_pt->on_site == 1? '■' : '□');
+                $templateProcessor->setValue('eType1', $reporter->report_pt->on_site == 0? '■' : '□');
                 $templateProcessor->setValue('Material', $reporter->report_pt->material);
                 $templateProcessor->setValue('Thicknes', $reporter->report_pt->thicknes);
                 $templateProcessor->setValue('Light Intensity', $reporter->report_pt->light_intensity);

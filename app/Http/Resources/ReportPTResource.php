@@ -29,6 +29,9 @@ class ReportPTResource extends JsonResource
         if(isset($this->report_pt->removal)) {
             $this->report_pt->removal = isset($this->report_pt->removal)? json_decode($this->report_pt->removal) : null;
         }
+        if(isset($this->report_pt->on_site)) {
+            $this->report_pt->on_site = isset($this->report_pt->on_site)? json_decode($this->report_pt->on_site) : null;
+        }
         
         return parent::toArray($request);
     }

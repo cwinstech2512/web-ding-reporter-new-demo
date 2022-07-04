@@ -33,6 +33,7 @@ class ReportPt extends Model
       'cleaner', //清洗劑
       'penetrant', //滲透劑
       'developer', //顯像劑dd
+      'on_site',
     'thickness_objs',
     'updated_user',
     'created_user'];

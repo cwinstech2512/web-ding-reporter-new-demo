@@ -517,7 +517,7 @@
                         tile
                       >
                         <div class="text-subtitle-2">
-                          
+                          現場/預置
                         </div>
                         <div class="text-caption">
                            
@@ -531,12 +531,23 @@
                         outlined
                         tile
                       >
-                        <!-- <v-text-field
-                          ref="obsert"
-                          v-model="editedItem.obsert"
-                          label="Regular"
-                          :readonly="readonlyVisible"
-                        ></v-text-field> -->
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="exam_time"
+                                v-model="editedItem.on_site"
+                                :items="listOnSite_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                multiple
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
                       </v-card>
                     </v-col>
                   </v-row>
@@ -1037,6 +1048,7 @@ export default {
       exam_date: new Date,
       exam_place: '',
       exam_type: '',
+      on_site: '',
       material: '',
       thicknes: '',
       nominal_size: '',
@@ -1071,6 +1083,7 @@ export default {
       exam_date: new Date,
       exam_place: '',
       exam_type: '',
+      on_site: '',
       material: '',
       thicknes: '',
       nominal_size: '',
@@ -1100,6 +1113,10 @@ export default {
       {text: '合格', value: 0},
       {text: '不合格', value: 1},
     ],
+    listOnSite_Datas:[
+      {text: '現場', value: 0},
+      {text: '預置', value: 1},
+    ],
   }),
 
   computed: {
@@ -1112,7 +1129,7 @@ export default {
     logItems() {
       return [
         {
-          name: '歷史紀錄',
+        name: '歷史紀錄',
           children: this.sampleItems,
         },
       ]
@@ -1649,6 +1666,7 @@ export default {
             var file = result.value.data
             if(file.export_final_path) {
               this.docPreviewUrlPath = file.export_final_path
+              this.docPreviewUrlPath = "https://linetest1.xinlidadigi.com/XID-PT-20220406-0003_2.docx"
               this.dialogPreview = true
               //  window.open('https://docs.google.com/viewer?url=' + file.export_final_path, '_blank')
             }
