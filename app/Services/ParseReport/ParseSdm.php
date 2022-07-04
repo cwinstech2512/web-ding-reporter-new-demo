@@ -214,7 +214,7 @@ class ParseSdm
                             // 檢驗日期時間				
                             $spreadsheet_0->setCellValue('K' . ($index+$i), (string)isset($objs[$i]->exam_datetime)? $objs[$i]->exam_datetime : '');
                             // 結果				
-                            $spreadsheet_0->setCellValue('O' . ($index+$i), (string)isset($objs[$i]->result)? $objs[$i]->result : '');
+                            $spreadsheet_0->setCellValue('O' . ($index+$i), (string)isset($objs[$i]->result)? ($objs[$i]->result == 0? 'Acc' : 'Reg') : '');
                             // 備註				
                             $spreadsheet_0->setCellValue('Q' . ($index+$i), (string)isset($objs[$i]->remark)? $objs[$i]->remark : '');
                             
@@ -692,7 +692,7 @@ class ParseSdm
                             // 檢驗日期時間				
                             $spreadsheet_0->setCellValue('O' . ($index+$i), (string)isset($objs[$i]->exam_datetime)? $objs[$i]->exam_datetime : '');
                             // 結果				
-                            $spreadsheet_0->setCellValue('Q' . ($index+$i), (string)isset($objs[$i]->result)? $objs[$i]->result : '');
+                            $spreadsheet_0->setCellValue('Q' . ($index+$i), (string)isset($objs[$i]->result)? ($objs[$i]->result == 0? 'Acc' : 'Reg') : '');
                             // 備註				
                             $spreadsheet_0->setCellValue('R' . ($index+$i), (string)isset($objs[$i]->remark)? $objs[$i]->remark : '');
                             
