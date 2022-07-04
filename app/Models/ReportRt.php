@@ -22,7 +22,7 @@ class ReportRt extends Model
     protected $fillable = ['dispatch_id', 'report_version', 'exam_date', 'exam_place', 'job_no', 'job_name', 'exam_type', 'material', 'radiographic_tech',
     'thicknes', 'layers', 'nominal_size', 'equlpment_no', 'film_type', 'sn', 'identify', 'film_brand', 'sin_dou', 'film_size', 'focal_spot', 'file_qty', 'sod', 'geometric_unsharpness', 
     'exposure_time', 'iqi_location_mark', 'radiation_energy', 'screen_thick', 'iqi_no', 'interpret','energy_strength' , 'film_processing_temp', 'film_processing_min', 'obsert', 'approved', 'items',
-    'customer', 'applicable_code', 'criteria', 'procedure_no', 'region', 'contract_no', 'exam_method', 'exam_time',
+    'customer', 'applicable_code', 'criteria', 'procedure_no', 'region', 'contract_no', 'exam_method', 'exam_time', 'procedure_version',
     'thickness_objs',
     'updated_user',
     'created_user'];

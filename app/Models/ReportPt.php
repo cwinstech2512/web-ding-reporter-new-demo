@@ -21,7 +21,7 @@ class ReportPt extends Model
      */
     protected $fillable = ['dispatch_id', 'report_version', 'job_name', 'job_no', 'exam_date', 'exam_place', 'exam_type', 'material', 
     'thicknes', 'nominal_size', 'surface_status', 'exam_time', 'light_intensity', 'white_ligth_meter', 'surface_temp', 'obsert', 'items',
-    'customer', 'applicable_code', 'criteria', 'procedure_no', 'region', 'contract_no', 'exam_method',
+    'customer', 'applicable_code', 'criteria', 'procedure_no', 'region', 'contract_no', 'exam_method', 'procedure_version',
     'penetrant_application', //施加滲透劑
       'dwell_time', //滲透時間
       'surface_temperature', //檢測時表面溫度

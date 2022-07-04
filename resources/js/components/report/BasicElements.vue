@@ -386,7 +386,40 @@
           ></v-text-field>
         </v-card>
       </v-col>
-      <v-col style="flex: 8;" class="d-flex align-stretch">
+      <v-col cols="1" class="d-flex align-stretch">
+        <v-card
+          class="pa-2 align-stretch"
+          style="flex: 1;"
+          outlined
+          tile
+        >
+          <div class="text-subtitle-2">
+            版次
+          </div>
+          <div class="text-caption">
+            Version 
+          </div>
+        </v-card>
+      </v-col>
+      <v-col cols="3" class="d-flex align-stretch">
+        <v-card
+          class="pa-2 align-stretch"
+          style="flex: 1;"
+          outlined
+          tile
+        >
+          <v-text-field
+            ref="procedure_version"
+            v-model="editedItem.procedure_version"
+            label="Regular"
+            :readonly="readonlyVisible"
+            :rules="[
+              (v) => !!v || '請填寫此欄位',
+            ]"
+          ></v-text-field>
+        </v-card>
+      </v-col>
+      <v-col style="flex: 4;" class="d-flex align-stretch">
       </v-col>
     </v-row>
   </div>
