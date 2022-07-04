@@ -92,7 +92,10 @@ export default {
     report_version_inputable: true,
     listReportVersion_Datas: {
       pt: [
-        {text: 'ISO 17637', value: 'iso17367'},
+        {text: 'CNS11398', value: 'cns11398'},
+        {text: 'ASME-02', value: 'asme02'},
+        {text: 'AWS D1.1', value: 'awsd1'},
+        // {text: 'ISO 17637', value: 'iso17367'},
       ],
       rt: [
         {text: 'API 650-02', value: 'api650'},
@@ -108,6 +111,19 @@ export default {
         {text: 'AWS D1.1│D1.1M-02', value: 'awsd1'},
         {text: 'CNS11378-02', value: 'cns11378'},
         {text: 'CNS13341-01', value: 'cns13341'},
+      ],
+      ut: [
+        {text: 'CNS12618', value: 'cns12618'},
+        {text: 'CNS14135', value: 'cns14135'},
+        {text: 'CNS14136', value: 'cns14136'},
+        {text: 'CNS11401', value: 'cns11401'},
+        {text: 'ASME-02', value: 'asme02'},
+        {text: 'ASME-SA435', value: 'asme435'},
+        {text: 'ASME-SA578', value: 'asme578'},
+        {text: 'AWS D1.1|D1.1M-02', value: 'awsd1'},
+      ],
+      vt: [
+        {text: 'AWS D1.1|D1.1M-01', value: 'awsd1'},
       ]
     },
     applicable_code: {
@@ -119,7 +135,10 @@ export default {
         ],
         cns11398: [
           {text: 'CNS 11398', value: 'CNS 11398'},
-        ]
+        ],
+        awsd1: [
+          {text: 'AWS D1.1/D1.1M', value: 'AWS D1.1/D1.1M'},
+        ],
       },
       rt: {
         asme02:   [
@@ -163,6 +182,37 @@ export default {
           {text: 'CNS 11378', value: 'CNS 11378'},
         ],
       },
+      ut: {
+        cns12618: [
+          {text: 'CNS12618', value: 'CNS12618'},
+        ],
+        cns14135: [
+          {text: 'CNS14135', value: 'CNS14135'},
+        ],
+        cns14136: [
+          {text: 'CNS14136', value: 'CNS14136'},
+        ],
+        cns11401: [
+          {text: 'CNS11401', value: 'CNS11401'},
+        ],
+        asme02: [
+          {text: 'ASME BPVC Sec. VIII Div.1 & ASME Sec. V Article 4', value: 'ASME BPVC Sec. VIII Div.1 & ASME Sec. V Article 4'},
+        ],
+        asme435: [
+          {text: 'ASME-SA435', value: 'ASME-SA435'},
+        ],
+        asme578: [
+          {text: 'ASME-SA578', value: 'ASME-SA578'},
+        ],
+        awsd1: [
+          {text: 'AWS D1.1-D1.1M 靜態力', value: 'AWS D1.1-D1.1M 靜態力'},
+        ]
+      },
+      vt: {
+        awsd1: [
+          {text: 'AWS D1.1-D1.1M', value: 'AWS D1.1-D1.1M'},
+        ]
+      }
     },
     criteria: {
       pt: {
@@ -173,6 +223,9 @@ export default {
         ],
         cns11398: [
           {text: 'CNS11398  二級', value: 'CNS11398  二級'},
+        ],
+        awsd1: [
+          {text: 'AWS D1.1/D1.1M', value: 'AWS D1.1/D1.1M'},
         ],
       },
       rt: {
@@ -217,6 +270,37 @@ export default {
           {text: 'CNS 11378  二級', value: 'CNS 11378  二級'},
         ],
       },
+      ut: {
+        cns12618: [
+          {text: 'CNS12618 二級', value: 'CNS12618 二級'},
+        ],
+        cns14135: [
+          {text: 'CNS14135 二級', value: 'CNS14135 二級'},
+        ],
+        cns14136: [
+          {text: 'CNS14136 二級', value: 'CNS14136 二級'},
+        ],
+        cns11401: [
+          {text: 'CNS11401 二級', value: 'CNS11401 二級'},
+        ],
+        asme02: [
+          {text: 'ASME BPVC Sec. VIII Div.1 Appendix 12', value: 'ASME BPVC Sec. VIII Div.1 Appendix 12'},
+        ],
+        asme435: [
+          {text: 'ASME-SA435', value: 'ASME-SA435'},
+        ],
+        asme578: [
+          {text: 'ASME-SA578', value: 'ASME-SA578'},
+        ],
+        awsd1: [
+          {text: 'AWS D1.1-D1.1M 靜態力', value: 'AWS D1.1-D1.1M 靜態力'},
+        ]
+      },
+      vt: {
+        awsd1: [
+          {text: 'AWS D1.1-D1.1M 靜態力', value: 'AWS D1.1-D1.1M 靜態力'},
+        ]
+      }
     },
     procedure: {
       pt: {
@@ -228,12 +312,15 @@ export default {
         cns11398: [
           'XID-PT-CNS11398/Rev.0',
         ],
+        awsd1: [
+          'XID-PT-AWS/Rev.0',
+        ],
       },
       rt: {
         asme02:  [
-          'XID-PT-ASME/Rev.2',
-          'XID-PT-ASME/Rev.2',
-          'XID-PT-ASME/Rev.2',
+          'XID-RT-ASME/Rev.2',
+          'XID-RT-ASME/Rev.2',
+          'XID-RT-ASME/Rev.2',
         ],
         awsd1: [
           'XID-RT-AWS D1.1/D1.1M/Rev.2',
@@ -256,7 +343,7 @@ export default {
           'XID-MT-ASME/Rev.1',
         ],
         awsd1: [
-          'XID-MT- AWSD1.1/D1.1M/Rev.1',
+          'XID-MT-AWSD1.1/D1.1M/Rev.1',
         ],
         cns13341: [
           'XID-MT-CNS13341/Rev.1',
@@ -266,6 +353,37 @@ export default {
           'XID-MT-CNS11378/Rev.1',
         ],
       },
+       ut: {
+        cns12618: [
+          'XID-UT-CNS12618/Rev.0',
+        ],
+        cns14135: [
+          'XID-UT-CNS14135/Rev.2',
+        ],
+        cns14136: [
+          'XID-UT-CNS14136/Rev.1',
+        ],
+        cns11401: [
+          'XID-UT-CNS11401/Rev.1',
+        ],
+        asme02: [
+          'XID-UT-ASME/Rev.2',
+        ],
+        asme435: [
+          'XID-UT-ASME-SA435/Rev.0',
+        ],
+        asme578: [
+          'XID-UT-ASME-SA578/Rev.1',
+        ],
+        awsd1: [
+          'XID-UT-AWSD1.1/D1.1M/Rev.2',
+        ]
+      },
+      vt: {
+        awsd1: [
+          'XID-VT-AWSD1.1/D1.1M/Rev.1',
+        ]
+      }
     }
   }),
 
