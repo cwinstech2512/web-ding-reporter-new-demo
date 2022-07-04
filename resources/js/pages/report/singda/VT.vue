@@ -1075,8 +1075,8 @@ export default {
       {text: '周向磁化', value: '5'},
     ],
     listResult_Datas:[
-      {text: '合格', value: 0},
-      {text: '不合格', value: 1},
+      {text: 'Acc', value: 0},
+      {text: 'Reg', value: 1},
     ],
     listParticlesManufacturer_Datas:[
       {text: 'Eishin', value: 0},
