@@ -66,6 +66,8 @@ class ParseSdm
             $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_vt->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
+            // 版次
+            $spreadsheet_0->setCellValue('I11', $reporter->procedure_version);
             // $spreadsheet_0->getStyle('A')->applyFromArray(ExcelConfig::sdmSheetStyle());
              /* report_vt */
             if(isset($reporter->report_vt)) {
@@ -276,6 +278,8 @@ class ParseSdm
             $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_ut->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
+            // 版次
+            $spreadsheet_0->setCellValue('I11', $reporter->procedure_version);
             // $spreadsheet_0->getStyle('A')->applyFromArray(ExcelConfig::sdmSheetStyle());
              /* report_ut */
             if(isset($reporter->report_ut)) {
@@ -493,6 +497,8 @@ class ParseSdm
             $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_mt->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
+            // 版次
+            $spreadsheet_0->setCellValue('I11', $reporter->procedure_version);
             // $spreadsheet_0->getStyle('A')->applyFromArray(ExcelConfig::sdmSheetStyle());
              /* report_rt */
             if(isset($reporter->report_mt)) {
