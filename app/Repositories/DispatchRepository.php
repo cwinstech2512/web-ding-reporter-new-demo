@@ -97,6 +97,8 @@ class DispatchRepository
                 )->first();
             }
             return null;
+        } else if(empty($function_path) && $id > 0) {
+            return $this->model::where('id', $id)->first();
         }
     }
 

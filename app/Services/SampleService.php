@@ -43,6 +43,10 @@ class SampleService
 	{
 		return $this->spRepo->lately('chimei.it');
 	}
+    public function getDispatch()
+	{
+		return $this->spRepo->lately('dispatch.20220701');
+	}
 
     public function logsChimeiPT()
 	{
@@ -104,6 +108,52 @@ class SampleService
     public function groupFunctionPath()
     {
         return $this->spRepo->groupFunctionPath();
+    }
+
+    public function parseDispatch($function_path, $id)
+    {
+        $out = [];
+        $sample = $this->getDispatch();
+        $reporter = $this->dispstchRepo->funPathDispatch(null, $id);
+        
+        $realPath = $sample->full_path;
+        $serial = Carbon::now()->format('Ymd');
+        $copyPath = 'dispath/'.$serial.'/' . $reporter->serial_no . '.docx';
+        if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
+            // dd(Storage::disk('public_sample'));
+            $dirname = dirname($realPath);
+            $samplePath = config('filesystems.disks.public_sample.root'). '/' .$dirname . '/' . basename($realPath);
+            // $samplePath = public_path('uploads/sample/'.$dirname . '/' . basename($realPath));
+            // dd($samplePath);
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
+            $templateProcessor->setValue('Customer', $reporter->customer);
+            $templateProcessor->setValue('serial_no', $reporter->serial_no);
+            $templateProcessor->setValue('delegator', $reporter->delegator);
+            $templateProcessor->setValue('concat_phone', $reporter->concat_phone);
+            $templateProcessor->setValue('concat_name', $reporter->concat_name);
+            $templateProcessor->setValue('exam_date', $reporter->exam_date);
+            $templateProcessor->setValue('exam_place', $reporter->exam_place);
+            $templateProcessor->setValue('material', $reporter->material);
+            $templateProcessor->setValue('thickness', $reporter->thickness);
+            $templateProcessor->setValue('leng', $reporter->leng);
+            $templateProcessor->setValue('editor', $reporter->editor);
+            $templateProcessor->setValue('inspector', $reporter->inspector);
+            $templateProcessor->setValue('transport', $reporter->transport);
+            
+            $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
+            $array['id'] = $id;
+            $array['export_final_path'] = $copyPath;
+            if($this->dispstchRepo->saveDispatchByArray($array)) {
+                $out['code'] = 1000;
+                $out['data'] = $array;
+                $out['message'] = "資料更新成功";
+                Log::info(json_encode($array));
+            } else {
+                $out['code'] = 50001;
+                $out['message'] = "資料更新錯誤";
+            }
+        }
+        return $out;
     }
 
     public function parseReportFpgRT_Oil($function_path, $id)
@@ -187,7 +237,7 @@ class SampleService
             $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Job No', '');
-            $templateProcessor->setValue('Job Name', $reporter->delegator . "     " . $reporter->exam_place . "     " . $reporter->job_name);
+            $templateProcessor->setValue('Job Name', $reporter->delegator . "/" . $reporter->exam_place . "/" . $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
             $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);

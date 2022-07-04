@@ -201,6 +201,13 @@ class DispatchController extends Controller
                 }
                 return new ResponseResource($out);
             break;
+            case 'dispatch.20220701':
+                $out = $this->smpService->parseDispatch($function_path, $id);
+                if($out && isset($out['data']['export_final_path'])) {
+                    $out['data']['export_final_path'] = config('app.url').'/storage/file/export/' . $out['data']['export_final_path'];
+                }
+                return new ResponseResource($out);
+            break;
             default:
                 return false;
             break;

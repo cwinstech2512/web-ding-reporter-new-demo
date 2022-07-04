@@ -90,6 +90,14 @@
                     <v-btn
                       dark
                       text
+                      @click="preview"
+                      :disabled="editedDispatchStatus < 2"
+                    >
+                      預覽
+                    </v-btn>
+                    <v-btn
+                      dark
+                      text
                       v-if="editedIndex !== -2"
                       @click="save"
                       :loading="loadingSave"
@@ -452,6 +460,11 @@
               >
                 <v-list-item-title>複製到</v-list-item-title>
               </v-list-item>
+              <v-list-item
+                @click="exportDispatch(item)"
+              >
+                <v-list-item-title>匯出</v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -485,6 +498,7 @@
 import DataTableStatus from '../../components/DataTableStatus.vue'
 import DispatchCopy from '../../components/DispatchCopy.vue'
 import BasicDispatch from '../../components/report/BasicDispatch.vue'
+import VueDocPreview  from 'vue-doc-preview'
 
 export default {
   name: 'DispatchView',
@@ -812,6 +826,83 @@ export default {
     copyFunctionPath (item) {
       this.formCopyItem = item
       this.toggleDialog()
+    },
+
+    preview () {
+      // var formError = false
+      // Object.keys(this.editedItem).forEach(f => {
+      //   if(this.$refs[f] && !this.$refs[f].validate(true)) {
+      //     formError = true
+      //     return
+      //   }
+      // })
+
+      // if(formError) {
+      //   return
+      // }
+
+      var route_name = 'dispatch_20220701'
+
+      let params = this.editedItem
+      let co = route_name.split('_');
+      let that = this
+      let url = `api/dispatch_preview/${co[0]}/${co[1]}` + (this.editedItem.id === -1? '' : ('/'+this.editedItem.id))
+      this.$swal.fire({
+        title: '預覽前請確定儲存?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          // params.nominal_size = that.selectNominalSize.nominal_size
+          // params.thicknes = that.selectThickness.thickness
+          // params.thickness_objs = that.thicknesGroup_Data
+
+          // params.surface_status = that.editedItem.surface_status.join(',')
+          // params.exam_time = that.editedItem.exam_time.join(',')
+          // params.type_of_particle_olor = that.editedItem.type_of_particle_olor.join(',')
+          // params.magnetizing_methon = that.editedItem.magnetizing_methon.join(',')
+          return this.$axios
+            .fetchPut(url, params)
+            .then(res => {
+              return res.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
+        if(result.isConfirmed) {
+          if(result.value.code == 1000) {
+            var file = result.value.data
+            if(file.export_final_path) {
+              this.docPreviewUrlPath = file.export_final_path
+              this.dialogPreview = true
+              //  window.open('https://docs.google.com/viewer?url=' + file.export_final_path, '_blank')
+            }
+            // that.$swal.fire({
+            //   title: "成功!",
+            //   text: "儲存數據成功",
+            //   type: "success",
+            //   confirmButtonClass: "btn btn-success"
+            // });
+            // this.closeView()
+          } else {
+              that.$swal.fire({
+                title: "錯誤!",
+                text: "儲存數據錯誤",
+                type: "error",
+                confirmButtonClass: "btn btn-danger"
+              });
+              // this.closeView()
+          }
+        }
+      })
+    },
+
+    exportDispatch () {
+
     },
 
     saveDispatchCopy (obj) {
