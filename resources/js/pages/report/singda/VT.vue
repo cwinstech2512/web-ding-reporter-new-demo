@@ -276,7 +276,7 @@
                             item-text="text"
                             item-value="value"
                             hide-details
-                            :readonly="true"
+                            :readonly="readonlyVisible"
                           ></v-select>
                         </div>
                         </v-card>
@@ -1031,7 +1031,8 @@ export default {
     selectApplyingMethod: null,
     selectMagnetizingMethon: null,
     listReportVersion_Datas: [
-      {text: 'ISO 17637', value: 'iso17367'},
+      {text: '萬機鋼鐵', value: 'WanChi'},
+      {text: '中國鋼鐵', value: 'China'},
     ],
     listMagnetizingCurrent_Datas:[
       {text: '交流 AC 110V', value: '0'},

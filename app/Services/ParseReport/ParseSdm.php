@@ -36,12 +36,13 @@ class ParseSdm
     public function parseReportSdmVT($function_path, $id)
     {
         $out = [];
-        $sample = $this->getSdmVT('2022');
         $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
         
         if(!isset($reporter->report_vt)) {
             return false;
         }
+        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $sample = $this->getSdmVT('2022.' . $reportVersion);
 
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
@@ -248,12 +249,13 @@ class ParseSdm
     public function parseReportSdmUT($function_path, $id)
     {
         $out = [];
-        $sample = $this->getSdmUT('2022');
         $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
         
         if(!isset($reporter->report_ut)) {
             return false;
         }
+        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $sample = $this->getSdmUT('2022.'.$reportVersion);
 
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
@@ -467,12 +469,13 @@ class ParseSdm
     public function parseReportSdmMT($function_path, $id)
     {
         $out = [];
-        $sample = $this->getSdmMT('2022');
         $reporter = $this->dispstchRepo->funPathDispatch($function_path, $id);
         
         if(!isset($reporter->report_mt)) {
             return false;
         }
+        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $sample = $this->getSdmMT('2022.' . $reportVersion);
 
         $realPath = $sample->full_path;
         $serial = Carbon::now()->format('Ymd');
