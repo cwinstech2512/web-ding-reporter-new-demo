@@ -268,7 +268,7 @@
                           outlined
                           tile
                         >
-                        <div class="text-subtitle-2">
+                        <!-- <div class="text-subtitle-2">
                           <v-select
                             ref="report_version"
                             v-model="editedItem.report_version"
@@ -279,7 +279,12 @@
                             :readonly="true"
                             
                           ></v-select>
-                        </div>
+                        </div> -->
+                        <v-text-field
+                          ref="report_version"
+                          v-model="editedItem.report_version"
+                          :readonly="true"
+                        ></v-text-field>
                         </v-card>
                       </v-col>
                       <v-col
