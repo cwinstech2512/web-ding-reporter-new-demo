@@ -41,7 +41,7 @@ class ParseSdm
         if(!isset($reporter->report_vt)) {
             return false;
         }
-        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $reportVersion = empty($reporter->report_version)? 'WanChi':$reporter->report_version;
         $sample = $this->getSdmVT('2022.' . $reportVersion);
 
         $realPath = $sample->full_path;
@@ -254,7 +254,7 @@ class ParseSdm
         if(!isset($reporter->report_ut)) {
             return false;
         }
-        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $reportVersion = empty($reporter->report_version)? 'WanChi':$reporter->report_version;
         $sample = $this->getSdmUT('2022.'.$reportVersion);
 
         $realPath = $sample->full_path;
@@ -474,7 +474,7 @@ class ParseSdm
         if(!isset($reporter->report_mt)) {
             return false;
         }
-        $reportVersion = empty($reporter->report_version)? $reporter->report_version : 'WanChi';
+        $reportVersion = empty($reporter->report_version)? 'WanChi':$reporter->report_version;
         $sample = $this->getSdmMT('2022.' . $reportVersion);
 
         $realPath = $sample->full_path;
