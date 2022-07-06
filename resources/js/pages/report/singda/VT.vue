@@ -1294,7 +1294,7 @@ export default {
               this.editedItem.applicable_code = this.defaultItem.applicable_code
               this.editedItem.criteria = this.defaultItem.criteria
               this.editedItem.procedure_no = this.defaultItem.procedure_no
-              this.editedItem.report_version = this.defaultItem.report_version
+              // this.editedItem.report_version = this.defaultItem.report_version
             } else {
               let tmp = Object.assign({}, this.editedItem)
               this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
