@@ -663,6 +663,60 @@
                       </v-card>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          檢測人員
+                        </div>
+                        <div class="text-caption">
+                          Inspector
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-card-title>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-select
+                                ref="joint_type"
+                                v-model="editedItem.inspector"
+                                :items="listInspector_Datas"
+                                label="請選擇(Regular)"
+                                item-text="text"
+                                item-value="value"
+                                dense
+                                :disabled="readonlyVisible"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
+
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+
+                    </v-col>
+                    <v-col style="flex: 1;" class="d-flex align-stretch">
+
+                    </v-col>
+                    <v-col style="flex: 3;" class="d-flex align-stretch">
+
+                    </v-col>
+                  </v-row>
                   <!-- row 6 -->
                   <!-- 表格區 -->
                   <v-row
@@ -1085,6 +1139,14 @@ export default {
       {text: '交流 AC 110V', value: '0'},
       {text: '直流 DC', value: '1'},
     ],
+    listInspector_Datas:[
+      {text: '徐源明', value: '徐源明'},
+      {text: '林炎亮', value: '林炎亮'},
+      {text: '林意開', value: '林意開'},
+      {text: '張介瑋', value: '張介瑋'},
+      {text: '林詒娟', value: '林詒娟'},
+      {text: '謝承坤', value: '謝承坤'},
+    ],
     listSurfaceStatus_Datas:[
       {text: '銲接表面As-Welded', value: '0'},
       {text: '輥軋表面As-Rolled', value: '1'},
@@ -1155,6 +1217,7 @@ export default {
       customer: '',
       original_no: '',
       report_version: 0,
+      inspector: '',
       id: 0,
       job_name: '',
       job_no: '',
@@ -1198,6 +1261,7 @@ export default {
       customer: '',
       original_no: '',
       report_version: 'iso17367',
+      inspector: '',
       id: 0,
       job_name: '',
       job_no: '',
@@ -1343,6 +1407,7 @@ export default {
               this.editedItem.job_name = tmp.job_name
             }
             this.thicknesGroup_Data = this.editedItem.thickness_objs? this.editedItem.thickness_objs : []
+            this.editedItem.inspector = res.data.data.inspector? res.data.data.inspector : ''
             
           })
           .catch(err => {

@@ -52,6 +52,14 @@ class ParseSdm
             $out['message'] = "資料更新錯誤";
             return $out;
         }
+        $inspector = [
+            '徐源明' => 'XD03',
+            '林炎亮' => 'XD06',
+            '林意開' => 'XD09',
+            '張介瑋' => 'XD12',
+            '林詒娟' => 'XD15',
+            '謝承坤' => 'XD16',
+        ];
         if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
             // dd($reporter);
             $dirname = dirname($realPath);
@@ -64,7 +72,7 @@ class ParseSdm
             // 檢測日期
             $spreadsheet_0->setCellValue('D9', $reporter->exam_date);
             // 檢測日期
-            $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_vt->original_no);
+            $spreadsheet_0->setCellValue('N1', '報告編號:' . (isset($inspector[$reporter->inspector])? $inspector[$reporter->inspector] . '-' : '') . $reporter->report_vt->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
             // 版次
@@ -254,6 +262,14 @@ class ParseSdm
         if(!isset($reporter->report_ut)) {
             return false;
         }
+        $inspector = [
+            '徐源明' => 'XD03',
+            '林炎亮' => 'XD06',
+            '林意開' => 'XD09',
+            '張介瑋' => 'XD12',
+            '林詒娟' => 'XD15',
+            '謝承坤' => 'XD16',
+        ];
         $reportVersion = empty($reporter->report_version)? 'WanChi':$reporter->report_version;
         $sample = $this->getSdmUT('2022.'.$reportVersion);
 
@@ -277,7 +293,7 @@ class ParseSdm
             // 檢測日期
             $spreadsheet_0->setCellValue('D9', $reporter->exam_date);
             // 檢測日期
-            $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_ut->original_no);
+            $spreadsheet_0->setCellValue('N1', '報告編號:' . (isset($inspector[$reporter->inspector])? $inspector[$reporter->inspector] . '-' : '') . $reporter->report_vt->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
             // 版次
@@ -474,6 +490,14 @@ class ParseSdm
         if(!isset($reporter->report_mt)) {
             return false;
         }
+        $inspector = [
+            '徐源明' => 'XD03',
+            '林炎亮' => 'XD06',
+            '林意開' => 'XD09',
+            '張介瑋' => 'XD12',
+            '林詒娟' => 'XD15',
+            '謝承坤' => 'XD16',
+        ];
         $reportVersion = empty($reporter->report_version)? 'WanChi':$reporter->report_version;
         $sample = $this->getSdmMT('2022.' . $reportVersion);
 
@@ -497,7 +521,7 @@ class ParseSdm
             // 檢測日期
             $spreadsheet_0->setCellValue('D9', $reporter->exam_date);
             // 檢測日期
-            $spreadsheet_0->setCellValue('N1', '報告編號:' . $reporter->report_mt->original_no);
+            $spreadsheet_0->setCellValue('N1', '報告編號:' . (isset($inspector[$reporter->inspector])? $inspector[$reporter->inspector] . '-' : '') . $reporter->report_vt->original_no);
             // 工件名稱/編號
             $spreadsheet_0->setCellValue('B6', $reporter->equlpment_no);
             // 版次
