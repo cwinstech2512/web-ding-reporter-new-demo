@@ -194,7 +194,7 @@ class ParseSdm
                     foreach($items as $objs) {
                         for($i = 0; $i < sizeof($objs)+1; $i++) {
                             // 流水號	
-                            $serial_no = (string)isset($objs[$i]->serial_no)? $objs[$i]->serial_no : ($runOnce? '以下空白' : '');
+                            $serial_no = (string)isset($objs[$i]->serial_no)? $objs[$i]->serial_no : ($runOnce? '' : '');
                             $spreadsheet_0->setCellValue('A' . ($index+$i), $serial_no);
                             // 銲道編號		
                             $spreadsheet_0->setCellValue('C' . ($index+$i), (string)isset($objs[$i]->weld_no)? $objs[$i]->weld_no : '');
@@ -678,7 +678,7 @@ class ParseSdm
                     foreach($items as $objs) {
                         for($i = 0; $i < 26; $i++) {
                             // 流水號	
-                            $serial_no = (string)isset($objs[$i]->serial_no)? $objs[$i]->serial_no : ($runOnce? '以下空白' : '');
+                            $serial_no = (string)isset($objs[$i]->serial_no)? $objs[$i]->serial_no : ($runOnce? '' : '');
                             $spreadsheet_0->setCellValue('A' . ($index+$i), $serial_no);
                             // 銲道編號		
                             $spreadsheet_0->setCellValue('C' . ($index+$i), (string)isset($objs[$i]->weld_no)? $objs[$i]->weld_no : '');

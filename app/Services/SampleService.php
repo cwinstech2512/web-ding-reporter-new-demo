@@ -254,16 +254,17 @@ class SampleService
                 $hash = 1;
                 foreach($items as $objs) {
                     $values = [];
-                    foreach($objs as $obj) {
-                        $itit['No#'.$hash] = $obj->object_no;
-                        $itit['Object No#'.$hash] = $obj->object_no;
-                        $itit['Weld Length#'.$hash] = $obj->weld_length;
-                        $itit['Welder No#'.$hash] = $obj->welder_no;
-                        $itit['Defect Location#'.$hash] = $obj->defect_location;
-                        $itit['Type of Defect#'.$hash] = $obj->type_of_defect;
-                        $itit['Defect Length#'.$hash] = $obj->defect_length;
-                        $itit['Result#'.$hash] = $obj->result == 0? '合格' : '不合格';
-                        $itit['Remark#'.$hash] = $obj->remark;
+                    // foreach($objs as $obj) {
+                    for($j = 0; $j < 23; $j++) {
+                        $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
+                        $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
+                        $itit['Weld Length#'.$hash] = isset($objs[$j]->weld_length)? $objs[$j]->weld_length:'';
+                        $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no:'';
+                        $itit['Defect Location#'.$hash] = isset($objs[$j]->defect_location)?$objs[$j]->defect_location:'';
+                        $itit['Type of Defect#'.$hash] = isset($objs[$j]->type_of_defect)?$objs[$j]->type_of_defect:'';
+                        $itit['Defect Length#'.$hash] = isset($objs[$j]->defect_length)?$objs[$j]->defect_length:'';
+                        $itit['Result#'.$hash] = isset($objs[$j]->result)?  ($objs[$j]->result== 0? '合格' : '不合格') : '';
+                        $itit['Remark#'.$hash] = isset($objs[$j]->remark)? $objs[$j]->remark : '';
                         array_push($values, $itit);
                     }
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
@@ -445,19 +446,20 @@ class SampleService
                 $hash = 1;
                 foreach($items as $objs) {
                     $values = [];
-                    foreach($objs as $obj) {
-                        $itit['No#'.$hash] = $obj->object_no;
-                        $itit['FoWNo#'.$hash] = $obj->film_or_weld_no;
-                        $itit['Thickness#'.$hash] = $obj->thickness;
-                        $itit['Welder No#'.$hash] = $obj->welder_no;
-                        $itit['Sensitivity#'.$hash] = $obj->sensitivity;
-                        $itit['Defect Code#'.$hash] = $obj->defect_code;
-                        $itit['Acceptable#'.$hash] = $obj->result == 0? 'V': '';
-                        $itit['Rejected#'.$hash] = $obj->result == 1? 'V': '';
-                        $itit['Remark#'.$hash] = $obj->remark;
+                    // foreach($objs as $obj) {
+                    for($j = 0; $j < 23; $j++) {
+                        $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
+                        $itit['FoWNo#'.$hash] = isset($objs[$j]->film_or_weld_no)? $objs[$j]->film_or_weld_no : '';
+                        $itit['Thickness#'.$hash] = isset($objs[$j]->thickness)? $objs[$j]->thickness : '';
+                        $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no : '';
+                        $itit['Sensitivity#'.$hash] = isset($objs[$j]->sensitivity)? $objs[$j]->sensitivity : '';
+                        $itit['Defect Code#'.$hash] = isset($objs[$j]->defect_code)?$objs[$j]->defect_code:'';
+                        $itit['Acceptable#'.$hash] = isset($objs[$j]->result)? ($objs[$j]->result== 0? 'V': '') :"";
+                        $itit['Rejected#'.$hash] = isset($objs[$j]->result)? ($objs[$j]->result== 1? 'V': '') :"";
+                        $itit['Remark#'.$hash] = isset($objs[$j]->remark)? $objs[$j]->remark : '';
                         array_push($values, $itit);
                         if($examinationResults) {
-                            $examinationResults = $obj->result == 0;
+                            $examinationResults = isset($objs[$j]->result)? ($objs[$j]->result== 0) : false;
                         }
                     }
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
