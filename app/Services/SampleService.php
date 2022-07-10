@@ -239,9 +239,9 @@ class SampleService
             $templateProcessor->setValue('Job No', '');
             $templateProcessor->setValue('Job Name', $reporter->delegator . "/" . $reporter->exam_place . "/" . $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
-            $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
             if(isset($reporter->report_pt)) {
+                $templateProcessor->setValue('Obsert', $reporter->report_pt->obsert);
                 $templateProcessor->setValue('eType2', $reporter->report_pt->on_site == 1? '■' : '□');
                 $templateProcessor->setValue('eType1', $reporter->report_pt->on_site == 0? '■' : '□');
                 $templateProcessor->setValue('Material', $reporter->report_pt->material);
@@ -325,13 +325,15 @@ class SampleService
             $templateProcessor->setValue('Report No', 'XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT));
             $templateProcessor->setValue('Customer', $reporter->customer);
             $templateProcessor->setValue('Delegator', $reporter->delegator);
-            $templateProcessor->setValue('Job No', $reporter->job_no);
             $templateProcessor->setValue('Job Name', $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
-            $templateProcessor->setValue('Obsert', $reporter->obsert);
             $templateProcessor->setValue('Examination place', $reporter->exam_place);
             if(isset($reporter->report_rt)) {
                 $tmpReport = $reporter->report_rt;
+
+                $templateProcessor->setValue('Job No', $tmpReport->job_no);
+                $templateProcessor->setValue('Obsert', $tmpReport->obsert);
+
                 $thickness_objs = json_decode($tmpReport->thickness_objs? $tmpReport->thickness_objs : '', true);
                 $filmBrand = ''; $filmType = '';
                 //底片廠牌 Film Brand

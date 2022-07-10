@@ -1225,12 +1225,18 @@
                                 outlined
                                 dense
                               ></v-text-field></td>
-                              <td><v-text-field
-                                v-model="item.sensitivity"
-                                :readonly="readonlyVisible"
-                                outlined
-                                dense
-                              ></v-text-field></td>
+                              <td>
+                                <v-select
+                                  v-model="item.sensitivity"
+                                  :items="listSensitivity_Datas"
+                                  item-text="text"
+                                  item-value="value"
+                                  dense
+                                  outlined
+                                  single-line
+                                  :readonly="readonlyVisible"
+                                ></v-select>
+                              </td>
                               <td><v-text-field
                                 v-model="item.defect_code"
                                 :readonly="readonlyVisible"
@@ -1486,6 +1492,10 @@ export default {
     listDL_Datas: [],
     listRTPT_Datas: [],
     listThickness_Datas: [],
+    listSensitivity_Datas: [
+      {text: 'V', value: 'V'},
+      {text: 'X', value: 'X'}
+    ],
     listFilmBrand_Datas: [
       {text: 'Agfa D4', value: '1'},
       {text: 'Agfa D5', value: '1.5'},
