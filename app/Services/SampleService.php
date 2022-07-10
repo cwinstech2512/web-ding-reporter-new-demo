@@ -451,7 +451,7 @@ class SampleService
                     for($j = 0; $j < 23; $j++) {
                         $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
                         $itit['FoWNo#'.$hash] = isset($objs[$j]->film_or_weld_no)? $objs[$j]->film_or_weld_no : '';
-                        $itit['Thickness#'.$hash] = isset($objs[$j]->thickness)? $objs[$j]->thickness : '';
+                        $itit['Thickness#'.$hash] = isset($objs[$j]->thickness)? $objs[$j]->thickness . 'mm' : '';
                         $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no : '';
                         $itit['Sensitivity#'.$hash] = isset($objs[$j]->sensitivity)? $objs[$j]->sensitivity : '';
                         $itit['Defect Code#'.$hash] = isset($objs[$j]->defect_code)?$objs[$j]->defect_code:'';
