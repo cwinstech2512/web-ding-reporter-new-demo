@@ -324,6 +324,7 @@ class SampleService
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
             $templateProcessor->setValue('Report No', 'XID-RT-' . $serial .'-' . str_pad($id, 5, "0", STR_PAD_LEFT));
             $templateProcessor->setValue('Customer', $reporter->customer);
+            $templateProcessor->setValue('Delegator', $reporter->delegator);
             $templateProcessor->setValue('Job No', $reporter->job_no);
             $templateProcessor->setValue('Job Name', $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
