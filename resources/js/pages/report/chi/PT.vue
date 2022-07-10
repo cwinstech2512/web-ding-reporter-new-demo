@@ -1789,11 +1789,13 @@ export default {
           }
           // console.log("item not empty end", this.editedItem.items[index])
           var thickness = element.mThincknessNomalSize
+          var nominal_size = element.selectNominalSize.nominal_size
           // console.log("thickness", thickness)
           this.editedItem.items[index].forEach((element1, i) => {
             // console.log("start", this.editedItem.items[index][i])
             // console.log("items", element1)
-            this.editedItem.items[index][i].weld_length = thickness
+            this.editedItem.items[index][i].weld_length = nominal_size
+            this.editedItem.items[index][i].thickness = thickness
             // console.log("end", this.editedItem.items[index][i])
           })
         })
