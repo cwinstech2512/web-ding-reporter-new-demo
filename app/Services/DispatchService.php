@@ -120,6 +120,7 @@ class DispatchService
                 $tmp['params']['criteria'] = isset($array['params']['criteria'])? $array['params']['criteria'] : '';
                 $tmp['params']['procedure_no'] = isset($array['params']['procedure_no'])? $array['params']['procedure_no'] : '';
                 $tmp['params']['report_version'] = isset($array['params']['report_version'])? $array['params']['report_version'] : '';
+                $tmp['params']['inspector'] = isset($array['params']['inspector'])? $array['params']['inspector'] : '';
                 // $tmp = array_where($array['params'], function($key, $value)
                 // {
                 //     return $key == 'job_name' || $key == 'exam_place' || $key == 'exam_date';
