@@ -123,6 +123,7 @@
         {text: '一般PT', value: 'normal.pt'},
         {text: '一般RT', value: 'normal.rt'},
         {text: '一般MT', value: 'normal.mt'},
+        {text: '一般UT', value: 'normal.ut'},
         {text: '海基MT', value: 'sdm.mt'},
         {text: '海基VT', value: 'sdm.vt'},
         {text: '海基UT', value: 'sdm.ut'},

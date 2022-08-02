@@ -1563,10 +1563,10 @@ export default {
             this.exportFinalPath = res.data.data.export_final_path
             if(res.data.data.report_ut) {
               this.editedItem = Object.assign({}, res.data.data.report_ut)
-              this.editedItem.applicable_code = this.defaultItem.applicable_code
-              this.editedItem.criteria = this.defaultItem.criteria
-              this.editedItem.procedure_no = this.defaultItem.procedure_no
-              this.editedItem.report_version = this.defaultItem.report_version
+              // this.editedItem.applicable_code = this.defaultItem.applicable_code
+              // this.editedItem.criteria = this.defaultItem.criteria
+              // this.editedItem.procedure_no = this.defaultItem.procedure_no
+              // this.editedItem.report_version = this.defaultItem.report_version
             } else {
               let tmp = Object.assign({}, this.editedItem)
               this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
