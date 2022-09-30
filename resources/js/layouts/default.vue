@@ -40,3 +40,8 @@
     },
   }
 </script>
+<style>
+html {
+  font-family: 'DFKai-sb' !important;
+}
+</style>

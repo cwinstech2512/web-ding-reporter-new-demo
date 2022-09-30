@@ -1731,6 +1731,7 @@ export default {
             if(res.data.data) {
               that.objDL_Data = Object.assign({}, res.data.data)
               that.editedItem.energy_strength = Math.round((that.objDL_Data.data_value) * 10) / 10
+              that.editedItem.sn = 'IR-192/ INC ' + that.objDL_Data.source_serial
             } else {
               that.$swal.fire({
                 title: "錯誤!",

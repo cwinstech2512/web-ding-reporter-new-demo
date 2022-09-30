@@ -26,6 +26,9 @@ class ReportRTResource extends JsonResource
                 if(isset($this->report_rt->thickness_objs)) {
                     $this->report_rt->thickness_objs = isset($this->report_rt->thickness_objs)? json_decode($this->report_rt->thickness_objs) : null;
                 }
+                if(isset($this->report_rt->iqi_location_mark)) {
+                    $this->report_rt->iqi_location_mark = isset($this->report_rt->iqi_location_mark)? json_decode($this->report_rt->iqi_location_mark) : null;
+                }
                 if(isset($this->report_rt->exam_time)) {
                     $this->report_rt->exam_time = isset($this->report_rt->exam_time)? json_decode($this->report_rt->exam_time) : null;
                 }

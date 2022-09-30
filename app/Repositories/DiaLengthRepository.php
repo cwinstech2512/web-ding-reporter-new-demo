@@ -32,13 +32,13 @@ class DiaLengthRepository
         if(is_null($date)) {
             return $this->master::where('status', 1)->orderBy('created_at', 'desc')->get();
         } else {
-            // return $this->master::with([
-            //     'slave' => function($query) use ($date, $select_id) {
-            //         $query->where('use_date', $date);
-            //         $query->where('dia_length_master_id', $select_id);
-            //     }
-            // ])->first();
-            return $this->slave->where('use_date', $date)->where('dia_length_master_id', $select_id)->first();
+            return $this->master::with([
+                'slave' => function($query) use ($date, $select_id) {
+                    $query->where('use_date', $date);
+                    $query->where('dia_length_master_id', $select_id);
+                }
+            ])->where('id', $select_id)->first();
+            // return $this->slave->where('use_date', $date)->where('dia_length_master_id', $select_id)->first();
         }
     }
 }

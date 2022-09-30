@@ -188,6 +188,8 @@
               :thicknesGroupModel="thicknesGroupModel"
               :dialog="dialogThicknessChoice" 
               :listRTPT_Datas="listRTPT_Datas"
+              :listRT_Datas="listRT_Datas"
+              :energy_strength="editedItem.energy_strength"
               :listThickness_Datas="listThickness_Datas">
             </ThicknessChoice>
              <v-dialog
@@ -717,6 +719,7 @@
                                 item-value="value"
                                 dense
                                 single-line
+                                multiple
                                 :disabled="readonlyVisible"
                                 ></v-select>
                             </v-col>
@@ -1380,7 +1383,7 @@ export default {
       identify: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '', film_processing_min: '',
-      energy_strength: '', sin_dou: 0, thickness_objs: [],
+      energy_strength: 0, sin_dou: 0, thickness_objs: [],
       obsert: '',
       items:[
         [
@@ -1421,7 +1424,7 @@ export default {
       identify: '',
       film_type: '', sn: '', film_brand: '', film_size: '', focal_spot: '', file_qty: '', sod: '', geometric_unsharpness: '', 
       exposure_time: '', iqi_location_mark: '', iqi_no: '', interpret: 0, film_processing_temp: '25', film_processing_min: '5',
-      energy_strength: '', sin_dou: 0, thickness_objs: [],
+      energy_strength: 0, sin_dou: 0, thickness_objs: [],
       obsert: '',
       items:[
         [
@@ -1440,6 +1443,7 @@ export default {
     },
     listDL_Datas: [],
     listRTPT_Datas: [],
+    listRT_Datas:[],
     listThickness_Datas: [],
     listFilmBrand_Datas: [
       {text: 'Agfa D4', value: '1'},
@@ -1817,7 +1821,11 @@ export default {
           .then(res => {
             if(res.data.data) {
               that.objDL_Data = Object.assign({}, res.data.data)
-              that.editedItem.energy_strength = Math.round((that.objDL_Data.data_value) * 10) / 10
+              if(that.objDL_Data.slave.length > 0) {
+                let s = that.objDL_Data.slave
+                that.editedItem.energy_strength = Math.round((s[0].data_value) * 10) / 10
+              }
+              that.editedItem.sn = 'IR-192/ INC ' + that.objDL_Data.source_serial
             } else {
               that.$swal.fire({
                 title: "錯誤!",
@@ -2438,9 +2446,18 @@ export default {
     },
     
     addDialogThickness () {
-      this.dialogThicknessChoice = true
-      this.thicknesGroupModel = this.thicknesGroup_Data.length
-      this.thicknesGroupModelChoice = this.thicknesGroup_Data.length
+      if(this.editedItem.energy_strength > 0) {
+        this.dialogThicknessChoice = true
+        this.thicknesGroupModel = this.thicknesGroup_Data.length
+        this.thicknesGroupModelChoice = this.thicknesGroup_Data.length
+      } else {
+        this.$swal.fire({
+          title: "錯誤!",
+          text: "請先選擇射源強度",
+          type: "warning",
+          confirmButtonClass: "btn btn-warning"
+        });
+      }
     },
 
     deleteThickness (item) {
@@ -2453,7 +2470,7 @@ export default {
       // this.mThincknessNomalSize = data[0].mThincknessNomalSize
       this.thicknesGroup_Data = data
 
-      // console.log("saveMThinckness result", data)
+      console.log("saveMThinckness result", data)
 
       if(this.thicknesGroup_Data.length > 0) {
         this.editedItem.geometric_unsharpness = ''
@@ -2463,8 +2480,12 @@ export default {
         this.thicknesGroup_Data.forEach((element, index) => {
           // console.log("element", element)
           // console.log("item default start", this.defaultItem.items[0][0])
-          this.roleCalcFOG(element)
-          this.roleCalcExTime(element, this.roleCalcSod(element))
+          // this.roleCalcFOG(element)
+          // this.roleCalcExTime(element, this.roleCalcSod(element))
+          this.editedItem.geometric_unsharpness += (";" + element.geometric_unsharpness)
+          this.editedItem.sod += (";" + element.sod)
+          this.editedItem.exposure_time += (";" + element.exposure_time)
+
           if(!this.editedItem.items) {
             this.editedItem.items = []
           }
