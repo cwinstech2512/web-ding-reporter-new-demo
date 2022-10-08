@@ -1289,12 +1289,12 @@ export default {
         let _ = this.editedItem.items
         let tmpDefault = Object.assign({}, _[choiceIndex][0])
         let newArr = Object.assign([], _)
-        tmpDefault.object_no = newArr[choiceIndex].length + 1
-        console.log(tmpDefault)
+        // tmpDefault.object_no = newArr[choiceIndex].length + 1
+        // console.log(tmpDefault)
         newArr[choiceIndex].push(tmpDefault)
-        newArr[choiceIndex].forEach((element, index) => {
-          newArr[choiceIndex][index].object_no = (index+1)
-        })
+        // newArr[choiceIndex].forEach((element, index) => {
+        //   newArr[choiceIndex][index].object_no = (index+1)
+        // })
         this.editedItem.items = newArr
       }
     },
