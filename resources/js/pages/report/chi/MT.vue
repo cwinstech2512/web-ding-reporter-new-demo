@@ -1585,9 +1585,9 @@ export default {
     deleteEditItems (item) {
       let x = this.editedItem.items.indexOf(item)
       this.editedItem.items.splice(x, 1);
-      this.editedItem.items.forEach((element, index) => {
-        this.editedItem.items[index].object_no = (index+1)
-      })
+      // this.editedItem.items.forEach((element, index) => {
+      //   this.editedItem.items[index].object_no = (index+1)
+      // })
     },
 
     editItem(item) {

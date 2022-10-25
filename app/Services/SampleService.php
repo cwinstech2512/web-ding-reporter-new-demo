@@ -236,7 +236,7 @@ class SampleService
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
             $templateProcessor->setValue('Report No', $reporter->report_pt->original_no);
             $templateProcessor->setValue('Customer', $reporter->customer);
-            $templateProcessor->setValue('Job No', '');
+            $templateProcessor->setValue('Job No', $reporter->report_pt->job_no);
             $templateProcessor->setValue('Job Name', $reporter->delegator . "/" . $reporter->exam_place . "/" . $reporter->job_name);
             $templateProcessor->setValue('Exam Date', $reporter->exam_date);
             $templateProcessor->setValue('Exam. Place', $reporter->exam_place);
