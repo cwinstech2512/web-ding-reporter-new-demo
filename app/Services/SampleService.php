@@ -245,20 +245,43 @@ class SampleService
                 $templateProcessor->setValue('eType2', $reporter->report_pt->on_site == 1? '■' : '□');
                 $templateProcessor->setValue('eType1', $reporter->report_pt->on_site == 0? '■' : '□');
                 $templateProcessor->setValue('Material', $reporter->report_pt->material);
-                $templateProcessor->setValue('Thicknes', $reporter->report_pt->thicknes);
                 $templateProcessor->setValue('Light Intensity', $reporter->report_pt->light_intensity);
                 $items = json_decode($reporter->report_pt->items);
                 $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 
                 $hash = 1;
-                foreach($items as $objs) {
+                $runOnce = true;
+                $thicknesStr = '';
+                foreach($items as $key => $objs) {
                     $values = [];
                     // foreach($objs as $obj) {
+                    $thickOrQu = $thickness_objs[$key]->thickOrQu;
+                    $thickOrQuUnit = "";
+                    switch($thickOrQu) {
+                        case '0':
+                            $thickOrQuUnit = '"';
+                            if(isset($thickness_objs[$key]->mThincknessNomalSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mThincknessNomalSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                        case '1':
+                            $thickOrQuUnit = 'm2';
+                            if(isset($thickness_objs[$key]->mAreaSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mAreaSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                        case '2':
+                            $thickOrQuUnit = 'm';
+                            if(isset($thickness_objs[$key]->mAreaSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mAreaSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                    }
                     for($j = 0; $j < 23; $j++) {
                         $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
-                        $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
-                        $itit['Weld Length#'.$hash] = isset($objs[$j]->weld_length)? $objs[$j]->weld_length:'';
+                        $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
+                        $itit['Weld Length#'.$hash] = isset($objs[$j]->weld_length)? $objs[$j]->weld_length . $thickOrQuUnit:'';
                         $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no:'';
                         $itit['Defect Location#'.$hash] = isset($objs[$j]->defect_location)?$objs[$j]->defect_location:'';
                         $itit['Type of Defect#'.$hash] = isset($objs[$j]->type_of_defect)?$objs[$j]->type_of_defect:'';
@@ -266,10 +289,16 @@ class SampleService
                         $itit['Result#'.$hash] = isset($objs[$j]->result)?  ($objs[$j]->result== 0? '合格' : '不合格') : '';
                         $itit['Remark#'.$hash] = isset($objs[$j]->remark)? $objs[$j]->remark : '';
                         array_push($values, $itit);
+
+                        if($itit['Object No#'.$hash] == '以下空白') {
+                            $runOnce = false;
+                        }
                     }
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
                     $hash++;
                 }
+
+                $templateProcessor->setValue('Thicknes', $thicknesStr);
                 // for($i = 1; $i < 21; $i++) {
                 //     if(isset($items[$i-1])) {
                 //         $templateProcessor->setValue('i'.$i.'1', isset($items[$i-1]->object_no)? $i : '');
@@ -447,12 +476,13 @@ class SampleService
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 
                 $hash = 1;
+                $runOnce = true;
                 foreach($items as $objs) {
                     $values = [];
                     // foreach($objs as $obj) {
                     for($j = 0; $j < 23; $j++) {
                         $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
-                        $itit['FoWNo#'.$hash] = isset($objs[$j]->film_or_weld_no)? $objs[$j]->film_or_weld_no : '';
+                        $itit['FoWNo#'.$hash] = isset($objs[$j]->film_or_weld_no)? $objs[$j]->film_or_weld_no : ($runOnce? '以下空白' : '');
                         $itit['Thickness#'.$hash] = isset($objs[$j]->thickness)? $objs[$j]->thickness . 'mm' : '';
                         $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no : '';
                         $itit['Sensitivity#'.$hash] = isset($objs[$j]->sensitivity)? $objs[$j]->sensitivity : '';
@@ -463,6 +493,10 @@ class SampleService
                         array_push($values, $itit);
                         if($examinationResults) {
                             $examinationResults = isset($objs[$j]->result)? ($objs[$j]->result== 0) : false;
+                        }
+
+                        if($itit['FoWNo#'.$hash] == '以下空白') {
+                            $runOnce = false;
                         }
                     }
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);

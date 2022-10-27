@@ -1059,6 +1059,7 @@ export default {
       surface_temp: '',
       obsert: '',
       thickness_objs: [],
+      equlpment_no: '',
       items:[
         [
           {

@@ -85,7 +85,7 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-row v-if="thick_or_qu == 0">
+        <v-row v-if="channalType == 'chimei_rt' || channalType == 'normal_rt'">
           <v-col cols="6" md="5">
             <v-text-field
               label="SOD"
