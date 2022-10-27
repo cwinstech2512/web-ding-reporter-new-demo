@@ -1667,7 +1667,7 @@ export default {
             var file = result.value.data
             if(file.export_final_path) {
               this.docPreviewUrlPath = file.export_final_path
-              this.docPreviewUrlPath = "https://linetest1.xinlidadigi.com/XID-PT-20220406-0003_2.docx"
+              // this.docPreviewUrlPath = "https://linetest1.xinlidadigi.com/XID-PT-20220406-0003_2.docx"
               this.dialogPreview = true
               //  window.open('https://docs.google.com/viewer?url=' + file.export_final_path, '_blank')
             }
