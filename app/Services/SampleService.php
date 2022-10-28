@@ -144,15 +144,9 @@ class SampleService
             $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
             $array['id'] = $id;
             $array['export_final_path'] = $copyPath;
-            if($this->dispstchRepo->saveDispatchByArray($array)) {
-                $out['code'] = 1000;
-                $out['data'] = $array;
-                $out['message'] = "資料更新成功";
-                Log::info(json_encode($array));
-            } else {
-                $out['code'] = 50001;
-                $out['message'] = "資料更新錯誤";
-            }
+            $out['code'] = 1000;
+            $out['data'] = $array;
+            $out['message'] = "資料更新成功";
         }
         return $out;
     }
