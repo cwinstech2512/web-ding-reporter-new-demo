@@ -567,6 +567,7 @@ export default {
     loading: false,
     loadingSave: false,
     loadingDelete: false,
+    editedDispatchStatus: 0,
     search: '',
     dataItems: [],
     selectItem: [],
@@ -901,8 +902,45 @@ export default {
       })
     },
 
-    exportDispatch () {
+    exportDispatch (item) {
+      if(!this.editedItem.id) return 
+      var route_name = 'dispatch_20220701'
+      let co = route_name.split('_');
+      let that = this
+      let url = `api/dispatch_export/${co[0]}/${co[1]}/` + item.id
+      this.$swal.fire({
+        title: '確定要匯出報告?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          return this.$axios
+            .fetchPost(url, {})
+            .then(res => {
+              return res.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
+        try {
+          if(result.value.code == 1000) {
+            window.open(result.value.data, '_blank')
+          } else {
+              that.$swal.fire({
+                title: "錯誤!",
+                text: result.value.data.message,
+                type: "error",
+                confirmButtonClass: "btn btn-danger"
+              });
+          }
+        } catch {
 
+        }
+      })
     },
 
     saveDispatchCopy (obj) {

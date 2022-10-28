@@ -2,15 +2,19 @@
 namespace App\Services;
 
 use App\Repositories\DispatchRepository;
+use App\Repositories\{SampleLogRepository};
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class DispatchService
 {
     private $dispstchRepo = null;
+    private $spRepo = null;
 
-	public function __construct(DispatchRepository $dispstchRepo)
+	public function __construct(DispatchRepository $dispstchRepo, SampleLogRepository $spRepo)
 	{
 		$this->dispstchRepo = $dispstchRepo;
+		$this->spRepo = $spRepo;
 	}
 
     public function getListData()

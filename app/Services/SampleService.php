@@ -126,7 +126,7 @@ class SampleService
             // $samplePath = public_path('uploads/sample/'.$dirname . '/' . basename($realPath));
             // dd($samplePath);
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
-            $templateProcessor->setValue('Customer', $reporter->customer);
+            $templateProcessor->setValue('customer', $reporter->customer);
             $templateProcessor->setValue('serial_no', $reporter->serial_no);
             $templateProcessor->setValue('delegator', $reporter->delegator);
             $templateProcessor->setValue('concat_phone', $reporter->concat_phone);
@@ -138,6 +138,7 @@ class SampleService
             $templateProcessor->setValue('leng', $reporter->leng);
             $templateProcessor->setValue('editor', $reporter->editor);
             $templateProcessor->setValue('inspector', $reporter->inspector);
+            $templateProcessor->setValue('job_name', $reporter->job_name);
             $templateProcessor->setValue('transport', $reporter->transport);
             
             $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));

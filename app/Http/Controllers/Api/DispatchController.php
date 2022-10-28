@@ -330,4 +330,9 @@ class DispatchController extends Controller
     {
         return $this->funPathDispatchExport($request, $corperation, $command, $id);
     }
+
+    public function exortDispatch(Request $request, $corperation, $command, $id) 
+    {
+        return $this->funPathDispatchExport($request, $corperation, $command, $id);
+    }
 }
