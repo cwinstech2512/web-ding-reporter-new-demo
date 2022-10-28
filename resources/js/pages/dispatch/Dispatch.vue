@@ -928,7 +928,10 @@ export default {
       }).then((result) => {
         try {
           if(result.value.code == 1000) {
-            window.open(result.value.data, '_blank')
+            var file = result.value.data
+            if(file.export_final_path) {
+              window.open(file.export_final_path, '_blank')
+            }
           } else {
               that.$swal.fire({
                 title: "錯誤!",
