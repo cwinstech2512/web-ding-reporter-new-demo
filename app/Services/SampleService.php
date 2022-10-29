@@ -142,6 +142,35 @@ class SampleService
             $templateProcessor->setValue('transport', $reporter->transport);
             
             $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
+
+            $functionPath = $reporter->function_path;
+            $explode = explode('.', $functionPath);
+            $p1 = '□';$p2 = '□';$p3 = '□';$p4 = '□';$p5 = '□';
+            if(sizeof($explode) > 1) {
+                switch($explode[1]) {
+                    case 'ut':
+                        $p1 = '■';
+                        break;
+                    case 'rt':
+                        $p2 = '■';
+                        break;
+                    case 'mt':
+                        $p3 = '■';
+                        break;
+                    case 'pt':
+                        $p4 = '■';
+                        break;
+                    case 'vt':
+                        $p5 = '■';
+                        break;
+                }
+            }
+            $templateProcessor->setValue('P1', $p1);
+            $templateProcessor->setValue('P2', $p2);
+            $templateProcessor->setValue('P3', $p3);
+            $templateProcessor->setValue('P4', $p4);
+            $templateProcessor->setValue('P5', $p5);
+            $templateProcessor->setValue('exam_date_range', $reporter->exam_date . '-' . $reporter->e_exam_date);
             $array['id'] = $id;
             $array['export_final_path'] = $copyPath;
             $out['code'] = 1000;
