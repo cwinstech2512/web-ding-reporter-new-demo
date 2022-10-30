@@ -68,11 +68,11 @@ const state = {
           icon: 'mdi-alpha-p',
           to: '/pt_chi/',
         },
-        {
-          title: '射線檢測(RT)',
-          icon: 'mdi-alpha-r',
-          to: '/rt_chi/',
-        },
+        // {
+        //   title: '射線檢測(RT)',
+        //   icon: 'mdi-alpha-r',
+        //   to: '/rt_chi/',
+        // },
         // {
         //   title: '磁粒檢測(MT)',
         //   icon: 'mdi-alpha-m',
@@ -90,27 +90,27 @@ const state = {
         // }
       ]
     },
-    {
-      title: '海基檢測報告',
-      icon: 'mdi-alpha-s-box-outline',
-      items: [
-        {
-          title: '磁粒檢測(MT)',
-          icon: 'mdi-alpha-m',
-          to: '/mt_sdm/',
-        },
-        {
-          title: '檢測報告(VT)',
-          icon: 'mdi-alpha-v',
-          to: '/vt_sdm/',
-        },
-        {
-          title: '檢測報告(UT)',
-          icon: 'mdi-alpha-u',
-          to: '/ut_sdm/',
-        }
-      ]
-    },
+    // {
+    //   title: '海基檢測報告',
+    //   icon: 'mdi-alpha-s-box-outline',
+    //   items: [
+    //     {
+    //       title: '磁粒檢測(MT)',
+    //       icon: 'mdi-alpha-m',
+    //       to: '/mt_sdm/',
+    //     },
+    //     {
+    //       title: '檢測報告(VT)',
+    //       icon: 'mdi-alpha-v',
+    //       to: '/vt_sdm/',
+    //     },
+    //     {
+    //       title: '檢測報告(UT)',
+    //       icon: 'mdi-alpha-u',
+    //       to: '/ut_sdm/',
+    //     }
+    //   ]
+    // },
     {
       title: '一般檢測報告',
       icon: 'mdi-alpha-n-box-outline',
@@ -120,21 +120,21 @@ const state = {
           icon: 'mdi-alpha-p',
           to: '/pt_nor/',
         },
-        {
-          title: '射線檢測(RT)',
-          icon: 'mdi-alpha-p',
-          to: '/rt_nor/',
-        },
-        {
-          title: '磁粒檢測(MT)',
-          icon: 'mdi-alpha-m',
-          to: '/mt_nor/',
-        },
-        {
-          title: '檢測報告(UT)',
-          icon: 'mdi-alpha-m',
-          to: '/ut_nor/',
-        },
+        // {
+        //   title: '射線檢測(RT)',
+        //   icon: 'mdi-alpha-p',
+        //   to: '/rt_nor/',
+        // },
+        // {
+        //   title: '磁粒檢測(MT)',
+        //   icon: 'mdi-alpha-m',
+        //   to: '/mt_nor/',
+        // },
+        // {
+        //   title: '檢測報告(UT)',
+        //   icon: 'mdi-alpha-m',
+        //   to: '/ut_nor/',
+        // },
       ]
     },
     // {
