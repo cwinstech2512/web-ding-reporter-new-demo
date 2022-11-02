@@ -284,7 +284,7 @@ class SampleService
                     $thickOrQuUnit = "";
                     switch($thickOrQu) {
                         case '0':
-                            $thickOrQuUnit = '"';
+                            $thickOrQuUnit = 'mm';
                             if(isset($thickness_objs[$key]->mThincknessNomalSize)) {
                                 $thicknesStr .= ($thickness_objs[$key]->mThincknessNomalSize . $thickOrQuUnit . ';');
                             }

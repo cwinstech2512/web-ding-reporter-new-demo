@@ -227,7 +227,7 @@ class DispatchRepository
         if(empty($model->original_no)) {
             $modelD = Dispatch::find($model->dispatch_id);
             if($modelD && !is_null($modelD->e_exam_date)) {
-                $originNo = ('XID-' . strtoupper($command) .'-'. Carbon::parse($modelD->e_exam_date)->format('Ymd') . '-' . str_pad($modelD::where('e_exam_date', $modelD->e_exam_date)->count(), 4, "0", STR_PAD_LEFT));
+                $originNo = ('XID-' . strtoupper($command) .'-'. Carbon::parse($modelD->exam_date)->format('Ymd') . '-' . str_pad($modelD::where('exam_date', $modelD->exam_date)->count(), 4, "0", STR_PAD_LEFT));
                 $model->original_no = $originNo;
                 return $model->save();
             }
