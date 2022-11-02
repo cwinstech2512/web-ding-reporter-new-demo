@@ -672,7 +672,7 @@ class ParseNormal
                 $templateProcessor->setValue('Criteria', $tmpReport->criteria);
                 $templateProcessor->setValue('Procedure No', $tmpReport->procedure_no);
                 $templateProcessor->setValue('Light Intensity', $tmpReport->light_intensity);
-                $templateProcessor->setValue('Surface Temp', $tmpReport->surface_temp);
+                // $templateProcessor->setValue('Surface Temp', $tmpReport->surface_temp);
                 
                 //滲透時間
                 $templateProcessor->setValue('Dwell Time', $tmpReport->dwell_time);
@@ -681,7 +681,7 @@ class ParseNormal
                 //施加顯像劑 Developing
                 $templateProcessor->setValue('Developing', $tmpReport->developing);
                 //顯像時間 Developing Time
-                $templateProcessor->setValue('Developing Time', $tmpReport->developing_time);
+                $templateProcessor->setValue('D Ti', $tmpReport->developing_time);
                 //乾燥時間 Drying Time
                 $templateProcessor->setValue('Drying Time', $tmpReport->developing_time);
                 //清洗劑 Cleaner
@@ -838,8 +838,8 @@ class ParseNormal
                 foreach($items as $objs) {
                     $values = [];
                     for($j = 0; $j < 26; $j++) {
-                        $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
-                        $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
+                        $itit['No#'.$hash] = ($j + 1) . ' ';
+                        $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
                         $itit['Weld Length#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->weld_length : '';
                         $itit['Defect Location#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->defect_location : '';
                         $itit['Type of Defect#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->type_of_defect : '';

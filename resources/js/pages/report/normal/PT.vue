@@ -694,6 +694,36 @@
                         ></v-text-field>
                       </v-card>
                     </v-col>
+                    <v-col cols="1" style="flex: 1; " class="d-flex align-stretch ">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <div class="text-subtitle-2">
+                          工作表面亮度
+                        </div>
+                        <div class="text-caption">
+                          Light Intensity
+                        </div>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="3" style="flex: 3;" class="d-flex align-stretch">
+                      <v-card
+                        class="pa-2 align-stretch"
+                        style="flex: 1;"
+                        outlined
+                        tile
+                      >
+                        <v-text-field
+                          ref="light_intensity"
+                          v-model="editedItem.light_intensity"
+                          label="Regular"
+                          :readonly="readonlyVisible"
+                        ></v-text-field>
+                      </v-card>
+                    </v-col>
                   </v-row>
                   <!-- row 4 -->
                   <v-row
