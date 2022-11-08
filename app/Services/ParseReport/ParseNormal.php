@@ -842,9 +842,9 @@ class ParseNormal
                     $thickOrQuUnit = "";
                     switch($thickOrQu) {
                         case '0':
-                            $thickOrQuUnit = 'mm';
+                            $thickOrQuUnit = '"';
                             if(isset($thickness_objs[$key]->mThincknessNomalSize)) {
-                                $thicknesStr .= ($thickness_objs[$key]->mThincknessNomalSize . $thickOrQuUnit . ';');
+                                $thicknesStr .= ($thickness_objs[$key]->mThincknessNomalSize . 'mm' . ';');
                             }
                             break;
                         case '1':
