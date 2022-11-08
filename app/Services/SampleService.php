@@ -270,6 +270,8 @@ class SampleService
                 $templateProcessor->setValue('eType1', $reporter->report_pt->on_site == 0? '■' : '□');
                 $templateProcessor->setValue('Material', $reporter->report_pt->material);
                 $templateProcessor->setValue('Light Intensity', $reporter->report_pt->light_intensity);
+                //檢測時表面溫度 Surface Temperature
+                $templateProcessor->setValue('Surface Temp', $reporter->report_pt->surface_temperature);
                 $items = json_decode($reporter->report_pt->items);
                 $thickness_objs = json_decode($reporter->report_pt->thickness_objs? $reporter->report_pt->thickness_objs : '');
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
