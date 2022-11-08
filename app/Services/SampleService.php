@@ -303,7 +303,7 @@ class SampleService
                             break;
                     }
                     for($j = 0; $j < 23; $j++) {
-                        $itit['No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : '';
+                        $itit['No#'.$hash] = ($j + 1) . ' ';
                         $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
                         $itit['Weld Length#'.$hash] = isset($objs[$j]->weld_length)? $objs[$j]->weld_length . $thickOrQuUnit:'';
                         $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no:'';
