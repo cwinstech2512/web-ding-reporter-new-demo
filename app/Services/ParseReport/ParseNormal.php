@@ -847,7 +847,7 @@ class ParseNormal
                         $itit['Result#'.$hash] = isset($objs[$j]->object_no)? ($objs[$j]->result == 0? '合格' : '不合格') : '';
                         $itit['Remark#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->remark : '';
 
-                        if($itit['No#'.$hash] == '以下空白') {
+                        if($itit['Object No#'.$hash] == '以下空白') {
                             $runOnce = false;
                         }
 
