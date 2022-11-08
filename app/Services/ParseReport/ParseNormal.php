@@ -835,12 +835,35 @@ class ParseNormal
                 $hash = 1;
                 $runOnce = true;
                 $examinationResults = true;
+                $thicknesStr = '';
                 foreach($items as $objs) {
                     $values = [];
+                    $thickOrQu = $thickness_objs[$key]->thickOrQu;
+                    $thickOrQuUnit = "";
+                    switch($thickOrQu) {
+                        case '0':
+                            $thickOrQuUnit = 'mm';
+                            if(isset($thickness_objs[$key]->mThincknessNomalSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mThincknessNomalSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                        case '1':
+                            $thickOrQuUnit = 'm2';
+                            if(isset($thickness_objs[$key]->mAreaSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mAreaSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                        case '2':
+                            $thickOrQuUnit = 'm';
+                            if(isset($thickness_objs[$key]->mAreaSize)) {
+                                $thicknesStr .= ($thickness_objs[$key]->mAreaSize . $thickOrQuUnit . ';');
+                            }
+                            break;
+                    }
                     for($j = 0; $j < 26; $j++) {
                         $itit['No#'.$hash] = ($j + 1) . ' ';
                         $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
-                        $itit['Weld Length#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->weld_length : '';
+                        $itit['Weld Length#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->weld_length . $thickOrQuUnit : '';
                         $itit['Defect Location#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->defect_location : '';
                         $itit['Type of Defect#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->type_of_defect : '';
                         $itit['Defect Length#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->defect_length : '';
@@ -859,6 +882,8 @@ class ParseNormal
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
                     $hash++;
                 }
+
+                $templateProcessor->setValue('Thicknes', $thicknesStr);
                 // 檢  測  結  果 Examination results
                 $examination_results = '';
                 if($examinationResults) {
