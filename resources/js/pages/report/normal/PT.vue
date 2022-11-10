@@ -883,6 +883,14 @@
                               <v-divider class="mx-2"></v-divider>
                                 {{thicknesGroup_Data[n-1].mAreaSize}}
                               </v-card-text>
+                              <v-card-text
+                                :class="active ? 'white--text' : ''"
+                                v-elseif="thicknesGroup_Data[n-1].thickOrQu == 2"
+                              >
+                                {{'長度'}}
+                              <v-divider class="mx-2"></v-divider>
+                                {{thicknesGroup_Data[n-1].mAreaSize}}
+                              </v-card-text>
                             </v-card>
                             <v-card
                               v-else
@@ -1696,11 +1704,23 @@ export default {
     },
 
     closeView () {
-      this.listDatas()
-      this.dialogView = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+      this.$swal.fire({
+        title: '請確認是否有儲存資料?',
+        showCancelButton: true,
+        confirmButtonText: '確認',
+        showLoaderOnConfirm: true,
+        cancelButtonText: '取消',
+        preConfirm: () => {
+          this.listDatas()
+          this.dialogView = false
+          this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+          })
+          return true
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then((result) => {
       })
     },
 
