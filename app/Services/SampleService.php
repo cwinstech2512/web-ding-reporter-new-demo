@@ -277,9 +277,9 @@ class SampleService
                 $templateProcessor->cloneBlock('block_detail', sizeof($thickness_objs), true, true);
                 
                 $hash = 1;
-                $runOnce = true;
                 $thicknesStr = '';
                 foreach($items as $key => $objs) {
+                    $runOnce = true;
                     $values = [];
                     // foreach($objs as $obj) {
                     $thickOrQu = $thickness_objs[$key]->thickOrQu;
