@@ -11,6 +11,7 @@ use App\Repositories\DispatchRepository;
 use App\Repositories\{SampleLogRepository};
 use App\Services\ParseReport\ParseNormal;
 use App\Services\ParseReport\ParseSdm;
+use PhpOffice\PhpWord\Element\TextRun;
 
 class SampleService
 {
@@ -308,7 +309,9 @@ class SampleService
                         $itit['No#'.$hash] = ($j + 1) . ' ';
                         $itit['Object No#'.$hash] = isset($objs[$j]->object_no)? $objs[$j]->object_no : ($runOnce? '以下空白' : '');
                         $itit['Weld Length#'.$hash] = isset($objs[$j]->weld_length)? $objs[$j]->weld_length . $thickOrQuUnit:'';
-                        $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no:'';
+                        if(!isset($objs[$j]->welder_no)) {
+                            $itit['Welder No#'.$hash] = isset($objs[$j]->welder_no)? $objs[$j]->welder_no:'';
+                        }
                         $itit['Defect Location#'.$hash] = isset($objs[$j]->defect_location)?$objs[$j]->defect_location:'';
                         $itit['Type of Defect#'.$hash] = isset($objs[$j]->type_of_defect)?$objs[$j]->type_of_defect:'';
                         $itit['Defect Length#'.$hash] = isset($objs[$j]->defect_length)?$objs[$j]->defect_length:'';
@@ -321,6 +324,22 @@ class SampleService
                         }
                     }
                     $templateProcessor->cloneRowAndSetValues('No#'.$hash, $values);
+                    for($j = 0; $j < 23; $j++) {
+                        $welderNo = '';
+                        if(isset($objs[$j]->welder_no)) {
+                            $welderNo = $objs[$j]->welder_no;
+                            if(mb_strlen($welderNo, 'utf8') > 5) {
+                                $trWelderNo = new TextRun();
+                                $trWelderNo->addText($welderNo . $j, ['size'=> 7]);
+                                $templateProcessor->setComplexBlock('Welder No#'.$hash.'#'.($j + 1), $trWelderNo);
+                            } else {
+                                $trWelderNo = new TextRun();
+                                $trWelderNo->addText($welderNo, ['size'=> 12]);
+                                $templateProcessor->setComplexBlock('Welder No#'.$hash.'#'.($j + 1), $trWelderNo);
+                            }
+                        }
+                    }
+
                     $hash++;
                 }
 
