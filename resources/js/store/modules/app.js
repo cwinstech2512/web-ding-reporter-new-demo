@@ -125,16 +125,16 @@ const state = {
         //   icon: 'mdi-alpha-p',
         //   to: '/rt_nor/',
         // },
-        // {
-        //   title: '磁粒檢測(MT)',
-        //   icon: 'mdi-alpha-m',
-        //   to: '/mt_nor/',
-        // },
-        // {
-        //   title: '檢測報告(UT)',
-        //   icon: 'mdi-alpha-m',
-        //   to: '/ut_nor/',
-        // },
+        {
+          title: '磁粒檢測(MT)',
+          icon: 'mdi-alpha-m',
+          to: '/mt_nor/',
+        },
+        {
+          title: '檢測報告(UT)',
+          icon: 'mdi-alpha-m',
+          to: '/ut_nor/',
+        },
       ]
     },
     // {
