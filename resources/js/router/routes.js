@@ -171,6 +171,11 @@ export default [
         name: '超音波檢測',
         component: page('report/singda/UT.vue')
       },
+      {
+        path: '/tp_IMHQST',
+        name: '檢測或人時數量統計表',
+        component: page('report/taipower/upload_tp.vue')
+      },
     ]
   },
   {

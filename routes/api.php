@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\TransportationController;
 use App\Http\Controllers\Api\FrontWebController;
 use App\Http\Controllers\Api\ImportController;
 use App\Http\Controllers\Api\DispatchController;
+use App\Http\Controllers\Api\TaipowerController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -63,6 +64,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('dispatch/data/{type}', [DispatchController::class, 'index']);
     Route::get('dispatch/data/{type}/{id}', [DispatchController::class, 'show'])
         ->whereNumber('id');
+
+    // Taipower IMHQST
+    Route::get('taipower/data/{type}', [TaipowerController::class, 'index']);
+    Route::post('taipower/upload/imhqst', [TaipowerController::class, 'importIMHQST']);
+
     //派單
     Route::post('dispatch', [DispatchController::class, 'create']);
     Route::put('dispatch/{id}', [DispatchController::class, 'update']);

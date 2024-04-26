@@ -169,6 +169,17 @@ const state = {
     //   ]
     // },
     {
+      title: '台電檢測報告',
+      icon: 'mdi-alpha-t-box-outline',
+      items: [
+        {
+          title: '檢測或人時數量統計表',
+          icon: 'mdi-alpha-r',
+          to: '/tp_IMHQST/',
+        }
+      ]
+    },
+    {
       title: 'Icons',
       icon: 'mdi-chart-bubble',
       to: '/components/icons/',
