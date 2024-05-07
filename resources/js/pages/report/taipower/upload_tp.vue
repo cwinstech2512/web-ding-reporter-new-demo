@@ -4,6 +4,34 @@
     fluid
     tag="section"
   >
+    <v-dialog v-model="dialogView" max-width="800px">
+      <v-card>
+        <v-card-title class="headline">詳細資料</v-card-title>
+        <v-card-text>
+          <v-list dense>
+            <v-list-item-group>
+              <v-list-item v-for="(file, fi) in editedItem.export_paths" :key="fi">
+                <v-list-item-icon class="vertical-center">
+                  <v-icon>mdi-file-document</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content class="vertical-center">
+                  <v-list-item-title>{{ extractFileName(file) }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action class="vertical-center">
+                  <v-btn icon color="primary" @click="downloadFile(file)">
+                    <v-icon>mdi-download</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialogView = false">關閉</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <material-card
       icon="mdi-clipboard-text"
       icon-small
@@ -26,7 +54,7 @@
           <v-toolbar
             flat
           >
-            <v-toolbar-title>Normal (PT)</v-toolbar-title>
+            <v-toolbar-title>數量統計表</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -54,7 +82,7 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  上傳樣板
+                  上傳數據資料
                 </v-btn>
               </template>
               <v-card>
@@ -76,28 +104,6 @@
                           ref="files"
                           v-model="excelFile"
                         ></v-file-input>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col
-                        cols="12"
-                      >
-                        <v-treeview
-                          :active.sync="active"
-                          :items="logItems"
-                          :load-children="fetchSampleLog"
-                          :open.sync="open"
-                          activatable
-                          color="warning"
-                          open-on-click
-                          transition
-                        >
-                          <template v-slot:prepend="{ item }">
-                            <v-icon v-if="!item.children">
-                              mdi-account
-                            </v-icon>
-                          </template>
-                        </v-treeview>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -198,6 +204,9 @@ export default {
     pageCount: 0,
     itemsPerPage: 10,
     dataItems: [],
+    editedItem: {},
+    editedIndex: -1,
+    excelFile: null,
     headers: [
       {
         text: '報告編號',
@@ -209,11 +218,12 @@ export default {
       { text: 'Actions', value: 'actions', sortable: false },
     ],
     dialogSample: false,
+    dialogView: false,
   }),
 
   computed: {
     formTitle () {
-      return '液滲檢測報告樣板'
+      return '檢測或人時數量統計資料'
     },
     ...mapGetters({
       user: 'auth/user'
@@ -239,6 +249,7 @@ export default {
             // console.log(res.data)
             this.dataItems = res.data.data.map((_, idx) => ({
                 name: res.data.data[idx].name,
+                export_paths: JSON.parse(res.data.data[idx].export_paths),
                 updated_at: res.data.data[idx].updated_at,
                 created_at: res.data.data[idx].created_at,
                 id: res.data.data[idx].id,
@@ -260,21 +271,25 @@ export default {
           .then(res => {
             // console.log(res.data)
             let _res = res.data.data
-            if(Array.isArray(_res)) {
-              if(_res[0]) {
-                that.pdfUrl = this.$base_url + '/' + _res[0].full_path
-              }
-            } else {
-              if(_res.full_path) {
-                that.pdfUrl = this.$base_url + '/' + _res.full_path
-              }
-            }
             
             this.closeSample()
+            this.listDatas()
           })
           .catch(err => {
             console.log(err)
           })
+    },
+    viewItem(item) {
+      this.dialogView = true
+
+      this.editedIndex = -2
+      this.editedItem = Object.assign({}, item)
+    },
+    extractFileName(path) {
+      return path.split('/').pop();
+    },
+    downloadFile(filePath) {
+      window.open(filePath);
     },
     authRoleVaild (key) {
       return true
@@ -292,5 +307,10 @@ export default {
 }
 tr .v-text-field__details {
   display: none !important;
+}
+.vertical-center {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 </style>
