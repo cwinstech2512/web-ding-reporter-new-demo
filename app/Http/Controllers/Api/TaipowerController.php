@@ -48,6 +48,17 @@ class TaipowerController extends Controller
 
     public function importIMHQST(Request $request)
     {
+        $validated = $request->validate([
+            'report_date' => 'required|date', // 例: 验证是否为日期格式
+            'report_type' => 'required'
+        ]);
+        $reportDate = $validated['report_date'];
+        $reportType = $validated['report_type'];
+
+        $arrayData = [
+            'report_date' => $reportDate,
+            'report_type' => $reportType
+        ];
         $file = null;
         // $file_name = Carbon::now()->format('ymdhms');
         if($request->has('ex_file')) {
@@ -59,14 +70,15 @@ class TaipowerController extends Controller
             $description = $request->input('description');
         }
 
-        $import = new class($file_name, $description, $file) implements ToCollection, WithMultipleSheets
+        $import = new class($file_name, $arrayData, $file) implements ToCollection, WithMultipleSheets
         {
             use Importable;
 
             public $called = false;
             public $file = false;
             private $file_name = 'default';
-            private $description = '';
+            private $arrayData = '';
+            private $reportDate = null;
             private $C_group = [
                 16, 17, 18
             ];
@@ -74,10 +86,11 @@ class TaipowerController extends Controller
                 16, 17, 18
             ];
 
-            public function __construct($file_name, $description, $file)
+            public function __construct($file_name, $arrayData, $file)
             {
                 $this->file_name = $file_name;
-                $this->description = $description;
+                $this->arrayData = $arrayData;
+                $this->reportDate = Carbon::parse($arrayData['report_date']);
                 $this->file = $file;
             }
 
@@ -99,7 +112,6 @@ class TaipowerController extends Controller
                 $result_C = $this->filterGroup('C', $data);
                 $result_L = $this->filterGroup('L', $data);
                 $export_path = array_merge($result_C['export_path'], $result_L['export_path']);
-                // dd($export_path);
                 if(!empty($export_path)) {
 
                     // 確保 file 屬性存在並且是檔案的實例
@@ -112,8 +124,10 @@ class TaipowerController extends Controller
                         );
                     }
                     $model = new TpReportImhqst;
-                    $model->name = '檢測或人時數量統計表-' . ($result_C['work_date'] ? $result_C['work_date']->format('md') : Carbon::now()->format('md'));
+                    $model->name = '檢測或人時數量統計表-' . ($this->reportDate ? $this->reportDate->format('md') : Carbon::now()->format('md'));
                     $model->upload_path = $upload_path;
+                    $model->report_type = !empty($this->arrayData['report_type']) ? $this->arrayData['report_type'] : "";
+                    $model->report_date = $this->reportDate;
                     $model->export_paths = json_encode($export_path);
                     $model->ststus = 1;
                     $model->save();
@@ -138,7 +152,7 @@ class TaipowerController extends Controller
                     // 按 B 列的值进行分组，假设 B 列在集合中的索引为 1
                     $groupedData = $filteredData->groupBy(1);
     
-                    $work_date = Carbon::now();
+                    $work_date = $this->reportDate;
     
                     // 进行分组后的数据处理
                     $formattedData = $groupedData->map(function ($items, $key) use (&$work_date){
@@ -146,7 +160,7 @@ class TaipowerController extends Controller
                         $baseInfo = "{$key}-{$firstItem[10]}#{$firstItem[3]}";
                         $weldNumbers = $items->pluck(5)->implode('、');
                         $componentType = $firstItem[4];
-                        $work_date = Carbon::create(1899, 12, 30)->addDays($firstItem[0]);
+                        // $work_date = Carbon::create(1899, 12, 30)->addDays($firstItem[0]);
                         // 返回格式化字符串，這將會在 map 的結果集合中為每一個分組建立一個條目
                         return "{$baseInfo}-{$weldNumbers}({$componentType})";
                     });
@@ -204,7 +218,8 @@ class TaipowerController extends Controller
                 $sample = SampleLog::where('function_path', 'taipower.'.strtolower($trans_formate[$gp_key]).'.l.20240501')->latest()->first();;
                 $realPath = $sample->full_path;
                 $serial = Carbon::now()->format('Ymd');
-                $copyPath = 'taipower/'.$serial.'/TP-'. $trans_formate[$gp_key] .'('.$group_name.'線)檢測或人時數量統計表-' . $date->format('md') . '.docx';
+                $report_type = !empty($this->arrayData['report_type']) ? $this->arrayData['report_type'] : "";
+                $copyPath = 'taipower/'.$serial.'/'."{$report_type}-". $trans_formate[$gp_key] .'('.$group_name.'線)檢測或人時數量統計表-' . $date->format('md') . '.docx';
                 if (Storage::disk('export')->put($copyPath, Storage::disk('public_sample')->get($realPath))) {
                     $dirname = dirname($realPath);
                     $samplePath = config('filesystems.disks.public_sample.root'). '/' .$dirname . '/' . basename($realPath);
@@ -212,9 +227,9 @@ class TaipowerController extends Controller
                     // dd($samplePath);
                     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($samplePath);
 
-                    // dd($line1);
                     $templateProcessor->setValue('Line1', (string)$line1);
                     $templateProcessor->setValue('Line2', $line2);
+                    $templateProcessor->setValue('rt', $report_type);
                     $templateProcessor->setValue('Line3', $date->format('Y年m月d日'));
                     $templateProcessor->setValue('M', $date->format('m'));
                     $templateProcessor->setValue('G', $group_name);

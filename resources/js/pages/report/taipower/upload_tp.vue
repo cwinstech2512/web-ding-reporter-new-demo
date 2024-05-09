@@ -106,6 +106,22 @@
                         ></v-file-input>
                       </v-col>
                     </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="6">
+                        <v-menu ref="menuDatePicker" v-model="menuDatePicker" :close-on-content-click="false" transition="scale-transition" offset-y min-width="290px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field v-model="reportDate" label="選擇日期" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" required></v-text-field>
+                          </template>
+                          <v-date-picker v-model="reportDate" @input="menuDatePicker = false"></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <!-- 下拉選單 -->
+                      <v-col cols="12" sm="6">
+                        <v-select :items="reportTypeItems" label="選擇選項" prepend-icon="mdi-form-dropdown" v-model="selectedReportType"></v-select>
+                      </v-col>
+                    </v-row>
                   </v-container>
                 </v-card-text>
 
@@ -204,6 +220,10 @@ export default {
     pageCount: 0,
     itemsPerPage: 10,
     dataItems: [],
+    reportTypeItems: ['TP', 'JK'],
+    menuDatePicker: false,
+    reportDate: new Date().toISOString().substr(0, 10), // 預設今天日期,
+    selectedReportType: '',
     editedItem: {},
     editedIndex: -1,
     excelFile: null,
@@ -248,8 +268,10 @@ export default {
           .then(res => {
             // console.log(res.data)
             this.dataItems = res.data.data.map((_, idx) => ({
-                name: res.data.data[idx].name,
+                name: res.data.data[idx].report_type + '-' + res.data.data[idx].name,
                 export_paths: JSON.parse(res.data.data[idx].export_paths),
+                report_date: res.data.data[idx].report_date,
+                report_type: res.data.data[idx].report_type,
                 updated_at: res.data.data[idx].updated_at,
                 created_at: res.data.data[idx].created_at,
                 id: res.data.data[idx].id,
@@ -266,6 +288,8 @@ export default {
       let url = `api/taipower/upload/imhqst/`
       let formData = new FormData();
       formData.append("ex_file", this.excelFile);
+      formData.append("report_date", this.reportDate);
+      formData.append("report_type", this.selectedReportType);
       this.$axios
         .fetchUpload(url, formData)
           .then(res => {
