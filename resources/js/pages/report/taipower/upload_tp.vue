@@ -265,6 +265,7 @@ export default {
     //   this.activeSample()
     },
     listDatas() {
+      let that = this
       this.loading = true
       let co = SAMPLE_PDF_PATH.split('_');
       let url = `api/taipower/data/list`
@@ -278,8 +279,8 @@ export default {
                 export_paths: JSON.parse(res.data.data[idx].export_paths),
                 report_date: res.data.data[idx].report_date,
                 report_type: res.data.data[idx].report_type,
-                updated_at: res.data.data[idx].updated_at,
-                created_at: res.data.data[idx].created_at,
+                updated_at: that.formatDate(res.data.data[idx].updated_at),
+                created_at: that.formatDate(res.data.data[idx].created_at),
                 id: res.data.data[idx].id,
               }))
             this.loading = false
@@ -314,6 +315,15 @@ export default {
 
       this.editedIndex = -2
       this.editedItem = Object.assign({}, item)
+    },
+    formatDate(dateTimeString) {
+      const date = new Date(dateTimeString);
+      return date.getFullYear() + '-' +
+            (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+            date.getDate().toString().padStart(2, '0') + ' ' +
+            date.getHours().toString().padStart(2, '0') + ':' +
+            date.getMinutes().toString().padStart(2, '0') + ':' +
+            date.getSeconds().toString().padStart(2, '0');
     },
     extractFileName(path) {
       return path.split('/').pop();
