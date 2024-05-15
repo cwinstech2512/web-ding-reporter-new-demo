@@ -185,6 +185,12 @@
           </div>
         </template>
        </v-data-table>
+       <div class="text-center pt-2">
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+        ></v-pagination>
+      </div>
     </material-card>
   </v-container>
 </template>
