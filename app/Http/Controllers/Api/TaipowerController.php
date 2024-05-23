@@ -233,6 +233,7 @@ class TaipowerController extends Controller
                     $templateProcessor->setValue('Line3', $date->format('Y年m月d日'));
                     $templateProcessor->setValue('M', $date->format('m'));
                     $templateProcessor->setValue('G', $group_name);
+                    $templateProcessor->setValue('C', $report_type == 'TP'? '5' : '6'); // TP 項目5，JK 項目6
 
                     $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));
                 }
