@@ -42,6 +42,8 @@ class TaipowerController extends Controller
         switch($type) {
             case 'list':
                 return new ResponseResource($this->taiService->list()); 
+            case 'daily_list':
+                return new ResponseResource($this->taiService->list()); 
             break;
         }
     }

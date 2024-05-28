@@ -173,8 +173,8 @@ export default [
       },
       {
         path: '/tp_IMHQST',
-        name: '檢測或人時數量統計表',
-        component: page('report/taipower/upload_tp.vue')
+        name: '監工或人時數量統計表',
+        component: page('report/taipower/upload_daily.vue')
       },
     ]
   },

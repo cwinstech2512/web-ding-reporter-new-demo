@@ -173,7 +173,7 @@ const state = {
       icon: 'mdi-alpha-t-box-outline',
       items: [
         {
-          title: '檢測或人時數量統計表',
+          title: '監工或人時數量統計表',
           icon: 'mdi-alpha-r',
           to: '/tp_IMHQST/',
         }
