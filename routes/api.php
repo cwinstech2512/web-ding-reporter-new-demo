@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('taipower/upload/imhqst', [TaipowerController::class, 'importIMHQST']);
     // Taipower Daily
     Route::post('taipower/upload/daily', [TaipowerDailyController::class, 'importDaily']);
+    Route::delete('taipower/remove/{id}', [TaipowerDailyController::class, 'remove']);
 
     //派單
     Route::post('dispatch', [DispatchController::class, 'create']);

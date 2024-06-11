@@ -42,6 +42,11 @@ class TaipowerDailyController extends Controller
         }
     }
 
+    public function remove(Request $request, $id)
+    {
+        return new ResponseResource($this->taiService->remove($id));
+    }
+
     public function importDaily(Request $request)
     {
         $validated = $request->validate([

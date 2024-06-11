@@ -4,6 +4,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Repositories\TaipowerRepository;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Models\SampleLog;
 use App\Models\TpReportImhqst;
 
@@ -28,6 +29,55 @@ class TaipowerService
             }
             return $item;
         });
+    }
+
+    // 刪除指定 ID 的記錄
+    public function remove($id)
+    {
+        try {
+            // 檢查 ID 是否有效
+            if (!is_numeric($id) || $id <= 0) {
+                return [
+                    'code' => 400,
+                    'message' => 'Invalid ID provided.',
+                    'data' => ''
+                ];
+            }
+
+            // 查找記錄
+            $record = TpReportImhqst::find($id);
+
+            // 檢查記錄是否存在
+            if ($record) {
+                $record->delete();
+                // 記錄刪除日誌
+                Log::info("Record with ID $id deleted successfully.");
+
+                return [
+                    'code' => 1000,
+                    'message' => 'Success',
+                    'data' => ''
+                ];
+            } else {
+                // 記錄未找到日誌
+                Log::warning("Record with ID $id not found.");
+
+                return [
+                    'code' => 404,
+                    'message' => 'Record not found.',
+                    'data' => ''
+                ];
+            }
+        } catch (\Exception $e) {
+            // 記錄異常日誌
+            Log::error("Error deleting record with ID $id: " . $e->getMessage());
+
+            return [
+                'code' => 500,
+                'message' => 'An error occurred while trying to delete the record.',
+                'data' => ''
+            ];
+        }
     }
 
     public function rendomXlxs($result_TP, $result_JK, $date, $group_name = '') 

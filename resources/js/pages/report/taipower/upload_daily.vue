@@ -69,6 +69,17 @@
               hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-card>
+                <v-card-title class="text-h5">是否確認要刪除資料?</v-card-title>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="closeDelete">取消</v-btn>
+                  <v-btn color="error" text @click="deleteItemConfirm" :loading="loadingDelete">確定</v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-dialog
               v-model="dialogSample"
               max-width="500px"
@@ -141,6 +152,12 @@
                       </v-col>
                     </v-row>
                     <v-row>
+                      <!-- 下拉選單 -->
+                      <v-col cols="12" sm="10">
+                        <v-select :items="areasItems" label="選擇區域" prepend-icon="mdi-form-dropdown" v-model="selectedArea"></v-select>
+                      </v-col>
+                    </v-row>
+                    <v-row>
                       <v-col cols="12" sm="10">
                         <v-menu ref="menuDatePicker" v-model="menuDatePicker" :close-on-content-click="false" transition="scale-transition" offset-y min-width="290px">
                           <template v-slot:activator="{ on, attrs }">
@@ -193,6 +210,23 @@
                 </v-btn>
               </template>
               <span>檢視</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    color="error"
+                    x-small
+                    dark
+                    class="mx-2"
+                    fab
+                    @click="deleteItem(item)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                  <v-icon dark>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>刪除</span>
             </v-tooltip>
             <v-tooltip  v-if="item.status == 1" top>
               <template v-slot:activator="{ on, attrs }">
@@ -247,6 +281,9 @@ export default {
   },
 
   data: () => ({
+    deleteId: -1,
+    dialogDelete: false,
+    loadingDelete: false,
     active: [],
     open: [],
     search: '',
@@ -256,9 +293,15 @@ export default {
     itemsPerPage: 10,
     dataItems: [],
     reportTypeItems: ['TP', 'JK'],
+    areasItems:[
+      '北區',
+      '中區',
+      '南區',
+    ],
     menuDatePicker: false,
     reportDate: new Date().toISOString().substr(0, 10), // 預設今天日期,
     selectedReportType: '',
+    selectedArea: '',
     editedItem: {},
     editedIndex: -1,
     tpFile: null,
@@ -341,6 +384,7 @@ export default {
       formData.append("jkFile", this.jkFile);
       formData.append("tpFile", this.tpFile);
       formData.append("report_date", this.reportDate);
+      formData.append("area", this.selectedArea);
       this.$axios
         .fetchUpload(url, formData)
           .then(res => {
@@ -355,6 +399,52 @@ export default {
           .catch(err => {
             console.log(err)
           })
+    },
+    deleteItem(item) {
+      this.dialogDelete = true
+      this.deleteId = item.id
+    },
+    deleteItemConfirm() {
+      this.dialogDelete = true
+      let that = this
+      let url = 'api/taipower/remove/' + this.deleteId
+      this.$axios
+        .fetchDelete(url, {})
+          .then(res => {
+            that.loadingDelete = false
+            that.closeDelete()
+            that.listDatas()
+            let result = res.data
+            if(result.code == 1000) {
+                that.$swal.fire({
+                  title: "成功!",
+                  text: result.message,
+                  type: "success",
+                  confirmButtonClass: "btn btn-success"
+                });
+            } else {
+                that.$swal.fire({
+                  title: "錯誤!",
+                  text: result.message,
+                  type: "error",
+                  confirmButtonClass: "btn btn-danger"
+                });
+            }
+          })
+          .catch(err => {
+            that.loadingDelete = false
+            that.close()
+            that.$swal.fire({
+              title: "錯誤!",
+              text: "系統錯誤，請稍後重新嘗試",
+              type: "error",
+              confirmButtonClass: "btn btn-danger"
+            });
+          })
+    },
+    closeDelete () {
+      this.dialogDelete = false
+      this.deleteId = -1
     },
     viewItem(item) {
       this.dialogView = true
