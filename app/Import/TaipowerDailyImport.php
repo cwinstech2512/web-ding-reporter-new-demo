@@ -20,6 +20,7 @@ class TaipowerDailyImport implements ToCollection, WithMultipleSheets
     private $file_name = 'default';
     private $arrayData = '';
     private $reportDate = null;
+    private $reportArea = null;
     private $totalSums = null;
     private $C_group = [
         16, // VT
@@ -42,6 +43,7 @@ class TaipowerDailyImport implements ToCollection, WithMultipleSheets
         $this->file_name = $file_name;
         $this->arrayData = $arrayData;
         $this->reportDate = Carbon::parse($arrayData['report_date']);
+        $this->reportArea = $arrayData['report_area'];
         $this->file = $file;
     }
 
@@ -228,6 +230,7 @@ class TaipowerDailyImport implements ToCollection, WithMultipleSheets
             $templateProcessor->setValue('Line3', $date->format('Y年m月d日'));
             $templateProcessor->setValue('M', $date->format('m'));
             $templateProcessor->setValue('G', $group_name);
+            $templateProcessor->setValue('AR', $this->reportArea);
             $templateProcessor->setValue('C', $report_type == 'TP'? '5' : '6'); // TP 項目5，JK 項目6
 
             $templateProcessor->saveAs(Storage::disk('export')->path($copyPath));

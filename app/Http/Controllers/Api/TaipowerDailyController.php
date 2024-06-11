@@ -51,12 +51,14 @@ class TaipowerDailyController extends Controller
     {
         $validated = $request->validate([
             'report_date' => 'required|date', // 例: 验证是否为日期格式
+            'report_area' => 'required', // 例: 验证是否为日期格式
             'jkFile' => 'required',
             'tpFile' => 'required', 
         ]);
         ini_set('memory_limit', '512M');  // 或更高，根据需要调整
         $arrayData = [
             'report_date' => $validated['report_date'],
+            'report_area' => $validated['report_area'],
             'report_type' => ''
         ];
         $jkFile = null;

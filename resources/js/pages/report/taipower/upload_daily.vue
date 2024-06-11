@@ -384,7 +384,7 @@ export default {
       formData.append("jkFile", this.jkFile);
       formData.append("tpFile", this.tpFile);
       formData.append("report_date", this.reportDate);
-      formData.append("area", this.selectedArea);
+      formData.append("report_area", this.selectedArea);
       this.$axios
         .fetchUpload(url, formData)
           .then(res => {
