@@ -146,20 +146,50 @@ class TaipowerDailyImport implements ToCollection, WithMultipleSheets
             // 初始化组别总和
             $totalSumByGroup[$gp_key] = 0;
 
+            $isFirstGroup = true; // 用於標記是否是第一個分組
+            $result = []; // 用於存儲最終結果
             // 进行分组后的数据处理
-            $formattedData = $groupedData->map(function ($items, $key) use (&$work_date){
-                $firstItem = $items->first();
-                $baseInfo = "{$key}-{$firstItem[10]}#{$firstItem[3]}";
-                $weldNumbers = $items->pluck(5)->implode('、');
-                $componentType = $firstItem[4];
-                // $work_date = Carbon::create(1899, 12, 30)->addDays($firstItem[0]);
-                // 返回格式化字符串，這將會在 map 的結果集合中為每一個分組建立一個條目
-                return "{$baseInfo}-{$weldNumbers}({$componentType})";
+            $formattedData = $groupedData->map(function ($items, $key) use (&$isFirstGroup){
+                // 進一步根據 $firstItem[10] 進行分組
+                $subGroupedData = $items->groupBy(function ($item) {
+                    return $item[10];
+                });
+                // 針對每一個 $firstItem[10] 分組進行格式化
+                $release = $subGroupedData->map(function ($subItems, $subKey) use (&$isFirstGroup, $key) {
+                    $firstItem = $subItems->first();
+                    $baseInfo = "{$subKey}#{$firstItem[3]}";
+                    if ($isFirstGroup) {
+                        $baseInfo = "{$key}-{$baseInfo}";
+                        $isFirstGroup = false;
+                    }
+                    $weldNumbers = $subItems->pluck(5)->implode('、');
+                    $componentType = $firstItem[4];
+
+                    // 返回格式化字符串
+                    return "{$baseInfo}-{$weldNumbers}({$componentType})";
+                });
+                
+                return $release->implode("<w:br/>");
+                // dd($release);
+                // return $subGroupedData->map(function ($subItems, $subKey) use ($key) {
+                //     $firstItem = $subItems->first();
+                //     $baseInfo = "{$key}-{$subKey}#{$firstItem[3]}";
+                //     $weldNumbers = $subItems->pluck(5)->implode('、');
+                //     $componentType = $firstItem[4];
+
+                //     // 返回格式化字符串
+                //     return "{$baseInfo}-{$weldNumbers}({$componentType})";
+                // })->implode("<w:br/>");
+                // $firstItem = $items->first();
+                // $baseInfo = "{$key}-{$firstItem[10]}#{$firstItem[3]}";
+                // $weldNumbers = $items->pluck(5)->implode('、');
+                // $componentType = $firstItem[4];
+                // // $work_date = Carbon::create(1899, 12, 30)->addDays($firstItem[0]);
+                // // 返回格式化字符串，這將會在 map 的結果集合中為每一個分組建立一個條目
+                // return "{$baseInfo}-{$weldNumbers}({$componentType})";
             });
-        
             // 將所有的分組格式化的字符串合併，使用 PHP_EOL 作為每一個分組的分隔符號來創建新行
             $output1 = $formattedData->implode("<w:br/>");
-        
             // 按 B 列的值进行分组，假设 B 列在集合中的索引为 1
             $groupedData = $data->groupBy(10);
             // 初始化合計值
