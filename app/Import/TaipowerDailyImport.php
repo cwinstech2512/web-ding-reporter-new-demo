@@ -150,17 +150,20 @@ class TaipowerDailyImport implements ToCollection, WithMultipleSheets
             $result = []; // 用於存儲最終結果
             // 进行分组后的数据处理
             $formattedData = $groupedData->map(function ($items, $key) use (&$isFirstGroup){
+                if(!isset($isArrFirstGroup[$key])) {
+                    $isArrFirstGroup[$key] = true;
+                }
                 // 進一步根據 $firstItem[10] 進行分組
                 $subGroupedData = $items->groupBy(function ($item) {
                     return $item[10];
                 });
                 // 針對每一個 $firstItem[10] 分組進行格式化
-                $release = $subGroupedData->map(function ($subItems, $subKey) use (&$isFirstGroup, $key) {
+                $release = $subGroupedData->map(function ($subItems, $subKey) use (&$isArrFirstGroup, $key) {
                     $firstItem = $subItems->first();
                     $baseInfo = "{$subKey}#{$firstItem[3]}";
-                    if ($isFirstGroup) {
+                    if ($isArrFirstGroup[$key]) {
                         $baseInfo = "{$key}-{$baseInfo}";
-                        $isFirstGroup = false;
+                        $isArrFirstGroup[$key] = false;
                     }
                     $weldNumbers = $subItems->pluck(5)->implode('、');
                     $componentType = $firstItem[4];
