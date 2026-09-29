@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="mb-0 justify-space-between pl-3" link :href="'./dashboard'">
+  <v-list-item class="mb-0 justify-space-between pl-3" link :to="{ name: '統計分析' }">
     <v-list-item-avatar>
       <v-img
         :src="$base_url + '/assets/images/x_m_logo.png'"

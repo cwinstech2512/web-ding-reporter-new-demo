@@ -1,11 +1,12 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import * as types from '../mutation-types'
+import { demoUser, frontendDemo } from '~/demo/data'
 
 // state
 const state = {
-  user: null,
-  token: Cookies.get('token')
+  user: frontendDemo ? demoUser : null,
+  token: frontendDemo ? 'frontend-demo-token' : Cookies.get('token')
 }
 
 // getters
@@ -50,6 +51,10 @@ const actions = {
   },
 
   async fetchUser ({ commit }) {
+    if (frontendDemo) {
+      commit(types.FETCH_USER_SUCCESS, { user: demoUser })
+      return
+    }
     try {
       const { data } = await axios.get('/api/user')
 
@@ -64,6 +69,10 @@ const actions = {
   },
 
   async logout ({ commit }) {
+    if (frontendDemo) {
+      commit(types.LOGOUT)
+      return
+    }
     try {
       await axios.post('/api/logout')
     } catch (e) { }
@@ -72,6 +81,11 @@ const actions = {
   },
 
   async login ({ commit }, payload) {
+    if (frontendDemo) {
+      commit(types.SAVE_TOKEN, { token: 'frontend-demo-token', remember: true })
+      commit(types.FETCH_USER_SUCCESS, { user: demoUser })
+      return
+    }
     try {
       payload.email = payload.username + "@example.com"
       const { data } = await axios.post('/api/login', payload)

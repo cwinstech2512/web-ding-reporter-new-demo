@@ -2,6 +2,9 @@
 /public/hot
 /public/storage
 /public/dist
+/public/fonts
+/pages-dist
+/public/uploads/*
 /storage/*.key
 /vendor
 .env

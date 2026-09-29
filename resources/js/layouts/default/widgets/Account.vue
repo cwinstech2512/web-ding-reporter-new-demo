@@ -48,7 +48,7 @@
 
     data: () => ({
       profile: [
-        { title: '個人中心' },
+        { title: '個人中心', link: 'profile' },
         { title: '修改密碼', link: 'change_password' },
         { divider: true },
         { title: '登出', link: 'logout' },
@@ -64,6 +64,9 @@
             break;
           case 'change_password':
             this.$router.push({ name: '修改密碼' })
+            break;
+          case 'profile':
+            this.$router.push({ name: '個人中心' })
             break;
         
           default:

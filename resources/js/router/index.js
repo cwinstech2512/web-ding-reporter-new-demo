@@ -30,7 +30,7 @@ export default router
 function createRouter () {
   const router = new Router({
     scrollBehavior,
-    mode: 'history',
+    mode: process.env.MIX_FRONTEND_DEMO === 'true' ? 'hash' : 'history',
     routes
   })
 

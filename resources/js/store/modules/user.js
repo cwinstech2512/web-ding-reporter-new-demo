@@ -17,7 +17,7 @@ const state = {
     'rgba(244, 67, 54, .8), rgba(244, 67, 54, .8)',
   ],
   images: [
-    'https://va-demo.okami101.io/admin/img/splash.79942c13.jpg',
+    process.env.MIX_FRONTEND_DEMO === 'true' ? './assets/images/bg-2.jpg' : 'https://va-demo.okami101.io/admin/img/splash.79942c13.jpg',
     'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-2.jpg',
     'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-3.jpg',
     'https://demos.creative-tim.com/material-dashboard-pro/assets/img/sidebar-4.jpg',

@@ -3,10 +3,19 @@ import store from '~/store'
 import router from '~/router'
 import Swal from 'sweetalert2'
 import i18n from '~/plugins/i18n'
+import createDemoAdapter from '~/demo/adapter'
 
 axios.defaults.timeout = 1000 * 60 // 响应时间
 axios.defaults.headers.post['Content-Type'] = 'application/json' // 配置请求头
-axios.defaults.baseURL = (process.env.MIX_APP_ENV === 'local') ? 'http://127.0.0.1:8000/' : process.env.MIX_APP_URL + '/'
+const frontendDemo = process.env.MIX_FRONTEND_DEMO === 'true'
+axios.defaults.baseURL = frontendDemo
+  ? './'
+  : ((process.env.MIX_APP_ENV === 'local') ? 'http://127.0.0.1:8000/' : process.env.MIX_APP_URL + '/')
+
+if (frontendDemo) {
+  axios.defaults.adapter = createDemoAdapter
+  console.info('[Frontend Demo] API calls are served locally and never reach the Laravel backend.')
+}
 
 // Request interceptor
 axios.interceptors.request.use(request => {

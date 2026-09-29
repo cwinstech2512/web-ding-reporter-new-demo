@@ -10,6 +10,12 @@ mix
 
   .disableNotifications()
 
+if (process.env.MIX_FRONTEND_DEMO === 'true') {
+  // Keep emitted fonts/icons relative so they also work below a GitHub Pages
+  // repository sub-path instead of requesting /fonts from the domain root.
+  mix.setResourceRoot('./')
+}
+
 if (mix.inProduction()) {
   mix
     // .extract() // Disabled until resolved: https://github.com/JeffreyWay/laravel-mix/issues/1889
@@ -30,6 +36,7 @@ mix.webpackConfig({
     }
   },
   output: {
+    publicPath: process.env.MIX_FRONTEND_DEMO === 'true' ? './' : '/',
     chunkFilename: 'dist/js/[chunkhash].js',
     path: mix.config.hmr
       ? '/'
@@ -45,8 +52,15 @@ mix.then(() => {
 
 function publishAseets () {
   const publicDir = path.resolve(__dirname, './public')
+  const buildDir = path.join(publicDir, 'build')
 
   fs.removeSync(path.join(publicDir, 'dist'))
-  fs.copySync(path.join(publicDir, 'build', 'dist'), path.join(publicDir, 'dist'))
-  fs.removeSync(path.join(publicDir, 'build'))
+  fs.copySync(path.join(buildDir, 'dist'), path.join(publicDir, 'dist'))
+
+  if (fs.existsSync(path.join(buildDir, 'fonts'))) {
+    fs.removeSync(path.join(publicDir, 'fonts'))
+    fs.copySync(path.join(buildDir, 'fonts'), path.join(publicDir, 'fonts'))
+  }
+
+  fs.removeSync(buildDir)
 }

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div v-if="frontendDemo" class="frontend-demo-badge">FRONTEND DEMO · LOCAL DATA</div>
     <loading ref="loading" />
     <v-fade-transition name="page" mode="out-in">
       <router-view :is="layout" v-if="layout"/>
@@ -33,7 +34,8 @@ export default {
 
   data: () => ({
     layout: null,
-    defaultLayout: 'default'
+    defaultLayout: 'default',
+    frontendDemo: process.env.MIX_FRONTEND_DEMO === 'true'
   }),
 
   metaInfo () {
@@ -71,5 +73,18 @@ export default {
 }
 </script>
 <style>
-  
+  .frontend-demo-badge {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9999;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #ffc107;
+    color: #202020;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .24);
+  }
 </style>

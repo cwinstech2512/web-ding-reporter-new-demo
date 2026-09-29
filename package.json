@@ -2,11 +2,14 @@
   "private": true,
   "scripts": {
     "lint": "eslint --fix --ext .js,.vue resources/js",
+    "lint:check": "eslint --ext .js,.vue resources/js",
+    "verify:paths": "node scripts/verify-path-case.js",
+    "build:demo": "cross-env MIX_FRONTEND_DEMO=true MIX_APP_ENV=demo MIX_APP_URL=. npm run production && node scripts/build-demo-site.js",
     "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "development": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",
     "watch-poll": "npm run watch -- --watch-poll"
   },
